@@ -1,718 +1,430 @@
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
-interface Vendor {
-  id: number;
+type Category = "All" | "Uni Eats" | "Campus Drip" | "Fresh Cuts" | "Tech Plug";
+
+type Business = {
+  id: string;
   name: string;
   category: string;
   initials: string;
   description: string;
   tags: string[];
   whatsapp: string;
-  rating: number;
-  status: "open" | "busy" | "closed";
-}
-
+  accent: string;
+  logo?: string;
+  image?: string;
+};
 // ── Data ─────────────────────────────────────────────────────────────────────
-const VENDORS: Vendor[] = [
+const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Handmade"] as const;
+const BUSINESSES: Business[] = [
   {
-    id: 1,
+    id: "1",
     name: "Shaffy's Treats",
     category: "Uni Eats",
     initials: "ST",
-    description:
-      "Handmade cakes, glazed doughnuts and crispy small chops made fresh to order. Every bite tells the story.",
+    description: "Handmade cakes, glazed doughnuts and crispy small chops made fresh to order. Every bite tells the story.",
     tags: ["Cakes", "Doughnuts", "Small Chops"],
-    whatsapp: "2348011111111",
-    rating: 4.9,
-    status: "open",
+    whatsapp: "2348026498451",
+    accent: "from-amber-300/30 to-emerald-400/20",
+    logo: "/shaffyslogo.jpg",
+    image: "/shaffys1.jpg",
   },
   {
-    id: 2,
+    id: "2",
     name: "Timas Delight",
     category: "Uni Eats",
     initials: "TD",
-    description:
-      "Shawarma, mandi rice, milkshakes, mocktails and fresh small chops — campus comfort food done right.",
+    description: "Shawarma, mandi rice, milkshakes, mocktails and fresh small chops — campus comfort food done right.",
     tags: ["Shawarma", "Milkshakes", "Snacks"],
-    whatsapp: "2348022222222",
-    rating: 4.8,
-    status: "open",
+    whatsapp: "2348026498451",
+    accent: "from-orange-300/25 to-emerald-400/15",
+    logo: "/temaslogo.jpg",
+    image: "/temas1.jpg",
   },
   {
-    id: 3,
+    id: "3",
     name: "Shop with Lola",
     category: "Campus Drip",
     initials: "SL",
-    description:
-      "Soft, simple and affordable campus essentials — scrunchies, camisoles, sunglasses, hand cream and more.",
+    description: "Soft, simple and affordable campus essentials — scrunchies, camisoles, sunglasses, hand cream and more.",
     tags: ["Accessories", "Camisoles", "Skincare"],
-    whatsapp: "2348033333333",
-    rating: 4.7,
-    status: "open",
+    whatsapp: "2347046998187",
+    accent: "from-pink-400/20 to-emerald-400/20",
+    logo: "/lolalogo.jpg",
+    image: "/lola1.jpg",
   },
   {
-    id: 4,
-    name: "FreshByte Gadgets",
+    id: "4",
+    name: "Everything Mata",
+    category: "Campus Drip",
+    initials: "EM",
+    description: "Curated beauty and self-care products for elegant living. Skincare essentials delivered to your door.",
+    tags: ["Skincare", "Self Care", "Beauty"],
+    whatsapp: "2349139294346",
+    accent: "from-rose-300/20 to-emerald-400/15",
+    logo: "/matalogo.jpg",
+    image: "/mata1.jpg",
+  },
+  {
+    id: "5",
+    name: "Anointed Accessories",
     category: "Tech Plug",
-    initials: "FB",
-    description:
-      "Fastest phone screen repairs on campus. Accessories, data cables, and power banks — sorted in minutes.",
-    tags: ["Phone Repair", "Accessories", "Power Banks"],
-    whatsapp: "2348044444444",
-    rating: 4.8,
-    status: "open",
+    initials: "AA",
+    description: "Phones and accessories at student-friendly prices. Quality devices, fast delivery on campus.",
+    tags: ["Phones", "Accessories", "Gadgets"],
+    whatsapp: "2349129929484",
+    accent: "from-cyan-400/25 to-emerald-400/15",
+    logo: "/aalogo.jpg",
+    image: "/aa1.jpg",
   },
   {
-    id: 5,
-    name: "Afro Cuts Studio",
-    category: "Fresh Cuts",
-    initials: "AC",
-    description:
-      "Precision fades, beard shaping and scalp treatments for the campus king who takes his appearance seriously.",
-    tags: ["Fade", "Beard", "Scalp Care"],
-    whatsapp: "2348055555555",
-    rating: 4.9,
-    status: "busy",
+    id: "6",
+    name: "MBM Gadget",
+    category: "Tech Plug",
+    initials: "MG",
+    description: "Trusted campus plug for laptops and phones. UK-used and brand new devices with verified specs.",
+    tags: ["Laptops", "Phones", "UK-Used"],
+    whatsapp: "2348084737552",
+    accent: "from-emerald-400/30 to-cyan-400/10",
+    logo: "/mbmlogo.jpg",
+    image: "/mbm1.jpg",
   },
   {
-    id: 6,
-    name: "The Print Plug",
-    category: "Print & Copy",
-    initials: "PP",
-    description:
-      "Assignment printing, thesis binding and bulk photocopying. Fast, affordable, and right on campus.",
-    tags: ["Printing", "Binding", "Photocopy"],
-    whatsapp: "2348066666666",
-    rating: 4.6,
-    status: "open",
+    id: "7",
+    name: "10 Digit Integrated Service",
+    category: "Uni Eats",
+    initials: "DIS",
+    description: "Sells affordable, crispy small chops + snacks. Natural ingredients, 100% homemade.",
+    tags: ["Zobo", "Samosa", "PuffPuff"],
+    whatsapp: "2347031955575",
+    accent: "from-orange-300/25 to-emerald-400/15",
+    logo: "/10 logo.jpg",
+    image: "/10 1.jpg",
+  },
+  {
+    id: "8",
+    name: "Dizzorh.inc",
+    category: "Handmade",
+    initials: "DI",
+    description: "Handmade epoxy resin art - custom coasters, Home Decor.",
+    tags: ["ResinArt", "Home Decor", "Vases"],
+    whatsapp: "234709421820",
+    accent: "from-purple-300/25 to-pink-400/15",
+    logo: "/dizzorhlogo.jpg",
+    image: "/dizzorh2.jpg",
   },
 ];
 
-const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Tech Plug", "Fresh Cuts", "Print & Copy"];
+const STATS = [
+  { k: "200+", v: "Verified vendors" },
+  { k: "12", v: "Categories" },
+  { k: "4.9★", v: "Avg. campus rating" },
+  { k: "< 30m", v: "Median response" },
+];
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
-function openWhatsApp(number: string, vendorName: string) {
-  const msg = encodeURIComponent(
-    `Hi! I found you on FUD Hub (EMBIEM). I'd like to place an order from ${vendorName}.`
-  );
-  window.open(`https://wa.me/${number}?text=${msg}`, "_blank");
+// ── Reveal hook ───────────────────────────────────────────────────────────────
+function useReveal() {
+  useEffect(() => {
+    document.documentElement.classList.add("reveal-ready");
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-visible");
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    const observe = () => {
+      document.querySelectorAll<HTMLElement>(".reveal:not(.is-visible), .reveal-slide:not(.is-visible)").forEach((el) => io.observe(el));
+    };
+    observe();
+    const mo = new MutationObserver(observe);
+    mo.observe(document.body, { childList: true, subtree: true });
+    return () => { io.disconnect(); mo.disconnect(); document.documentElement.classList.remove("reveal-ready"); };
+  }, []);
 }
 
-// ── Vendor Card ───────────────────────────────────────────────────────────────
-function VendorCard({ vendor }: { vendor: Vendor }) {
+// ── Nav ───────────────────────────────────────────────────────────────────────
+function Nav() {
   return (
-    <div className="vendor-card">
-      <div className="card-top">
-        <div className="card-avatar">{vendor.initials}</div>
-        <span className="card-category">{vendor.category.toUpperCase()}</span>
+    <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/60 border-b border-border/60">
+      <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="relative h-10 w-10 rounded-xl overflow-hidden border border-white/10 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.8)]">
+          <img 
+            src="/embiem-logo.png" 
+            alt="EMBIEM" 
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+          </div>
+          <span className="font-display font-semibold tracking-tight text-lg">FUD Hub</span>
+        </div>
+        <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
+          <a href="#directory" className="hover:text-foreground transition-colors">Directory</a>
+          <a href="#stats" className="hover:text-foreground transition-colors">Numbers</a>
+          <a href="#embiem" className="hover:text-foreground transition-colors">For Founders</a>
+        </nav>
+        <a href="#directory" className="text-xs sm:text-sm font-medium px-4 py-2 rounded-full glow-border bg-surface hover:bg-surface-elevated transition-colors">
+          Explore
+        </a>
       </div>
-      <div className="card-body">
-        <h3 className="card-name">{vendor.name}</h3>
-        <p className="card-desc">{vendor.description}</p>
-        <div className="card-tags">
-          {vendor.tags.map((tag) => (
-            <span key={tag} className="card-tag">
-              {tag}
+    </header>
+  );
+}
+
+// ── Hero ──────────────────────────────────────────────────────────────────────
+function Hero() {
+  return (
+    <section className="relative mx-auto max-w-7xl px-6 pt-20 pb-16 sm:pt-24">
+      <div className="reveal max-w-3xl">
+        <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/60 px-3 py-1.5 text-xs text-foreground mb-7">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-bright animate-pulse" />
+          Live · 200+ student vendors on campus
+        </div>
+        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold leading-[1.02] tracking-tight">
+          The Blueprint of <br />
+          <span className="text-gradient-emerald">Campus Excellence.</span>
+        </h1>
+        <p className="mt-6 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed">
+          A curated directory of student-led businesses redefining campus culture — from architectural pastry to bespoke tech. One tap, ordered via WhatsApp.
+        </p>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <a
+            href="#directory"
+            className="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_-5px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)] transition-shadow"
+          >
+            Browse the Hub
+            <span className="transition-transform group-hover:translate-x-0.5">→</span>
+          </a>
+          <a
+            href="#embiem"
+            className="inline-flex items-center gap-2 rounded-full glow-border bg-surface px-5 py-3 text-sm font-medium hover:bg-surface-elevated transition-colors"
+          >
+            List your business
+          </a>
+        </div>
+      </div>
+
+      {/* EMBIEM card */}
+      <div id="embiem" className="reveal-slide mt-18 relative overflow-hidden rounded-2xl border border-emerald-glow/30 bg-gradient-to-br from-surface-elevated to-surface p-6 sm:p-8 shadow-[0_0_40px_-12px_rgba(0,0,0,0.5)]" style={{ marginTop: "4.5rem" }}>
+        <div aria-hidden className="pointer-events-none absolute -right-6 -top-6 h-40 w-40 rounded-full bg-emerald-glow/15 blur-3xl" />
+        <div className="relative">
+          <div className="text-[10px] uppercase tracking-[0.18em] text-emerald-bright mb-2">
+            Built by EMBIEM
+          </div>
+          <h2 className="text-xl sm:text-2xl font-display font-semibold leading-snug tracking-tight">
+            Your Campus. Your Vendors <span className="text-gradient-emerald">Engineered by EMBIEM.</span>
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground max-w-md">
+            Built for FUD students, by FUD students. EMBIEM is the student-led agency powering FUD Hub — from design and development to vendor onboarding and support. Interested in listing your business or collaborating with us? Reach out via WhatsApp and let's elevate campus culture together.
+          </p>
+          <a
+            href={`https://wa.me/2347044389234?text=${encodeURIComponent("Hi EMBIEM! I'd like to list my luxury site for my business.")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_-5px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)] transition-shadow"
+          >
+            Order food, shop drip, grab tech
+            <span className="transition-transform group-hover:translate-x-0.5">→</span>
+          </a>
+        </div>
+      </div>
+
+      {/* Floating orb */}
+      <div aria-hidden className="pointer-events-none absolute -right-10 top-10 hidden lg:block">
+        <div className="h-72 w-72 rounded-full bg-emerald-glow/20 blur-3xl" />
+      </div>
+    </section>
+  );
+}
+
+// ── Controls ──────────────────────────────────────────────────────────────────
+function Controls({ active, onActive, query, onQuery }: {
+  active: (typeof CATEGORIES)[number];
+  onActive: (c: (typeof CATEGORIES)[number]) => void;
+  query: string;
+  onQuery: (q: string) => void;
+}) {
+  return (
+    <section id="directory" className="mx-auto max-w-7xl px-6">
+      <div className="reveal glass-card rounded-2xl p-4 sm:p-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="relative flex-1 min-w-0">
+          <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="11" cy="11" r="7" /><path d="m21 21-3.5-3.5" />
+          </svg>
+          <input
+            value={query}
+            onChange={(e) => onQuery(e.target.value)}
+            placeholder="Search pastries, tailors, tech repair..."
+            className="w-full bg-surface/60 border border-border rounded-xl pl-11 pr-4 py-3 text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:border-emerald-glow focus:shadow-[0_0_0_3px_color-mix(in_oklab,var(--emerald-glow),20%,transparent)] transition"
+          />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {CATEGORIES.map((c) => {
+            const isActive = c === active;
+            return (
+              <button
+                key={c}
+                onClick={() => onActive(c)}
+                className={
+                  "text-xs sm:text-sm px-4 py-2.5 rounded-full transition-all duration-300 border " +
+                  (isActive
+                    ? "bg-primary text-primary-foreground border-transparent shadow-[0_0_24px_-6px_var(--emerald-glow)]"
+                    : "bg-surface/60 text-muted-foreground border-border hover:text-foreground hover:border-emerald-glow/60")
+                }
+              >
+                {c}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Card ──────────────────────────────────────────────────────────────────────
+function Card({ business, index }: { business: Business; index: number }) {
+  const waHref = `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(`Hi ${business.name}, I'd like to place an order via FUD Hub.`)}`;
+  return (
+    <article
+      className="reveal group relative glass-card rounded-2xl p-6 flex flex-col hover:-translate-y-1 hover:scale-[1.03] hover:shadow-[0_30px_60px_-20px_color-mix(in_oklab,var(--emerald-glow),55%,transparent)] hover:border-emerald-glow/60"
+      style={{ transitionDelay: `${(index % 9) * 40}ms` }}
+    >
+      {/* Accent gradient overlay */}
+      <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br ${business.accent} pointer-events-none`} />
+
+      {/* Top row */}
+        <div className="h-14 w-14 glow-border bg-surface place-items-center grid rounded-xl shrink-0 overflow-hidden">
+          {business.logo ? (
+            <img src={business.logo} alt={business.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          ) : (
+            <span className="text-gradient-emerald font-display text-lg font-bold tracking-tight">
+              {business.initials}
+            </span>
+          )}
+        </div>
+
+      {/* Body */}
+      <div className="relative mt-4 flex-1">
+        <h3 className="text-xl font-display font-semibold leading-snug tracking-tight">{business.name}</h3>
+        <p className="mt-2 text-sm text-muted-foreground">{business.description}</p>
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {business.tags.map((t) => (
+            <span key={t} className="text-[11px] px-2.5 py-1 rounded-full border border-border/70 text-muted-foreground bg-surface/60">
+              {t}
             </span>
           ))}
         </div>
       </div>
-      <div className="card-image-placeholder">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="3" y="3" width="18" height="18" rx="2" />
-          <circle cx="8.5" cy="8.5" r="1.5" />
-          <path d="m21 15-5-5L5 21" />
-        </svg>
-      </div>
-      <button
-        className="card-whatsapp-btn"
-        onClick={() => openWhatsApp(vendor.whatsapp, vendor.name)}
+
+      {/* Image area */}
+      <div
+        className="reveal-slide relative mt-6 aspect-[16/10] w-full overflow-hidden rounded-xl border border-border/70 bg-gradient-to-br from-surface-elevated to-surface"
+        style={{ transitionDelay: `${(index % 9) * 60 + 120}ms` }}
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-        </svg>
-        Order on WhatsApp
-      </button>
-    </div>
+        {business.image ? (
+          <img
+            src={business.image}
+            alt={`${business.name} product`}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="absolute inset-0 grid place-items-center">
+            <div aria-hidden className="absolute inset-0 opacity-60" style={{ backgroundImage: "repeating-linear-gradient(45deg, color-mix(in oklab, var(--emerald-glow) 8%, transparent) 0 1px, transparent 1px 14px)" }} />
+            <div className="relative flex flex-col items-center gap-2 text-center p-4">
+              <svg viewBox="0 0 24 24" className="h-7 w-7 text-emerald-bright/70" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <circle cx="9" cy="11" r="2" />
+                <path d="m21 17-5-5-8 8" />
+              </svg>
+              <span className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                Upload Product Photo
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* WhatsApp CTA */}
+      <div className="relative mt-5 pt-5 border-t border-border/70">
+        <a
+          href={waHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-all duration-400 shadow-[0_0_24px_-6px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)]"        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+          </svg>
+          Order via WhatsApp
+        </a>
+      </div>
+    </article>
+  );
+}
+
+// ── Grid ──────────────────────────────────────────────────────────────────────
+function Grid({ items }: { items: Business[] }) {
+  return (
+    <section className="mx-auto max-w-7xl px-6 py-12 sm:py-16">
+      {items.length === 0 ? (
+        <div className="glass-card rounded-2xl p-16 text-center text-muted-foreground">
+          No vendors match that search. Try another category.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          {items.map((b, i) => (
+            <Card key={b.id} business={b} index={i} />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+// ── Stats ─────────────────────────────────────────────────────────────────────
+function Stats() {
+  return (
+    <section id="stats" className="mx-auto max-w-7xl px-6 pb-24">
+      <div className="reveal glass-card p-8 sm:p-10 grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        {STATS.map((s) => (
+          <div key={s.v}>
+            <div className="text-3xl sm:text-4xl font-display font-bold text-gradient-emerald">{s.k}</div>
+            <div className="mt-1 text-xs sm:text-sm text-muted-foreground tracking-wide">{s.v}</div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App() {
-  const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  useReveal();
+  const [active, setActive] = useState<(typeof CATEGORIES)[number]>("All");
+  const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
-    return VENDORS.filter((v) => {
-      const matchesCat = activeCategory === "All" || v.category === activeCategory;
-      const q = search.toLowerCase();
-      const matchesSearch =
-        !q ||
-        v.name.toLowerCase().includes(q) ||
-        v.category.toLowerCase().includes(q) ||
-        v.tags.some((t) => t.toLowerCase().includes(q));
-      return matchesCat && matchesSearch;
+    const q = query.trim().toLowerCase();
+    return BUSINESSES.filter((b) => {
+      const matchCat = active === "All" || b.category === active;
+      const matchQ = !q || b.name.toLowerCase().includes(q) || b.description.toLowerCase().includes(q) || b.tags.some((t) => t.toLowerCase().includes(q));
+      return matchCat && matchQ;
     });
-  }, [search, activeCategory]);
+  }, [active, query]);
 
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap');
-
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-          background: #0a1512;
-          color: #e8ede8;
-          font-family: 'Inter', sans-serif;
-          -webkit-font-smoothing: antialiased;
-        }
-
-        /* ── NAV ── */
-        .nav {
-          position: sticky;
-          top: 0;
-          z-index: 50;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 0 2rem;
-          height: 64px;
-          background: rgba(10,21,18,0.92);
-          backdrop-filter: blur(16px);
-          border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-        .nav-logo {
-          display: flex;
-          align-items: center;
-          gap: 0.6rem;
-          font-weight: 600;
-          font-size: 1rem;
-          color: #e8ede8;
-          text-decoration: none;
-        }
-        .nav-logo-icon {
-          width: 32px; height: 32px;
-          background: rgba(255,255,255,0.08);
-          border: 1px solid rgba(255,255,255,0.12);
-          border-radius: 8px;
-          display: flex; align-items: center; justify-content: center;
-          font-size: 0.9rem;
-        }
-        .nav-links {
-          display: flex;
-          gap: 2.5rem;
-          list-style: none;
-        }
-        .nav-links a {
-          color: rgba(232,237,232,0.65);
-          text-decoration: none;
-          font-size: 0.875rem;
-          font-weight: 500;
-          transition: color 0.2s;
-        }
-        .nav-links a:hover { color: #e8ede8; }
-        .nav-cta {
-          padding: 0.5rem 1.25rem;
-          background: transparent;
-          border: 1px solid rgba(255,255,255,0.2);
-          border-radius: 999px;
-          color: #e8ede8;
-          font-size: 0.875rem;
-          font-weight: 500;
-          cursor: pointer;
-          transition: background 0.2s, border-color 0.2s;
-        }
-        .nav-cta:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.35); }
-        .nav-mobile-btn {
-          display: none;
-          background: none;
-          border: none;
-          color: #e8ede8;
-          cursor: pointer;
-          padding: 4px;
-        }
-
-        /* ── HERO ── */
-        .hero {
-          position: relative;
-          padding: 5rem 2rem 5rem;
-          overflow: hidden;
-          background: radial-gradient(ellipse 70% 80% at 85% 40%, #0d3d2a 0%, transparent 60%),
-                      radial-gradient(ellipse 50% 60% at 10% 80%, #071f14 0%, transparent 50%),
-                      #0a1512;
-        }
-        .hero-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.375rem 1rem;
-          background: rgba(255,255,255,0.06);
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 999px;
-          font-size: 0.8125rem;
-          color: rgba(232,237,232,0.75);
-          margin-bottom: 2rem;
-        }
-        .hero-badge-dot {
-          width: 7px; height: 7px;
-          background: #22c55e;
-          border-radius: 50%;
-        }
-        .hero-title {
-          font-family: 'Playfair Display', Georgia, serif;
-          font-size: clamp(3rem, 7vw, 5.5rem);
-          font-weight: 900;
-          line-height: 1.05;
-          letter-spacing: -0.02em;
-          color: #e8ede8;
-          margin-bottom: 1.5rem;
-          max-width: 700px;
-        }
-        .hero-title-accent {
-          color: #22c55e;
-        }
-        .hero-subtitle {
-          font-size: 1.05rem;
-          color: rgba(232,237,232,0.6);
-          line-height: 1.7;
-          max-width: 520px;
-          margin-bottom: 2.5rem;
-        }
-        .hero-btns {
-          display: flex;
-          gap: 1rem;
-          flex-wrap: wrap;
-        }
-        .btn-primary {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.875rem 1.75rem;
-          background: #22c55e;
-          color: #071a0f;
-          font-weight: 600;
-          font-size: 0.9375rem;
-          border-radius: 999px;
-          border: none;
-          cursor: pointer;
-          transition: background 0.2s, transform 0.15s;
-          text-decoration: none;
-        }
-        .btn-primary:hover { background: #16a34a; transform: translateY(-1px); }
-        .btn-secondary {
-          display: inline-flex;
-          align-items: center;
-          padding: 0.875rem 1.75rem;
-          background: transparent;
-          color: #e8ede8;
-          font-weight: 500;
-          font-size: 0.9375rem;
-          border-radius: 999px;
-          border: 1px solid rgba(255,255,255,0.2);
-          cursor: pointer;
-          transition: background 0.2s, border-color 0.2s;
-          text-decoration: none;
-        }
-        .btn-secondary:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.35); }
-
-        /* ── EMBIEM CARD ── */
-        .embiem-section {
-          padding: 1.5rem 2rem 3rem;
-        }
-        .embiem-card {
-          position: relative;
-          background: #0f231a;
-          border: 1px solid rgba(34,197,94,0.3);
-          border-radius: 20px;
-          padding: 2.5rem;
-          overflow: hidden;
-          box-shadow: 0 0 60px rgba(34,197,94,0.08), inset 0 1px 0 rgba(34,197,94,0.15);
-        }
-        .embiem-card::before {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0;
-          height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(34,197,94,0.5), transparent);
-        }
-        .embiem-eyebrow {
-          font-size: 0.75rem;
-          font-weight: 600;
-          letter-spacing: 0.12em;
-          color: #22c55e;
-          margin-bottom: 0.875rem;
-          text-transform: uppercase;
-        }
-        .embiem-title {
-          font-family: 'Playfair Display', Georgia, serif;
-          font-size: clamp(1.5rem, 3.5vw, 2.25rem);
-          font-weight: 700;
-          color: #e8ede8;
-          line-height: 1.25;
-          margin-bottom: 1rem;
-        }
-        .embiem-title-gradient {
-          background: linear-gradient(135deg, #22c55e, #86efac);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-        .embiem-body {
-          font-size: 0.9375rem;
-          color: rgba(232,237,232,0.6);
-          line-height: 1.75;
-          max-width: 540px;
-          margin-bottom: 2rem;
-        }
-
-        /* ── DIRECTORY SECTION ── */
-        .directory {
-          padding: 0 2rem 4rem;
-        }
-
-        /* ── SEARCH + FILTER BAR ── */
-        .search-bar-wrap {
-          background: #111f18;
-          border: 1px solid rgba(255,255,255,0.07);
-          border-radius: 16px;
-          padding: 1rem 1.25rem;
-          display: flex;
-          align-items: center;
-          gap: 1.25rem;
-          margin-bottom: 3rem;
-          flex-wrap: wrap;
-        }
-        .search-input-wrap {
-          display: flex;
-          align-items: center;
-          gap: 0.625rem;
-          flex: 1;
-          min-width: 200px;
-        }
-        .search-icon { color: rgba(232,237,232,0.35); flex-shrink: 0; }
-        .search-input {
-          background: none;
-          border: none;
-          outline: none;
-          color: #e8ede8;
-          font-size: 0.9375rem;
-          font-family: 'Inter', sans-serif;
-          width: 100%;
-        }
-        .search-input::placeholder { color: rgba(232,237,232,0.35); }
-        .filter-pills {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          flex-wrap: wrap;
-        }
-        .filter-pill {
-          padding: 0.375rem 1rem;
-          border-radius: 999px;
-          font-size: 0.8125rem;
-          font-weight: 500;
-          cursor: pointer;
-          border: none;
-          transition: background 0.18s, color 0.18s;
-          background: transparent;
-          color: rgba(232,237,232,0.55);
-          font-family: 'Inter', sans-serif;
-        }
-        .filter-pill:hover { color: #e8ede8; }
-        .filter-pill.active {
-          background: #22c55e;
-          color: #071a0f;
-          font-weight: 600;
-        }
-
-        /* ── VENDOR GRID ── */
-        .vendor-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1.25rem;
-        }
-
-        /* ── VENDOR CARD ── */
-        .vendor-card {
-          background: #0f1f18;
-          border: 1px solid rgba(255,255,255,0.07);
-          border-radius: 16px;
-          overflow: hidden;
-          cursor: pointer;
-          transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-          display: flex;
-          flex-direction: column;
-        }
-        .vendor-card:hover {
-          border-color: rgba(34,197,94,0.25);
-          transform: translateY(-2px);
-          box-shadow: 0 12px 32px rgba(0,0,0,0.3);
-        }
-        .card-top {
-          display: flex;
-          align-items: flex-start;
-          justify-content: space-between;
-          padding: 1.25rem 1.25rem 0;
-        }
-        .card-avatar {
-          width: 48px; height: 48px;
-          background: rgba(34,197,94,0.12);
-          border: 1px solid rgba(34,197,94,0.2);
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 700;
-          font-size: 0.875rem;
-          color: #22c55e;
-          letter-spacing: 0.02em;
-        }
-        .card-category {
-          font-size: 0.6875rem;
-          font-weight: 600;
-          letter-spacing: 0.1em;
-          color: rgba(232,237,232,0.4);
-        }
-        .card-body {
-          padding: 1rem 1.25rem 1.25rem;
-          flex: 1;
-        }
-        .card-name {
-          font-family: 'Playfair Display', Georgia, serif;
-          font-size: 1.3125rem;
-          font-weight: 700;
-          color: #e8ede8;
-          line-height: 1.25;
-          margin-bottom: 0.625rem;
-        }
-        .card-desc {
-          font-size: 0.875rem;
-          color: rgba(232,237,232,0.5);
-          line-height: 1.65;
-          margin-bottom: 1rem;
-        }
-        .card-tags {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.375rem;
-        }
-        .card-tag {
-          padding: 0.25rem 0.75rem;
-          background: rgba(255,255,255,0.05);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 999px;
-          font-size: 0.75rem;
-          color: rgba(232,237,232,0.55);
-        }
-        .card-image-placeholder {
-          height: 100px;
-          background: rgba(255,255,255,0.03);
-          border-top: 1px solid rgba(255,255,255,0.05);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: rgba(232,237,232,0.15);
-        }
-
-        /* ── WHATSAPP BUTTON ── */
-        .card-whatsapp-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          width: calc(100% - 2.5rem);
-          margin: 0 1.25rem 1.25rem;
-          padding: 0.7rem 1rem;
-          background: #22c55e;
-          color: #071a0f;
-          font-family: 'Inter', sans-serif;
-          font-size: 0.875rem;
-          font-weight: 600;
-          border: none;
-          border-radius: 10px;
-          cursor: pointer;
-          transition: background 0.2s, transform 0.15s;
-        }
-        .card-whatsapp-btn:hover { background: #16a34a; transform: translateY(-1px); }
-        .card-whatsapp-btn:active { transform: scale(0.98); }
-
-        /* ── EMPTY STATE ── */
-        .empty-state {
-          grid-column: 1/-1;
-          text-align: center;
-          padding: 4rem 2rem;
-          color: rgba(232,237,232,0.4);
-        }
-        .empty-state h3 { font-size: 1.125rem; color: #e8ede8; margin-bottom: 0.5rem; }
-
-        /* ── FOOTER ── */
-        .footer {
-          border-top: 1px solid rgba(255,255,255,0.06);
-          padding: 2rem;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          flex-wrap: gap;
-          gap: 1rem;
-        }
-        .footer-left { font-size: 0.8125rem; color: rgba(232,237,232,0.35); }
-        .footer-left span { color: #22c55e; font-weight: 600; }
-        .footer-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .footer-chip {
-          padding: 0.3rem 0.875rem;
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.07);
-          border-radius: 999px;
-          font-size: 0.75rem;
-          color: rgba(232,237,232,0.4);
-        }
-
-        /* ── RESPONSIVE ── */
-        @media (max-width: 900px) {
-          .vendor-grid { grid-template-columns: repeat(2, 1fr); }
-          .nav-links { display: none; }
-          .nav-mobile-btn { display: block; }
-        }
-        @media (max-width: 580px) {
-          .vendor-grid { grid-template-columns: 1fr; }
-          .hero { padding: 3rem 1.25rem 3.5rem; }
-          .hero-title { font-size: 2.75rem; }
-          .embiem-section { padding: 1rem 1.25rem 2rem; }
-          .embiem-card { padding: 1.75rem; }
-          .directory { padding: 0 1.25rem 3rem; }
-          .search-bar-wrap { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
-          .nav { padding: 0 1.25rem; }
-          .footer { padding: 1.5rem 1.25rem; flex-direction: column; align-items: flex-start; }
-        }
-      `}</style>
-
-      {/* ── NAV ── */}
-      <nav className="nav">
-        <a href="#" className="nav-logo">
-          <div className="nav-logo-icon">🎓</div>
-          FUD Hub
-        </a>
-        <ul className="nav-links">
-          <li><a href="#directory">Directory</a></li>
-          <li><a href="#numbers">Numbers</a></li>
-          <li><a href="#embiem">For Founders</a></li>
-        </ul>
-        <button className="nav-cta" onClick={() => document.getElementById("directory")?.scrollIntoView({ behavior: "smooth" })}>
-          Explore
-        </button>
-        <button className="nav-mobile-btn" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Menu">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M3 12h18M3 6h18M3 18h18" />
-          </svg>
-        </button>
-      </nav>
-
-      {/* ── HERO ── */}
-      <section className="hero">
-        <div className="hero-badge">
-          <span className="hero-badge-dot" />
-          Live · 200+ student vendors on campus
-        </div>
-        <h1 className="hero-title">
-          The Blueprint of<br />
-          <span className="hero-title-accent">Campus Excellence.</span>
-        </h1>
-        <p className="hero-subtitle">
-          A curated directory of student-led businesses redefining campus culture — from architectural pastry to bespoke tech. One tap, ordered via WhatsApp.
-        </p>
-        <div className="hero-btns">
-          <button
-            className="btn-primary"
-            onClick={() => document.getElementById("directory")?.scrollIntoView({ behavior: "smooth" })}
-          >
-            Browse the Hub →
-          </button>
-          <button
-            className="btn-secondary"
-            onClick={() => document.getElementById("embiem")?.scrollIntoView({ behavior: "smooth" })}
-          >
-            List your business
-          </button>
-        </div>
-      </section>
-
-      {/* ── EMBIEM CARD ── */}
-      <section className="embiem-section" id="embiem">
-        <div className="embiem-card">
-          <p className="embiem-eyebrow">Built by EMBIEM</p>
-          <h2 className="embiem-title">
-            Your Campus. Your Vendors <span className="embiem-title-gradient">Engineered by EMBIEM.</span>
-          </h2>
-          <p className="embiem-body">
-            Built for FUD students, by FUD students. EMBIEM is the student-led agency powering FUD Hub — from design and development to vendor onboarding and support. Interested in listing your business or collaborating with us? Reach out via WhatsApp and let's elevate campus culture together.
-          </p>
-          <button
-            className="btn-primary"
-            onClick={() => window.open("https://wa.me/2348000000000?text=Hi%20EMBIEM!%20I%20want%20to%20list%20my%20business%20on%20FUD%20Hub.", "_blank")}
-          >
-            Order food, shop drip, grab tech →
-          </button>
-        </div>
-      </section>
-
-      {/* ── DIRECTORY ── */}
-      <section className="directory" id="directory">
-        {/* Search + Filter */}
-        <div className="search-bar-wrap">
-          <div className="search-input-wrap">
-            <svg className="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-            </svg>
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search pastries, tailors, tech repair..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-          <div className="filter-pills">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                className={`filter-pill${activeCategory === cat ? " active" : ""}`}
-                onClick={() => setActiveCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Grid */}
-        <div className="vendor-grid">
-          {filtered.length > 0 ? (
-            filtered.map((vendor) => <VendorCard key={vendor.id} vendor={vendor} />)
-          ) : (
-            <div className="empty-state">
-              <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>🔍</div>
-              <h3>No vendors found</h3>
-              <p>Try a different search term or category</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ── FOOTER ── */}
-      <footer className="footer">
-        <p className="footer-left">
-          FUD Hub by <span>EMBIEM</span> · Federal University Dutsinma
-        </p>
-        <div className="footer-chips">
-          {["FUD Hub", "Vendor Portal", "EMBIEM.dev"].map((item) => (
-            <span key={item} className="footer-chip">{item}</span>
-          ))}
-        </div>
-      </footer>
-    </>
+    <div className="relative min-h-screen overflow-x-hidden">
+      <Nav />
+      <Hero />
+      <Controls active={active} onActive={setActive} query={query} onQuery={setQuery} />
+      <Grid items={filtered} />
+      <Stats />
+    </div>
   );
 }
