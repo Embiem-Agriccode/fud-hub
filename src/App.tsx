@@ -110,7 +110,7 @@ const BUSINESSES: Business[] = [
     description: "Handmade epoxy resin art - custom coasters, Home Decor.",
     tags: ["ResinArt", "Home Decor", "Vases"],
     whatsapp: "234709421820",
-    accent: "from-purple-300/25 to-pink-400/15",
+    accent: "from-orange-300/25 to-emerald-400/15",
     logo: "/dizzorhlogo.jpg",
     image: "/dizzorh2.jpg",
   },
