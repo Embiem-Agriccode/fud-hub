@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
-type CATEGORIES = "All" | "Uni Eats" | "Campus Drip" | "Fresh Cuts" | "Tech Plug";
 type Business = {
   id: string;
   name: string;
