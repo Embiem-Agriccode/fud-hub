@@ -369,7 +369,7 @@ function Hero() {
             Built for FUD students, by FUD students. EMBIEM is the student-led agency powering FUD Hub — from design and development to vendor onboarding and support. Interested in listing your business or collaborating with us? Reach out via WhatsApp and let's elevate campus culture together.
           </p>
           <a href={`https://wa.me/2347044389234?text=${encodeURIComponent("Hi EMBIEM! I'd like to list my business on FUD Hub.")}`} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_-5px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)] transition-shadow">
-            Order food, shop drip, grab tech →
+           Add your business to FUD Hub →
           </a>
         </div>
       </div>
