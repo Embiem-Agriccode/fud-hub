@@ -19,21 +19,9 @@ type Business = {
 const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Handmade"] as const;
 
 const BUSINESSES: Business[] = [
+ 
   {
     id: "1",
-    name: "Shaffy's Treats",
-    category: "Uni Eats",
-    initials: "ST",
-    description: "Handmade cakes, glazed doughnuts and crispy small chops made fresh to order. Every bite tells the story.",
-    tags: ["Cakes", "Doughnuts", "Small Chops"],
-    whatsapp: "2348026498451",
-    accent: "from-amber-300/30 to-emerald-400/20",
-    logo: "/shaffyslogo.jpg",
-    image: "/shaffys1.jpg",
-    images: ["/shaffys1.jpg", "/shaffys2.jpg", "/shaffys3.jpg", "/shaffys4.jpg"],
-  },
-  {
-    id: "2",
     name: "Timas Delight",
     category: "Uni Eats",
     initials: "TD",
@@ -46,7 +34,7 @@ const BUSINESSES: Business[] = [
     images: ["/temas1.jpg", "/temas2.jpg", "/temas3.jpg", "/temas4.jpg", "/temas5.jpg"],
   },
   {
-    id: "3",
+    id: "2",
     name: "Shop with Lola",
     category: "Campus Drip",
     initials: "SL",
@@ -57,6 +45,19 @@ const BUSINESSES: Business[] = [
     logo: "/lolalogo.jpg",
     image: "/lola1.jpg",
     images: ["/lola1.jpg", "/lola2.jpg", "/lola3.jpg"],
+  },
+   {
+    id: "3",
+    name: "Shaffy's Treats",
+    category: "Uni Eats",
+    initials: "ST",
+    description: "Handmade cakes, glazed doughnuts and crispy small chops made fresh to order. Every bite tells the story.",
+    tags: ["Cakes", "Doughnuts", "Small Chops"],
+    whatsapp: "2348026498451",
+    accent: "from-amber-300/30 to-emerald-400/20",
+    logo: "/shaffyslogo.jpg",
+    image: "/shaffys1.jpg",
+    images: ["/shaffys1.jpg", "/shaffys2.jpg", "/shaffys3.jpg", "/shaffys4.jpg"],
   },
   {
     id: "4",
