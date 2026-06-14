@@ -35,7 +35,7 @@ const BUSINESSES: Business[] = [
     initials: "TD",
     description: "Shawarma, mandi rice, milkshakes, mocktails and fresh small chops — campus comfort food done right.",
     tags: ["Shawarma", "Milkshakes", "Snacks"],
-    whatsapp: "2348026498451",
+    whatsapp: "2347026356625",
     accent: "from-orange-300/25 to-emerald-400/15",
     logo: "/temaslogo.jpg",
     image: "/temas1.jpg",
