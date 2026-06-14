@@ -119,7 +119,7 @@ const BUSINESSES: Business[] = [
     tags: ["ResinArt", "Home Decor", "Vases"],
     whatsapp: "234709421820",
     accent: "from-purple-300/25 to-pink-400/15",
-    logo: "/dizzorlogo.jpg",
+    logo: "/dizzorhlogo.jpg",
     image: "/dizzorh2.jpg",
     images: ["/dizzorh2.jpg", "/dizzorh3.jpg", "/dizzorh4.jpg"],
   },
