@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-// ── Types ────────────────────────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────────
 type Business = {
   id: string;
   name: string;
@@ -12,9 +12,12 @@ type Business = {
   accent: string;
   logo?: string;
   image?: string;
+  images?: string[];
 };
-// ── Data ─────────────────────────────────────────────────────────────────────
+
+// ── Data ──────────────────────────────────────────────────────────────────────
 const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Handmade"] as const;
+
 const BUSINESSES: Business[] = [
   {
     id: "1",
@@ -27,6 +30,7 @@ const BUSINESSES: Business[] = [
     accent: "from-amber-300/30 to-emerald-400/20",
     logo: "/shaffyslogo.jpg",
     image: "/shaffys1.jpg",
+    images: ["/shaffys1.jpg", "/shaffys2.jpg", "/shaffys3.jpg", "/shaffys4.jpg"],
   },
   {
     id: "2",
@@ -35,10 +39,11 @@ const BUSINESSES: Business[] = [
     initials: "TD",
     description: "Shawarma, mandi rice, milkshakes, mocktails and fresh small chops — campus comfort food done right.",
     tags: ["Shawarma", "Milkshakes", "Snacks"],
-    whatsapp: "2347026356625",
+    whatsapp: "2348026498451",
     accent: "from-orange-300/25 to-emerald-400/15",
     logo: "/temaslogo.jpg",
     image: "/temas1.jpg",
+    images: ["/temas1.jpg", "/temas2.jpg", "/temas3.jpg", "/temas4.jpg", "/temas5.jpg"],
   },
   {
     id: "3",
@@ -51,6 +56,7 @@ const BUSINESSES: Business[] = [
     accent: "from-pink-400/20 to-emerald-400/20",
     logo: "/lolalogo.jpg",
     image: "/lola1.jpg",
+    images: ["/lola1.jpg", "/lola2.jpg", "/lola3.jpg"],
   },
   {
     id: "4",
@@ -63,6 +69,7 @@ const BUSINESSES: Business[] = [
     accent: "from-rose-300/20 to-emerald-400/15",
     logo: "/matalogo.jpg",
     image: "/mata1.jpg",
+    images: ["/mata1.jpg", "/mata2.jpg"],
   },
   {
     id: "5",
@@ -75,6 +82,7 @@ const BUSINESSES: Business[] = [
     accent: "from-cyan-400/25 to-emerald-400/15",
     logo: "/aalogo.jpg",
     image: "/aa1.jpg",
+    images: ["/aa1.jpg", "/aa2.jpg", "/aa3.jpg", "/aa4.jpg"],
   },
   {
     id: "6",
@@ -87,6 +95,7 @@ const BUSINESSES: Business[] = [
     accent: "from-emerald-400/30 to-cyan-400/10",
     logo: "/mbmlogo.jpg",
     image: "/mbm1.jpg",
+    images: ["/mbm1.jpg", "/mbm2.jpg", "/mbm3.jpg"],
   },
   {
     id: "7",
@@ -99,6 +108,7 @@ const BUSINESSES: Business[] = [
     accent: "from-orange-300/25 to-emerald-400/15",
     logo: "/10 logo.jpg",
     image: "/10 1.jpg",
+    images: ["/10 1.jpg", "/10 2.jpg", "/10 3.jpg"],
   },
   {
     id: "8",
@@ -108,9 +118,10 @@ const BUSINESSES: Business[] = [
     description: "Handmade epoxy resin art - custom coasters, Home Decor.",
     tags: ["ResinArt", "Home Decor", "Vases"],
     whatsapp: "234709421820",
-    accent: "from-orange-300/25 to-emerald-400/15",
-    logo: "/dizzorhlogo.jpg",
+    accent: "from-purple-300/25 to-pink-400/15",
+    logo: "/dizzorlogo.jpg",
     image: "/dizzorh2.jpg",
+    images: ["/dizzorh2.jpg", "/dizzorh3.jpg", "/dizzorh4.jpg"],
   },
 ];
 
@@ -146,6 +157,156 @@ function useReveal() {
   }, []);
 }
 
+// ── Vendor Modal ──────────────────────────────────────────────────────────────
+function VendorModal({ business, onClose }: { business: Business; onClose: () => void }) {
+  const [current, setCurrent] = useState(0);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+  const images = business.images || (business.image ? [business.image] : []);
+  const waHref = `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(`Hi ${business.name}, I'd like to place an order via FUD Hub.`)}`;
+
+  // Close on backdrop click
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  const prev = () => setCurrent((c) => (c - 1 + images.length) % images.length);
+  const next = () => setCurrent((c) => (c + 1) % images.length);
+
+  const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    touchEndX.current = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - touchEndX.current;
+    if (Math.abs(diff) > 40) diff > 0 ? next() : prev();
+  };
+
+  return (
+    <div
+      style={{
+        position: "fixed", inset: 0, zIndex: 100,
+        background: "rgba(0,0,0,0.85)",
+        backdropFilter: "blur(8px)",
+        display: "flex", alignItems: "flex-end",
+        animation: "fadeIn 0.2s ease",
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          width: "100%", maxWidth: "480px", margin: "0 auto",
+          background: "oklch(0.18 0.02 250)",
+          borderRadius: "24px 24px 0 0",
+          border: "1px solid color-mix(in oklab, oklch(0.72 0.21 152) 20%, transparent)",
+          overflow: "hidden",
+          animation: "slideUp 0.35s cubic-bezier(0.2,0.8,0.2,1)",
+          maxHeight: "90vh",
+          overflowY: "auto",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1.25rem 1.25rem 0.75rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            {business.logo ? (
+              <img src={business.logo} alt={business.name} style={{ width: 44, height: 44, borderRadius: 10, objectFit: "cover", border: "1px solid rgba(255,255,255,0.1)" }} />
+            ) : (
+              <div style={{ width: 44, height: 44, borderRadius: 10, background: "oklch(0.22 0.022 250)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1rem", fontWeight: 700, color: "oklch(0.85 0.22 158)" }}>
+                {business.initials}
+              </div>
+            )}
+            <div>
+              <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.1rem", color: "oklch(0.97 0.01 180)", lineHeight: 1.2 }}>{business.name}</div>
+              <div style={{ fontSize: "0.7rem", color: "oklch(0.62 0.02 250)", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>{business.category}</div>
+            </div>
+          </div>
+          <button onClick={onClose} style={{ background: "oklch(0.26 0.025 250)", border: "none", borderRadius: "50%", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "oklch(0.97 0.01 180)", fontSize: "1rem" }}>✕</button>
+        </div>
+
+        {/* Image gallery */}
+        {images.length > 0 && (
+          <div style={{ position: "relative", margin: "0.75rem 1.25rem" }}>
+            <div
+              style={{ borderRadius: 16, overflow: "hidden", aspectRatio: "4/3", background: "oklch(0.22 0.022 250)", position: "relative" }}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
+              <img
+                key={current}
+                src={images[current]}
+                alt={`${business.name} ${current + 1}`}
+                style={{ width: "100%", height: "100%", objectFit: "cover", animation: "fadeIn 0.3s ease" }}
+              />
+              {/* Arrows */}
+              {images.length > 1 && (
+                <>
+                  <button onClick={prev} style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.5)", border: "none", borderRadius: "50%", width: 36, height: 36, color: "white", fontSize: "1rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>‹</button>
+                  <button onClick={next} style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.5)", border: "none", borderRadius: "50%", width: 36, height: 36, color: "white", fontSize: "1rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>›</button>
+                </>
+              )}
+            </div>
+
+            {/* Dots */}
+            {images.length > 1 && (
+              <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 10 }}>
+                {images.map((_, i) => (
+                  <button key={i} onClick={() => setCurrent(i)} style={{ width: i === current ? 20 : 6, height: 6, borderRadius: 999, background: i === current ? "oklch(0.85 0.22 158)" : "oklch(0.4 0.02 250)", border: "none", cursor: "pointer", transition: "all 0.3s", padding: 0 }} />
+                ))}
+              </div>
+            )}
+
+            {/* Counter */}
+            {images.length > 1 && (
+              <div style={{ textAlign: "center", fontSize: "0.75rem", color: "oklch(0.62 0.02 250)", marginTop: 4 }}>
+                {current + 1} / {images.length}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Info */}
+        <div style={{ padding: "0 1.25rem 1.25rem" }}>
+          <p style={{ fontSize: "0.9rem", color: "oklch(0.75 0.02 250)", lineHeight: 1.65, marginBottom: "0.875rem" }}>{business.description}</p>
+
+          {/* Tags */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: "1.25rem" }}>
+            {business.tags.map((t) => (
+              <span key={t} style={{ padding: "4px 12px", background: "oklch(0.22 0.022 250)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 999, fontSize: "0.75rem", color: "oklch(0.75 0.02 250)" }}>{t}</span>
+            ))}
+          </div>
+
+          {/* WhatsApp button */}
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+              width: "100%", padding: "0.875rem",
+              background: "oklch(0.78 0.19 155)",
+              color: "oklch(0.15 0.02 250)",
+              fontWeight: 700, fontSize: "0.9375rem",
+              borderRadius: 14, border: "none",
+              textDecoration: "none",
+              boxShadow: "0 0 30px -5px oklch(0.72 0.21 152)",
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
+            Order via WhatsApp
+          </a>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+      `}</style>
+    </div>
+  );
+}
+
 // ── Nav ───────────────────────────────────────────────────────────────────────
 function Nav() {
   return (
@@ -153,11 +314,7 @@ function Nav() {
       <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative h-10 w-10 rounded-xl overflow-hidden border border-white/10 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.8)]">
-          <img 
-            src="/embiem-logo.png" 
-            alt="EMBIEM" 
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
+            <img src="/embiem-logo.png" alt="EMBIEM" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
           <span className="font-display font-semibold tracking-tight text-lg">FUD Hub</span>
         </div>
@@ -166,7 +323,7 @@ function Nav() {
           <a href="#stats" className="hover:text-foreground transition-colors">Numbers</a>
           <a href="#embiem" className="hover:text-foreground transition-colors">For Founders</a>
         </nav>
-        <a href="#directory" className="text-xs sm:text-sm font-medium px-4 py-2 rounded-full glow-border bg-surface hover:bg-surface-elevated transition-colors">
+        <a href="#directory" className="text-foreground text-xs sm:text-sm font-medium px-4 py-2 rounded-full glow-border bg-surface hover:bg-surface-elevated transition-colors">
           Explore
         </a>
       </div>
@@ -191,48 +348,31 @@ function Hero() {
           A curated directory of student-led businesses redefining campus culture — from architectural pastry to bespoke tech. One tap, ordered via WhatsApp.
         </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <a
-            href="#directory"
-            className="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_-5px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)] transition-shadow"
-          >
-            Browse the Hub
-            <span className="transition-transform group-hover:translate-x-0.5">→</span>
+          <a href="#directory" className="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_-5px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)] transition-shadow">
+            Browse the Hub <span className="transition-transform group-hover:translate-x-0.5">→</span>
           </a>
-          <a
-            href="#embiem"
-            className="inline-flex items-center gap-2 rounded-full glow-border bg-surface px-5 py-3 text-sm font-medium hover:bg-surface-elevated transition-colors"
-          >
+          <a href="#embiem" className="text-foreground inline-flex items-center gap-2 rounded-full glow-border bg-surface px-5 py-3 text-sm font-medium hover:bg-surface-elevated transition-colors">
             List your business
           </a>
         </div>
       </div>
 
-      {/* EMBIEM card */}
-      <div id="embiem" className="reveal-slide mt-18 relative overflow-hidden rounded-2xl border border-emerald-glow/30 bg-gradient-to-br from-surface-elevated to-surface p-6 sm:p-8 shadow-[0_0_40px_-12px_rgba(0,0,0,0.5)]" style={{ marginTop: "4.5rem" }}>
+      <div id="embiem" className="reveal-slide relative overflow-hidden rounded-2xl border border-emerald-glow/30 bg-gradient-to-br from-surface-elevated to-surface p-6 sm:p-8 shadow-[0_0_40px_-12px_rgba(0,0,0,0.5)]" style={{ marginTop: "4.5rem" }}>
         <div aria-hidden className="pointer-events-none absolute -right-6 -top-6 h-40 w-40 rounded-full bg-emerald-glow/15 blur-3xl" />
         <div className="relative">
-          <div className="text-[10px] uppercase tracking-[0.18em] text-emerald-bright mb-2">
-            Built by EMBIEM
-          </div>
+          <div className="text-[10px] uppercase tracking-[0.18em] text-emerald-bright mb-2">Built by EMBIEM</div>
           <h2 className="text-xl sm:text-2xl font-display font-semibold leading-snug tracking-tight">
             Your Campus. Your Vendors <span className="text-gradient-emerald">Engineered by EMBIEM.</span>
           </h2>
           <p className="mt-2 text-sm text-muted-foreground max-w-md">
             Built for FUD students, by FUD students. EMBIEM is the student-led agency powering FUD Hub — from design and development to vendor onboarding and support. Interested in listing your business or collaborating with us? Reach out via WhatsApp and let's elevate campus culture together.
           </p>
-          <a
-            href={`https://wa.me/2347044389234?text=${encodeURIComponent("Hi EMBIEM! I'd like to list my luxury site for my business.")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_-5px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)] transition-shadow"
-          >
-            Order food, shop drip, grab tech
-            <span className="transition-transform group-hover:translate-x-0.5">→</span>
+          <a href={`https://wa.me/2347044389234?text=${encodeURIComponent("Hi EMBIEM! I'd like to list my business on FUD Hub.")}`} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_-5px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)] transition-shadow">
+            Order food, shop drip, grab tech →
           </a>
         </div>
       </div>
 
-      {/* Floating orb */}
       <div aria-hidden className="pointer-events-none absolute -right-10 top-10 hidden lg:block">
         <div className="h-72 w-72 rounded-full bg-emerald-glow/20 blur-3xl" />
       </div>
@@ -254,27 +394,13 @@ function Controls({ active, onActive, query, onQuery }: {
           <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="11" cy="11" r="7" /><path d="m21 21-3.5-3.5" />
           </svg>
-          <input
-            value={query}
-            onChange={(e) => onQuery(e.target.value)}
-            placeholder="Search pastries, tailors, tech repair..."
-            className="w-full bg-surface/60 border border-border rounded-xl pl-11 pr-4 py-3 text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:border-emerald-glow focus:shadow-[0_0_0_3px_color-mix(in_oklab,var(--emerald-glow),20%,transparent)] transition"
-          />
+          <input value={query} onChange={(e) => onQuery(e.target.value)} placeholder="Search pastries, tailors, tech repair..." className="w-full bg-surface/60 border border-border rounded-xl pl-11 pr-4 py-3 text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:border-emerald-glow transition" />
         </div>
         <div className="flex flex-wrap gap-2">
           {CATEGORIES.map((c) => {
             const isActive = c === active;
             return (
-              <button
-                key={c}
-                onClick={() => onActive(c)}
-                className={
-                  "text-xs sm:text-sm px-4 py-2.5 rounded-full transition-all duration-300 border " +
-                  (isActive
-                    ? "bg-primary text-primary-foreground border-transparent shadow-[0_0_24px_-6px_var(--emerald-glow)]"
-                    : "bg-surface/60 text-muted-foreground border-border hover:text-foreground hover:border-emerald-glow/60")
-                }
-              >
+              <button key={c} onClick={() => onActive(c)} className={"text-xs sm:text-sm px-4 py-2.5 rounded-full transition-all duration-300 border " + (isActive ? "bg-primary text-primary-foreground border-transparent shadow-[0_0_24px_-6px_var(--emerald-glow)]" : "bg-surface/60 text-muted-foreground border-border hover:text-foreground hover:border-emerald-glow/60")}>
                 {c}
               </button>
             );
@@ -286,76 +412,61 @@ function Controls({ active, onActive, query, onQuery }: {
 }
 
 // ── Card ──────────────────────────────────────────────────────────────────────
-function Card({ business, index }: { business: Business; index: number }) {
+function Card({ business, index, onOpen }: { business: Business; index: number; onOpen: () => void }) {
   const waHref = `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(`Hi ${business.name}, I'd like to place an order via FUD Hub.`)}`;
   return (
-    <article
-      className="reveal group relative glass-card rounded-2xl p-6 flex flex-col hover:-translate-y-1 hover:scale-[1.03] hover:shadow-[0_30px_60px_-20px_color-mix(in_oklab,var(--emerald-glow),55%,transparent)] hover:border-emerald-glow/60"
-      style={{ transitionDelay: `${(index % 9) * 40}ms` }}
-    >
-      {/* Accent gradient overlay */}
+    <article className="reveal group relative glass-card rounded-2xl p-6 flex flex-col hover:-translate-y-1 hover:scale-[1.03] hover:shadow-[0_30px_60px_-20px_color-mix(in_oklab,var(--emerald-glow),55%,transparent)] hover:border-emerald-glow/60" style={{ transitionDelay: `${(index % 9) * 40}ms` }}>
       <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br ${business.accent} pointer-events-none`} />
 
-      {/* Top row */}
+      {/* Top row — clickable to open modal */}
+      <div className="relative flex items-start justify-between gap-3 cursor-pointer" onClick={onOpen}>
         <div className="h-14 w-14 glow-border bg-surface place-items-center grid rounded-xl shrink-0 overflow-hidden">
           {business.logo ? (
             <img src={business.logo} alt={business.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           ) : (
-            <span className="text-gradient-emerald font-display text-lg font-bold tracking-tight">
-              {business.initials}
-            </span>
+            <span className="text-gradient-emerald font-display text-lg font-bold tracking-tight">{business.initials}</span>
           )}
         </div>
+        <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground/80 mt-1.5">{business.category}</span>
+      </div>
 
-      {/* Body */}
-      <div className="relative mt-4 flex-1">
+      {/* Body — clickable to open modal */}
+      <div className="relative mt-4 flex-1 cursor-pointer" onClick={onOpen}>
         <h3 className="text-xl font-display font-semibold leading-snug tracking-tight">{business.name}</h3>
         <p className="mt-2 text-sm text-muted-foreground">{business.description}</p>
         <div className="mt-3 flex flex-wrap gap-1.5">
           {business.tags.map((t) => (
-            <span key={t} className="text-[11px] px-2.5 py-1 rounded-full border border-border/70 text-muted-foreground bg-surface/60">
-              {t}
-            </span>
+            <span key={t} className="text-[11px] px-2.5 py-1 rounded-full border border-border/70 text-muted-foreground bg-surface/60">{t}</span>
           ))}
         </div>
       </div>
 
-      {/* Image area */}
-      <div
-        className="reveal-slide relative mt-6 aspect-[16/10] w-full overflow-hidden rounded-xl border border-border/70 bg-gradient-to-br from-surface-elevated to-surface"
-        style={{ transitionDelay: `${(index % 9) * 60 + 120}ms` }}
-      >
+      {/* Image — clickable to open modal */}
+      <div className="reveal-slide relative mt-6 aspect-[16/10] w-full overflow-hidden rounded-xl border border-border/70 bg-gradient-to-br from-surface-elevated to-surface cursor-pointer" style={{ transitionDelay: `${(index % 9) * 60 + 120}ms` }} onClick={onOpen}>
         {business.image ? (
-          <img
-            src={business.image}
-            alt={`${business.name} product`}
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
+          <img src={business.image} alt={`${business.name} product`} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
         ) : (
           <div className="absolute inset-0 grid place-items-center">
             <div aria-hidden className="absolute inset-0 opacity-60" style={{ backgroundImage: "repeating-linear-gradient(45deg, color-mix(in oklab, var(--emerald-glow) 8%, transparent) 0 1px, transparent 1px 14px)" }} />
             <div className="relative flex flex-col items-center gap-2 text-center p-4">
               <svg viewBox="0 0 24 24" className="h-7 w-7 text-emerald-bright/70" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="5" width="18" height="14" rx="2" />
-                <circle cx="9" cy="11" r="2" />
-                <path d="m21 17-5-5-8 8" />
+                <rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="9" cy="11" r="2" /><path d="m21 17-5-5-8 8" />
               </svg>
-              <span className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                Upload Product Photo
-              </span>
+              <span className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Upload Product Photo</span>
             </div>
+          </div>
+        )}
+        {/* View more hint */}
+        {business.images && business.images.length > 1 && (
+          <div style={{ position: "absolute", bottom: 8, right: 8, background: "rgba(0,0,0,0.6)", borderRadius: 999, padding: "3px 10px", fontSize: "0.7rem", color: "white", backdropFilter: "blur(4px)" }}>
+            +{business.images.length - 1} more
           </div>
         )}
       </div>
 
-      {/* WhatsApp CTA */}
+      {/* WhatsApp button */}
       <div className="relative mt-5 pt-5 border-t border-border/70">
-        <a
-          href={waHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-all duration-400 shadow-[0_0_24px_-6px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)]"        >
+        <a href={waHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-all duration-400 shadow-[0_0_24px_-6px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)]">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
           </svg>
@@ -367,18 +478,14 @@ function Card({ business, index }: { business: Business; index: number }) {
 }
 
 // ── Grid ──────────────────────────────────────────────────────────────────────
-function Grid({ items }: { items: Business[] }) {
+function Grid({ items, onOpen }: { items: Business[]; onOpen: (b: Business) => void }) {
   return (
     <section className="mx-auto max-w-7xl px-6 py-12 sm:py-16">
       {items.length === 0 ? (
-        <div className="glass-card rounded-2xl p-16 text-center text-muted-foreground">
-          No vendors match that search. Try another category.
-        </div>
+        <div className="glass-card rounded-2xl p-16 text-center text-muted-foreground">No vendors match that search. Try another category.</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-          {items.map((b, i) => (
-            <Card key={b.id} business={b} index={i} />
-          ))}
+          {items.map((b, i) => <Card key={b.id} business={b} index={i} onOpen={() => onOpen(b)} />)}
         </div>
       )}
     </section>
@@ -406,6 +513,7 @@ export default function App() {
   useReveal();
   const [active, setActive] = useState<(typeof CATEGORIES)[number]>("All");
   const [query, setQuery] = useState("");
+  const [selectedVendor, setSelectedVendor] = useState<Business | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -421,8 +529,9 @@ export default function App() {
       <Nav />
       <Hero />
       <Controls active={active} onActive={setActive} query={query} onQuery={setQuery} />
-      <Grid items={filtered} />
+      <Grid items={filtered} onOpen={setSelectedVendor} />
       <Stats />
+      {selectedVendor && <VendorModal business={selectedVendor} onClose={() => setSelectedVendor(null)} />}
     </div>
   );
 }
