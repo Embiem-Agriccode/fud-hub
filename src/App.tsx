@@ -13,6 +13,7 @@ type Business = {
   logo?: string;
   image?: string;
   images?: string[];
+  verified?: boolean;
 };
 
 // ── Data ──────────────────────────────────────────────────────────────────────
@@ -32,6 +33,7 @@ const BUSINESSES: Business[] = [
     logo: "/temaslogo.jpg",
     image: "/temas1.jpg",
     images: ["/temas1.jpg", "/temas2.jpg", "/temas3.jpg", "/temas4.jpg", "/temas5.jpg"],
+    verified: true
   },
   {
     id: "2",
@@ -45,6 +47,7 @@ const BUSINESSES: Business[] = [
     logo: "/lolalogo.jpg",
     image: "/lola1.jpg",
     images: ["/lola1.jpg", "/lola2.jpg", "/lola3.jpg"],
+    verified: true
   },
    {
     id: "3",
@@ -58,6 +61,7 @@ const BUSINESSES: Business[] = [
     logo: "/shaffyslogo.jpg",
     image: "/shaffys1.jpg",
     images: ["/shaffys1.jpg", "/shaffys2.jpg", "/shaffys3.jpg", "/shaffys4.jpg"],
+      verified: true
   },
   {
     id: "4",
@@ -71,6 +75,7 @@ const BUSINESSES: Business[] = [
     logo: "/matalogo.jpg",
     image: "/mata1.jpg",
     images: ["/mata1.jpg", "/mata2.jpg"],
+    verified: true
   },
   {
     id: "5",
@@ -84,6 +89,7 @@ const BUSINESSES: Business[] = [
     logo: "/aalogo.jpg",
     image: "/aa1.jpg",
     images: ["/aa1.jpg", "/aa2.jpg", "/aa3.jpg", "/aa4.jpg"],
+    verified: true
   },
   {
     id: "6",
@@ -97,6 +103,7 @@ const BUSINESSES: Business[] = [
     logo: "/mbmlogo.jpg",
     image: "/mbm1.jpg",
     images: ["/mbm1.jpg", "/mbm2.jpg", "/mbm3.jpg"],
+    verified: true
   },
   {
     id: "7",
@@ -110,6 +117,7 @@ const BUSINESSES: Business[] = [
     logo: "/10 logo.jpg",
     image: "/10 1.jpg",
     images: ["/10 1.jpg", "/10 2.jpg", "/10 3.jpg"],
+    verified: true
   },
   {
     id: "8",
@@ -123,6 +131,7 @@ const BUSINESSES: Business[] = [
     logo: "/dizzorhlogo.jpg",
     image: "/dizzorh2.jpg",
     images: ["/dizzorh2.jpg", "/dizzorh3.jpg", "/dizzorh4.jpg"],
+    verified: true
   },
   {
     id: "9",
@@ -136,6 +145,7 @@ const BUSINESSES: Business[] = [
     logo: "/bellogo.jpg",
     image: "/bel1.jpg",
     images: ["/bel1.jpg", "/bel7.jpeg", "/bel3.jpg", "/bel6.jpeg",  "/bel2.jpg",  "/bel4.jpg",  "/bel5.jpeg",  "/bel10.jpeg"],
+    verified: true
   },
   {
     id: "10",
@@ -581,7 +591,13 @@ function Card({ business, index, onOpen }: { business: Business; index: number; 
           </div>
         )}
       </div>
-
+      {business.verified && (
+  <div className="flex items-center gap-1 mt-3 mb-1">
+    <span style={{ fontSize: "11px", color: "#10b981", fontWeight: 600 }}>
+      ✅ Verified by EMBIEM
+    </span>
+  </div>
+)}
       {/* WhatsApp button */}
       <div className="relative mt-5 pt-5 border-t border-border/70">
         <a href={waHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-all duration-400 shadow-[0_0_24px_-6px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)]">
