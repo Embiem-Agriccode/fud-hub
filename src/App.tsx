@@ -215,6 +215,32 @@ const BUSINESSES: Business[] = [
     image: "/matashi2.jpg",
     images: ["/matashi3.jpg", "/matashi4.jpg", "/matashi5.jpg", "/matashi6.jpg"],
   },
+  {
+    id: "16",
+    name: "Glow City",
+    category: "Campus Drip",
+    initials: "GC",
+    description: "Luxury fabrics, perfumes, trendy shoes, bags & beauty essentials. Affordable + quality",
+    tags: ["Fabrics", "Perfumes", "Shoes", "Bags", "Beauty", "CampusDrip"],
+    whatsapp: "2349012146029",
+    accent: "from-orange-300/25 to-emerald-400/15",
+    logo: "/glowlogo.jpg",
+    image: "/glow1.jpg",
+    images: ["/glow2.jpg", "/glow3.jpg", "/glow4.jpg", "/glow5.jpg", ],
+  },
+  {
+    id: "17",
+    name: "Syms souvenirs",
+    category: "Campus Drip",
+    initials: "Ss",
+    description: "Ribbons, kasko, veil pins & more for weddings, birthdays, parties. Make your day memorable",
+    tags: ["Ribbons", "Kasko", "VeilPins", "Souvenirs", "Wedding", "Party"],
+    whatsapp: "2347061147976",
+    accent: "from-rose-300/20 to-emerald-400/15",
+    logo: "/symslogo.jpg",
+    image: "/syms1.jpg",
+    images: ["/syms1.jpg","/syms3.jpg" , "/syms2.jpg", "/syms4.jpg"],
+  },
 ];
 
 const STATS = [
