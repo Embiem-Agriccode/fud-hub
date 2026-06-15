@@ -16,7 +16,7 @@ type Business = {
 };
 
 // ── Data ──────────────────────────────────────────────────────────────────────
-const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Handmade"] as const;
+const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Decor"] as const;
 
 const BUSINESSES: Business[] = [
  
@@ -208,7 +208,7 @@ const BUSINESSES: Business[] = [
     category: "Campus Drip",
     initials: "M",
     description: "Traditional Hausa caps - embroidered, colored, plain. Fila, tangaran, campus styles",
-    tags:  ["Boots", "Timberland", "Watches", "Streetwear", "Sneakers", "Cloth"],
+    tags:  ["HausaCap", "Fila", "Tangaran", "TraditionalWear", "CampusWear", "Embroidered"],
     whatsapp: "2348029943729",
     accent: "from-cyan-400/25 to-emerald-400/15",
     logo: "/matashilogo.jpeg",
