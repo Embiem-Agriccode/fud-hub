@@ -242,7 +242,7 @@ const BUSINESSES: Business[] = [
     id: "17",
     name: "Syms souvenirs",
     category: "Campus Drip",
-    initials: "Ss",
+    initials: "SS",
     description: "Ribbons, kasko, veil pins & more for weddings, birthdays, parties. Make your day memorable",
     tags: ["Ribbons", "Kasko", "VeilPins", "Souvenirs", "Wedding", "Party"],
     whatsapp: "2347061147976",
@@ -251,6 +251,19 @@ const BUSINESSES: Business[] = [
     image: "/syms1.jpg",
     images: ["/syms1.jpg","/syms3.jpg" , "/syms2.jpg", "/syms4.jpg"],
   },
+  {
+  id: "18",
+  name: "HAZO's Collection",
+  category: "Campus Drip",
+  initials: "HZ",
+  description: "High-quality bedsheets and duvets, plus modest fashion items including hijabs, jalbabs, inner caps, and socks. Carefully selected for comfort, quality, and affordability.",
+  tags: ["Bedsheets", "Duvets", "Hijab", "Jalbab", "Socks", "ModestWear", "BedroomEssentials"],
+  whatsapp: "2349060932856",
+  accent: "from-rose-300/20 to-emerald-400/15",
+  logo: "/hazologo.jpeg",
+  image: "/hazo1.jpeg",
+  images: ["/hazo1.jpeg", "/hazo2.jpeg","/hazo3.jpeg" ,"/hazo4.jpeg"]
+}
 ];
 
 const STATS = [
