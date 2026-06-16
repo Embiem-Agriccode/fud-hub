@@ -197,7 +197,7 @@ const BUSINESSES: Business[] = [
     accent: "from-rose-300/20 to-emerald-400/15",
     logo: "/zakilogo.jpeg",
     image: "/zaki1.jpeg",
-    images: ["/zaki2.jpeg", "/zaki2.jpeg", "/zaki3.jpeg", "/zaki4.jpeg", "/zaki5.jpeg", "/zaki6.jpeg", "/zaki7.jpeg", "/zaki8.jpeg", "/zaki9.jpeg", "/zaki10.jpeg", "/zaki11.jpeg", "/zaki12.jpeg"],
+    images: ["/zaki2.jpeg", "/zaki12.jpeg", "/zaki3.jpeg", "/zaki4.jpeg", "/zaki5.jpeg", "/zaki6.jpeg", "/zaki7.jpeg", "/zaki8.jpeg", "/zaki9.jpeg", "/zaki10.jpeg", "/zaki11.jpeg", "/zaki12.jpeg"],
   },
   {
     id: "14",
