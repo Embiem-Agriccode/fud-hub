@@ -20,7 +20,6 @@ type Business = {
 const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Decor"] as const;
 
 const BUSINESSES: Business[] = [
- 
   {
     id: "1",
     name: "Timas Delight",
@@ -49,7 +48,7 @@ const BUSINESSES: Business[] = [
     images: ["/lola1.jpg", "/lola2.jpg", "/lola3.jpg"],
     verified: true
   },
-   {
+  {
     id: "3",
     name: "Shaffy's Treats",
     category: "Uni Eats",
@@ -61,7 +60,7 @@ const BUSINESSES: Business[] = [
     logo: "/shaffyslogo.jpg",
     image: "/shaffys1.jpg",
     images: ["/shaffys1.jpg", "/shaffys2.jpg", "/shaffys3.jpg", "/shaffys4.jpg"],
-      verified: true
+    verified: true
   },
   {
     id: "4",
@@ -144,7 +143,7 @@ const BUSINESSES: Business[] = [
     accent: "from-orange-300/25 to-emerald-400/15",
     logo: "/bellogo.jpg",
     image: "/bel1.jpg",
-    images: ["/bel1.jpg", "/bel7.jpeg", "/bel3.jpg", "/bel6.jpeg",  "/bel2.jpg",  "/bel4.jpg",  "/bel5.jpeg",  "/bel10.jpeg"],
+    images: ["/bel1.jpg", "/bel7.jpeg", "/bel3.jpg", "/bel6.jpeg", "/bel2.jpg", "/bel4.jpg", "/bel5.jpeg", "/bel10.jpeg"],
     verified: true
   },
   {
@@ -158,7 +157,7 @@ const BUSINESSES: Business[] = [
     accent: "from-amber-300/30 to-emerald-400/20",
     logo: "/amakalogo.jpeg",
     image: "/amaka1.jpeg",
-    images: ["/amaka1.jpeg", "/amaka2.jpeg", "/amaka3.jpeg", "/amaka4.jpeg","/amaka5.jpeg",],
+    images: ["/amaka1.jpeg", "/amaka2.jpeg", "/amaka3.jpeg", "/amaka4.jpeg", "/amaka5.jpeg"],
   },
   {
     id: "11",
@@ -184,14 +183,14 @@ const BUSINESSES: Business[] = [
     accent: "from-orange-300/25 to-emerald-400/15",
     logo: "/khadilogo.jpeg",
     image: "/khadi1.jpeg",
-    images: ["/khadi1.jpeg", "/khadi12.jpeg", "/khadi4.jpeg", "/khadi11.jpeg", "/khadi6.jpeg", "/khadi9.jpeg","/khadi12.jpeg"],
+    images: ["/khadi1.jpeg", "/khadi12.jpeg", "/khadi4.jpeg", "/khadi11.jpeg", "/khadi6.jpeg", "/khadi9.jpeg", "/khadi12.jpeg"],
   },
-   {
+  {
     id: "13",
     name: "A.L.M OTAKU WEARS",
     category: "Campus Drip",
     initials: "NL",
-    description:  "Anime streetwear & merch - tees, hoodies, caps. Naruto, Demon Slayer, One Piece designs",
+    description: "Anime streetwear & merch - tees, hoodies, caps. Naruto, Demon Slayer, One Piece designs",
     tags: ["AnimeCloth", "Streetwear", "Cosplay"],
     whatsapp: "2348054982024 ",
     accent: "from-rose-300/20 to-emerald-400/15",
@@ -218,7 +217,7 @@ const BUSINESSES: Business[] = [
     category: "Campus Drip",
     initials: "M",
     description: "Traditional Hausa caps - embroidered, colored, plain. Fila, tangaran, campus styles",
-    tags:  ["HausaCap", "Fila", "Tangaran", "TraditionalWear", "CampusWear", "Embroidered"],
+    tags: ["HausaCap", "Fila", "Tangaran", "TraditionalWear", "CampusWear", "Embroidered"],
     whatsapp: "2348029943729",
     accent: "from-cyan-400/25 to-emerald-400/15",
     logo: "/matashilogo.jpeg",
@@ -236,7 +235,7 @@ const BUSINESSES: Business[] = [
     accent: "from-orange-300/25 to-emerald-400/15",
     logo: "/glowlogo.jpg",
     image: "/glow1.jpg",
-    images: ["/glow2.jpg", "/glow3.jpg", "/glow4.jpg", "/glow5.jpg", ],
+    images: ["/glow2.jpg", "/glow3.jpg", "/glow4.jpg", "/glow5.jpg"],
   },
   {
     id: "17",
@@ -249,21 +248,21 @@ const BUSINESSES: Business[] = [
     accent: "from-rose-300/20 to-emerald-400/15",
     logo: "/symslogo.jpg",
     image: "/syms1.jpg",
-    images: ["/syms1.jpg","/syms3.jpg" , "/syms2.jpg", "/syms4.jpg"],
+    images: ["/syms1.jpg", "/syms3.jpg", "/syms2.jpg", "/syms4.jpg"],
   },
   {
-  id: "18",
-  name: "HAZO's Collection",
-  category: "Campus Drip",
-  initials: "HZ",
-  description: "High-quality bedsheets and duvets, plus modest fashion items including hijabs, jalbabs, inner caps, and socks. Carefully selected for comfort, quality, and affordability.",
-  tags: ["Bedsheets", "Duvets", "Hijab", "Jalbab", "Socks", "ModestWear", "BedroomEssentials"],
-  whatsapp: "2349060932856",
-  accent: "from-rose-300/20 to-emerald-400/15",
-  logo: "/hazologo.jpeg",
-  image: "/hazo1.jpeg",
-  images: ["/hazo1.jpeg", "/hazo2.jpeg","/hazo3.jpeg" ,"/hazo4.jpeg"]
-}
+    id: "18",
+    name: "HAZO's Collection",
+    category: "Campus Drip",
+    initials: "HZ",
+    description: "High-quality bedsheets and duvets, plus modest fashion items including hijabs, jalbabs, inner caps, and socks. Carefully selected for comfort, quality, and affordability.",
+    tags: ["Bedsheets", "Duvets", "Hijab", "Jalbab", "Socks", "ModestWear", "BedroomEssentials"],
+    whatsapp: "2349060932856",
+    accent: "from-rose-300/20 to-emerald-400/15",
+    logo: "/hazologo.jpeg",
+    image: "/hazo1.jpeg",
+    images: ["/hazo1.jpeg", "/hazo2.jpeg", "/hazo3.jpeg", "/hazo4.jpeg"]
+  }
 ];
 
 const STATS = [
@@ -272,6 +271,200 @@ const STATS = [
   { k: "4.9★", v: "Avg. campus rating" },
   { k: "< 30m", v: "Median response" },
 ];
+
+// ── localStorage helpers ───────────────────────────────────────────────────────
+function getRating(vendorId: string): number {
+  try {
+    return parseInt(localStorage.getItem(`fudhub_rating_${vendorId}`) || "0", 10);
+  } catch {
+    return 0;
+  }
+}
+function saveRating(vendorId: string, rating: number) {
+  try {
+    localStorage.setItem(`fudHub_rating_${vendorId}`, String(rating));
+  } catch {
+    // ignore
+  }
+}
+
+// ── Star Rating Component ─────────────────────────────────────────────────────
+function StarRating({ vendorId }: { vendorId: string }) {
+  const [rating, setRating] = useState(() => getRating(vendorId));
+  const [hovered, setHovered] = useState(0);
+
+  const handleRate = (star: number) => {
+    setRating(star);
+    saveRating(vendorId, star);
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: "1rem" }}>
+      <div style={{ fontSize: "0.75rem", color: "oklch(0.62 0.02 250)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+        Rate this vendor
+      </div>
+      <div style={{ display: "flex", gap: 6 }}>
+        {[1, 2, 3, 4, 5].map((star) => {
+          const filled = star <= (hovered || rating);
+          return (
+            <button
+              key={star}
+              onClick={() => handleRate(star)}
+              onMouseEnter={() => setHovered(star)}
+              onMouseLeave={() => setHovered(0)}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 2,
+                fontSize: "1.4rem",
+                lineHeight: 1,
+                color: filled ? "#10b981" : "oklch(0.35 0.02 250)",
+                transform: filled ? "scale(1.15)" : "scale(1)",
+                transition: "all 0.15s ease",
+                filter: filled ? "drop-shadow(0 0 6px rgba(16,185,129,0.6))" : "none",
+              }}
+              aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
+            >
+              ★
+            </button>
+          );
+        })}
+        {rating > 0 && (
+          <span style={{ fontSize: "0.75rem", color: "#10b981", alignSelf: "center", marginLeft: 4, fontWeight: 600 }}>
+            {rating}/5
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Keke FAB ──────────────────────────────────────────────────────────────────
+function KekeFAB() {
+  const [showPopup, setShowPopup] = useState(false);
+
+  return (
+    <>
+      {/* FAB Button */}
+      <button
+        onClick={() => setShowPopup(true)}
+        aria-label="Keke Delivery - Coming Soon"
+        style={{
+          position: "fixed",
+          bottom: 28,
+          right: 24,
+          zIndex: 90,
+          width: 60,
+          height: 60,
+          borderRadius: "50%",
+          background: "linear-gradient(135deg, #059669, #10b981)",
+          border: "2px solid rgba(16,185,129,0.5)",
+          boxShadow: "0 0 0 0 rgba(16,185,129,0.7)",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "1.6rem",
+          animation: "kekePulse 2s infinite",
+        }}
+      >
+        🛺
+      </button>
+
+      {/* Coming Soon Popup */}
+      {showPopup && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 200,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "rgba(0,0,0,0.7)",
+            backdropFilter: "blur(6px)",
+            animation: "fadeIn 0.2s ease",
+          }}
+          onClick={() => setShowPopup(false)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "oklch(0.18 0.02 250)",
+              border: "1px solid rgba(16,185,129,0.35)",
+              borderRadius: 24,
+              padding: "2rem 2rem 1.75rem",
+              maxWidth: 320,
+              width: "calc(100% - 48px)",
+              textAlign: "center",
+              boxShadow: "0 0 60px -10px rgba(16,185,129,0.4)",
+              animation: "popIn 0.3s cubic-bezier(0.2,0.8,0.2,1)",
+            }}
+          >
+            <div style={{ fontSize: "3rem", marginBottom: "0.75rem" }}>🛺</div>
+            <div style={{
+              fontSize: "1.25rem",
+              fontWeight: 700,
+              color: "oklch(0.97 0.01 180)",
+              marginBottom: "0.5rem",
+              fontFamily: "var(--font-display, sans-serif)",
+            }}>
+              Keke Delivery
+            </div>
+            <div style={{
+              display: "inline-block",
+              background: "rgba(16,185,129,0.15)",
+              border: "1px solid rgba(16,185,129,0.4)",
+              borderRadius: 999,
+              padding: "3px 14px",
+              fontSize: "0.7rem",
+              color: "#10b981",
+              fontWeight: 700,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              marginBottom: "1rem",
+            }}>
+              Coming Soon
+            </div>
+            <p style={{ fontSize: "0.875rem", color: "oklch(0.65 0.02 250)", lineHeight: 1.6, marginBottom: "1.5rem" }}>
+              Campus-wide keke delivery is on its way. Order from any FUD Hub vendor and get it dropped right at your hostel door. 🚀
+            </p>
+            <button
+              onClick={() => setShowPopup(false)}
+              style={{
+                background: "#10b981",
+                color: "#0a1a14",
+                border: "none",
+                borderRadius: 12,
+                padding: "0.75rem 2rem",
+                fontWeight: 700,
+                fontSize: "0.9rem",
+                cursor: "pointer",
+                width: "100%",
+                boxShadow: "0 0 24px -6px rgba(16,185,129,0.6)",
+              }}
+            >
+              Got it, can't wait!
+            </button>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes kekePulse {
+          0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.7); }
+          70%  { box-shadow: 0 0 0 14px rgba(16,185,129,0); }
+          100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+        }
+        @keyframes popIn {
+          from { opacity: 0; transform: scale(0.85); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
+    </>
+  );
+}
 
 // ── Reveal hook ───────────────────────────────────────────────────────────────
 function useReveal() {
@@ -306,7 +499,6 @@ function VendorModal({ business, onClose }: { business: Business; onClose: () =>
   const images = business.images || (business.image ? [business.image] : []);
   const waHref = `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(`Hi ${business.name}, I'd like to place an order via FUD Hub.`)}`;
 
-  // Close on backdrop click
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
@@ -378,7 +570,6 @@ function VendorModal({ business, onClose }: { business: Business; onClose: () =>
                 alt={`${business.name} ${current + 1}`}
                 style={{ width: "100%", height: "100%", objectFit: "cover", animation: "fadeIn 0.3s ease" }}
               />
-              {/* Arrows */}
               {images.length > 1 && (
                 <>
                   <button onClick={prev} style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,0.5)", border: "none", borderRadius: "50%", width: 36, height: 36, color: "white", fontSize: "1rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>‹</button>
@@ -387,7 +578,6 @@ function VendorModal({ business, onClose }: { business: Business; onClose: () =>
               )}
             </div>
 
-            {/* Dots */}
             {images.length > 1 && (
               <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 10 }}>
                 {images.map((_, i) => (
@@ -396,7 +586,6 @@ function VendorModal({ business, onClose }: { business: Business; onClose: () =>
               </div>
             )}
 
-            {/* Counter */}
             {images.length > 1 && (
               <div style={{ textAlign: "center", fontSize: "0.75rem", color: "oklch(0.62 0.02 250)", marginTop: 4 }}>
                 {current + 1} / {images.length}
@@ -415,6 +604,9 @@ function VendorModal({ business, onClose }: { business: Business; onClose: () =>
               <span key={t} style={{ padding: "4px 12px", background: "oklch(0.22 0.022 250)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 999, fontSize: "0.75rem", color: "oklch(0.75 0.02 250)" }}>{t}</span>
             ))}
           </div>
+
+          {/* ── Star Rating ── */}
+          <StarRating vendorId={business.id} />
 
           {/* WhatsApp button */}
           <a
@@ -464,15 +656,26 @@ function Nav({ lightMode, onToggle }: { lightMode: boolean; onToggle: () => void
           <a href="#stats" className="hover:text-foreground transition-colors">Numbers</a>
           <a href="#embiem" className="hover:text-foreground transition-colors">For Founders</a>
         </nav>
-        <a href="#directory" className="text-foreground text-xs sm:text-sm font-medium px-4 py-2 rounded-full glow-border bg-surface hover:bg-surface-elevated transition-colors">
-          Explore
+        <div className="flex items-center gap-2">
           <button
-  onClick={onToggle}
-  style={{ fontSize: "18px", background: "none", border: "none", cursor: "pointer" }}
->
-  {lightMode ? "🌙" : "☀️"}
-</button>
-        </a>
+            onClick={onToggle}
+            style={{
+              fontSize: "18px",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: "6px",
+              borderRadius: "50%",
+              lineHeight: 1,
+            }}
+            aria-label="Toggle light/dark mode"
+          >
+            {lightMode ? "🌙" : "☀️"}
+          </button>
+          <a href="#directory" className="text-foreground text-xs sm:text-sm font-medium px-4 py-2 rounded-full glow-border bg-surface hover:bg-surface-elevated transition-colors">
+            Explore
+          </a>
+        </div>
       </div>
     </header>
   );
@@ -515,7 +718,7 @@ function Hero() {
             Built for FUD students, by FUD students. EMBIEM is the student-led agency powering FUD Hub — from design and development to vendor onboarding and support. Interested in listing your business or collaborating with us? Reach out via WhatsApp and let's elevate campus culture together.
           </p>
           <a href={`https://wa.me/2347044389234?text=${encodeURIComponent("Hi EMBIEM! I'd like to list my business on FUD Hub.")}`} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_-5px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)] transition-shadow">
-           Add your business to FUD Hub →
+            Add your business to FUD Hub →
           </a>
         </div>
       </div>
@@ -537,17 +740,55 @@ function Controls({ active, onActive, query, onQuery }: {
   return (
     <section id="directory" className="mx-auto max-w-7xl px-6">
       <div className="reveal glass-card rounded-2xl p-4 sm:p-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        {/* Search */}
         <div className="relative flex-1 min-w-0">
           <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="11" cy="11" r="7" /><path d="m21 21-3.5-3.5" />
           </svg>
-          <input value={query} onChange={(e) => onQuery(e.target.value)} placeholder="Search pastries, tailors, tech repair..." className="w-full bg-surface/60 border text-foreground rounded-xl pl-11 pr-4 py-3 text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:border-emerald-glow transition" />
+          <input
+            value={query}
+            onChange={(e) => onQuery(e.target.value)}
+            placeholder="Search pastries, tailors, tech repair..."
+            className="w-full bg-surface/60 border text-foreground rounded-xl pl-11 pr-4 py-3 text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:border-emerald-glow transition"
+          />
         </div>
-        <div className="flex flex-wrap gap-2">
+
+        {/* Category pills — fixed styling with inline styles for reliability */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
           {CATEGORIES.map((c) => {
             const isActive = c === active;
             return (
-              <button key={c} onClick={() => onActive(c)} className={"text-xs sm:text-sm px-4 py-2.5 rounded-full transition-all duration-300 border " + (isActive ? "bg-primary text-primary-foreground border-transparent shadow-[0_0_24px_-6px_var(--emerald-glow)]" : "bg-surface/60 text-muted-foreground border-border hover:text-foreground hover:border-emerald-glow/60")}>
+              <button
+                key={c}
+                onClick={() => onActive(c)}
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: 999,
+                  fontSize: "0.8125rem",
+                  fontWeight: isActive ? 600 : 400,
+                  cursor: "pointer",
+                  transition: "all 0.25s ease",
+                  border: isActive ? "1px solid transparent" : "1px solid rgba(255,255,255,0.1)",
+                  background: isActive
+                    ? "oklch(0.72 0.21 152)"
+                    : "rgba(255,255,255,0.04)",
+                  color: isActive ? "oklch(0.12 0.02 160)" : "oklch(0.65 0.02 250)",
+                  boxShadow: isActive ? "0 0 24px -6px oklch(0.72 0.21 152)" : "none",
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    (e.currentTarget as HTMLButtonElement).style.color = "oklch(0.92 0.01 180)";
+                    (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(16,185,129,0.4)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    (e.currentTarget as HTMLButtonElement).style.color = "oklch(0.65 0.02 250)";
+                    (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.1)";
+                  }
+                }}
+              >
                 {c}
               </button>
             );
@@ -565,7 +806,7 @@ function Card({ business, index, onOpen }: { business: Business; index: number; 
     <article className="reveal group relative glass-card rounded-2xl p-6 flex flex-col hover:-translate-y-1 hover:scale-[1.03] hover:shadow-[0_30px_60px_-20px_color-mix(in_oklab,var(--emerald-glow),55%,transparent)] hover:border-emerald-glow/60" style={{ transitionDelay: `${(index % 9) * 40}ms` }}>
       <div className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br ${business.accent} pointer-events-none`} />
 
-      {/* Top row — clickable to open modal */}
+      {/* Top row */}
       <div className="relative flex items-start justify-between gap-3 cursor-pointer" onClick={onOpen}>
         <div className="h-14 w-14 glow-border bg-surface place-items-center grid rounded-xl shrink-0 overflow-hidden">
           {business.logo ? (
@@ -577,7 +818,7 @@ function Card({ business, index, onOpen }: { business: Business; index: number; 
         <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground/80 mt-1.5">{business.category}</span>
       </div>
 
-      {/* Body — clickable to open modal */}
+      {/* Body */}
       <div className="relative mt-4 flex-1 cursor-pointer" onClick={onOpen}>
         <h3 className="text-xl font-display font-semibold leading-snug tracking-tight">{business.name}</h3>
         <p className="mt-2 text-sm text-muted-foreground">{business.description}</p>
@@ -588,7 +829,7 @@ function Card({ business, index, onOpen }: { business: Business; index: number; 
         </div>
       </div>
 
-      {/* Image — clickable to open modal */}
+      {/* Image */}
       <div className="reveal-slide relative mt-6 aspect-[16/10] w-full overflow-hidden rounded-xl border border-border/70 bg-gradient-to-br from-surface-elevated to-surface cursor-pointer" style={{ transitionDelay: `${(index % 9) * 60 + 120}ms` }} onClick={onOpen}>
         {business.image ? (
           <img src={business.image} alt={`${business.name} product`} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -603,20 +844,21 @@ function Card({ business, index, onOpen }: { business: Business; index: number; 
             </div>
           </div>
         )}
-        {/* View more hint */}
         {business.images && business.images.length > 1 && (
           <div style={{ position: "absolute", bottom: 8, right: 8, background: "rgba(0,0,0,0.6)", borderRadius: 999, padding: "3px 10px", fontSize: "0.7rem", color: "white", backdropFilter: "blur(4px)" }}>
             +{business.images.length - 1} more
           </div>
         )}
       </div>
+
       {business.verified && (
-  <div className="flex items-center gap-1 mt-3 mb-1">
-    <span style={{ fontSize: "11px", color: "#10b981", fontWeight: 600 }}>
-      ✅ Verified by EMBIEM
-    </span>
-  </div>
-)}
+        <div className="flex items-center gap-1 mt-3 mb-1">
+          <span style={{ fontSize: "11px", color: "#10b981", fontWeight: 600 }}>
+            ✅ Verified by EMBIEM
+          </span>
+        </div>
+      )}
+
       {/* WhatsApp button */}
       <div className="relative mt-5 pt-5 border-t border-border/70">
         <a href={waHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-all duration-400 shadow-[0_0_24px_-6px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)]">
@@ -686,6 +928,8 @@ export default function App() {
       <Grid items={filtered} onOpen={setSelectedVendor} />
       <Stats />
       {selectedVendor && <VendorModal business={selectedVendor} onClose={() => setSelectedVendor(null)} />}
+      {/* Keke Delivery FAB */}
+      <KekeFAB />
     </div>
   );
 }
