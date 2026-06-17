@@ -535,7 +535,7 @@ function Controls({ active, onActive, query, onQuery }: {
           <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="11" cy="11" r="7" /><path d="m21 21-3.5-3.5" />
           </svg>
-          <input value={query} onChange={(e) => onQuery(e.target.value)} placeholder="Search pastries, tailors, tech repair..." className="w-full bg-surface/60 border border-border rounded-xl pl-11 pr-4 py-3 text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:border-emerald-glow transition" />
+          <input value={query} onChange={(e) => onQuery(e.target.value)} placeholder="Search pastries, tailors, tech repair..." className="w-full bg-surface/60 border text-foreground rounded-xl pl-11 pr-4 py-3 text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:border-emerald-glow transition" />
         </div>
         <div className="flex flex-wrap gap-2">
           {CATEGORIES.map((c) => {
