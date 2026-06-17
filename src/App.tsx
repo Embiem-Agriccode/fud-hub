@@ -449,7 +449,7 @@ function VendorModal({ business, onClose }: { business: Business; onClose: () =>
 }
 
 // ── Nav ───────────────────────────────────────────────────────────────────────
-function Nav() {
+function Nav({ lightMode, onToggle }: { lightMode: boolean; onToggle: () => void }) {
   return (
     <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/60 border-b border-border/60">
       <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
@@ -466,6 +466,12 @@ function Nav() {
         </nav>
         <a href="#directory" className="text-foreground text-xs sm:text-sm font-medium px-4 py-2 rounded-full glow-border bg-surface hover:bg-surface-elevated transition-colors">
           Explore
+          <button
+  onClick={onToggle}
+  style={{ fontSize: "18px", background: "none", border: "none", cursor: "pointer" }}
+>
+  {lightMode ? "🌙" : "☀️"}
+</button>
         </a>
       </div>
     </header>
@@ -657,6 +663,7 @@ function Stats() {
 
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App() {
+  const [lightMode, setLightMode] = useState(false);
   useReveal();
   const [active, setActive] = useState<(typeof CATEGORIES)[number]>("All");
   const [query, setQuery] = useState("");
@@ -672,8 +679,8 @@ export default function App() {
   }, [active, query]);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
-      <Nav />
+    <div className="relative min-h-screen overflow-x-hidden" style={{ background: lightMode ? "#f8fafc" : undefined, color: lightMode ? "#0a0f1a" : undefined }}>
+      <Nav lightMode={lightMode} onToggle={() => setLightMode(!lightMode)} />
       <Hero />
       <Controls active={active} onActive={setActive} query={query} onQuery={setQuery} />
       <Grid items={filtered} onOpen={setSelectedVendor} />
