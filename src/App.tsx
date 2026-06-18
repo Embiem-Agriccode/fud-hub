@@ -383,13 +383,13 @@ const BUSINESSES: Business[] = [
     name: "Hauwerh Brand",
     category: "Uni Eats",
     initials: "HB",
-    description: "Shawarma, mandi rice, milkshakes, mocktails and fresh small chops — campus comfort food done right.",
-    tags: ["Meatpie", "Snack", "Snacks", "SmallChops", "Grill"],
+    description: "Snacks:  meatpie, samosa, spring rolls, cup cakes, birthday cakes and fresh small chops — Available for delivery + Pickup.",
+    tags: ["Meatpie", "Snacks", "SmallChops", "Doughnuts"],
     whatsapp: "2348029213590",
     accent: "from-orange-300/25 to-emerald-400/15",
     logo: "/hauwherlogo.jpg",
     image: "/hauwher1.jpg",
-    images: ["/hauwher1.jpg", "/hauwher2.jpg", "/hauwher3.jpg", "/hauwher4.jpg"],
+    images: ["/hauwher1.jpg", "/hauwher2.jpg", "/hauwher3.jpg"],
   },
 ];
 
