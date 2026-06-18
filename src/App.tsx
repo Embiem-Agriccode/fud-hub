@@ -366,6 +366,31 @@ const BUSINESSES: Business[] = [
     image: "/dynamic1.jpg",
     images: ["/dynamic1.jpg", "/dynamic2.jpg", "/dynamic3.jpg", "/dynamic4.jpg"],
   },
+   {
+    id: "27",
+    name: "Fresh Garri",
+    category: "Uni Eat",
+    initials: "FG",
+    description: "premium Ijebu Garri available in Dutse, Crunchy, smooth, no stone.",
+    tags: ["Garri", "Ijebu Garri", "CampusDelivery"],
+    whatsapp: "2348100511947",
+    accent: "from-orange-300/25 to-emerald-400/15",
+    image: "/freshgarri.jpg",
+    images: ["/freshgarri.jpg",],
+  },
+  {
+    id: "28",
+    name: "Hauwerh Brand",
+    category: "Uni Eats",
+    initials: "HB",
+    description: "Shawarma, mandi rice, milkshakes, mocktails and fresh small chops — campus comfort food done right.",
+    tags: ["Meatpie", "Snack", "Snacks", "SmallChops", "Grill"],
+    whatsapp: "2348029213590",
+    accent: "from-orange-300/25 to-emerald-400/15",
+    logo: "/hauwherlogo.jpg",
+    image: "/hauwher1.jpg",
+    images: ["/hauwher1.jpg", "/hauwher2.jpg", "/hauwher3.jpg", "/hauwher4.jpg"],
+  },
 ];
 
 const STATS = [
