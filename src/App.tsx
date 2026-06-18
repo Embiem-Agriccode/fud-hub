@@ -17,7 +17,7 @@ type Business = {
 };
 
 // ── Data ──────────────────────────────────────────────────────────────────────
-const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Decor"] as const;
+const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug","Handmade","Laundry","Print & Copy"] as const;
 
 const BUSINESSES: Business[] = [
    {
@@ -240,7 +240,7 @@ const BUSINESSES: Business[] = [
   {
     id: "17",
     name: "Syms souvenirs",
-    category: "Campus Drip",
+    category: "Handmade",
     initials: "SS",
     description: "Ribbons, kasko, veil pins & more for weddings, birthdays, parties. Make your day memorable",
     tags: ["Ribbons", "Kasko", "VeilPins", "Souvenirs", "Wedding", "Party"],
@@ -369,7 +369,7 @@ const BUSINESSES: Business[] = [
    {
     id: "27",
     name: "Fresh Garri",
-    category: "Uni Eat",
+    category: "Uni Eats",
     initials: "FG",
     description: "premium Ijebu Garri available in Dutse, Crunchy, smooth, no stone.",
     tags: ["Garri", "Ijebu Garri", "CampusDelivery"],
