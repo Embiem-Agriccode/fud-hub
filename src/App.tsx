@@ -175,7 +175,7 @@ const BUSINESSES: Business[] = [
   {
     id: "12",
     name: "KHADI BRAINDS & MORE",
-    category: "Campus Drip",
+    category: "Fresh Cuts",
     initials: "KB",
     description: "Trendy campus dresses - casual, dinner, weekend fits. Custom sizes + fast delivery",
     tags: ["Clothing", "Hairstyle", "Trendy"],
