@@ -380,7 +380,7 @@ const BUSINESSES: Business[] = [
   },
   {
     id: "28",
-    name: "Hauwerh Brand",
+    name: "Hauwerh's Delicacy",
     category: "Uni Eats",
     initials: "HB",
     description: "Snacks:  meatpie, samosa, spring rolls, cup cakes, birthday cakes and fresh small chops — Available for delivery + Pickup.",
