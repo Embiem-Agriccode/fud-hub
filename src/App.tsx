@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Business = {
@@ -1058,6 +1059,7 @@ export default function App() {
       {selectedVendor && <VendorModal business={selectedVendor} onClose={() => setSelectedVendor(null)} />}
       {/* Keke Delivery FAB */}
       <KekeFAB />
+      <Analytics />
     </div>
   );
 }
