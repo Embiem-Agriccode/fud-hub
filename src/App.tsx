@@ -17,17 +17,17 @@ type Business = {
 };
 
 // ── Data ──────────────────────────────────────────────────────────────────────
-const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug","Handmade","Laundry","Print & Copy"] as const;
+const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Decor"] as const;
 
 const BUSINESSES: Business[] = [
-   {
+  {
     id: "1",
     name: "Timas Delight",
     category: "Uni Eats",
     initials: "TD",
     description: "Shawarma, mandi rice, milkshakes, mocktails and fresh small chops — campus comfort food done right.",
     tags: ["Shawarma", "Milkshakes", "Snacks"],
-    whatsapp: "2348061990740",
+    whatsapp: "2347026356625",
     accent: "from-orange-300/25 to-emerald-400/15",
     logo: "/temaslogo.jpg",
     image: "/temas1.jpg",
@@ -175,7 +175,7 @@ const BUSINESSES: Business[] = [
   {
     id: "12",
     name: "KHADI BRAINDS & MORE",
-    category: "Fresh Cuts",
+    category: "Campus Drip",
     initials: "KB",
     description: "Trendy campus dresses - casual, dinner, weekend fits. Custom sizes + fast delivery",
     tags: ["Clothing", "Hairstyle", "Trendy"],
@@ -240,7 +240,7 @@ const BUSINESSES: Business[] = [
   {
     id: "17",
     name: "Syms souvenirs",
-    category: "Handmade",
+    category: "Campus Drip",
     initials: "SS",
     description: "Ribbons, kasko, veil pins & more for weddings, birthdays, parties. Make your day memorable",
     tags: ["Ribbons", "Kasko", "VeilPins", "Souvenirs", "Wedding", "Party"],
@@ -262,135 +262,7 @@ const BUSINESSES: Business[] = [
     logo: "/hazologo.jpeg",
     image: "/hazo1.jpeg",
     images: ["/hazo1.jpeg", "/hazo2.jpeg", "/hazo3.jpeg", "/hazo4.jpeg"]
-  },
-  {
-    id: "19",
-    name: "BKD Art & General Printing",
-    category: "Print & Copy",
-    initials: "BKD",
-    description: "Architectural drawings, graphics design, plastic ID cards, printing and online services. Shop 16, Backside. Open 8am - 12pm.",
-    tags: ["Graphics", "ID Card", "Photocopy"],
-    whatsapp: "2348162831389",
-    accent: "from-pink-400/20 to-emerald-400/20",
-    logo: "/bkdlogo.jpg",
-    image: "/bkdshop.jpg",
-    images: ["/bkdshop.jpg"],
-    verified: true,
-  },
-  {
-    id: "20",
-    name: "Alaminu Bookshop",
-    category: "Print & Copy",
-    initials: "AB",
-    description: "Books, stationery, lab coats, calculators, pens, cleaners, key holders and tailoring services. Shop 46, Backside. Open 7am - 10pm.",
-    tags: ["Books", "Lab Coat", "Tailoring"],
-    whatsapp: "2347067434367",
-    accent: "from-rose-300/20 to-emerald-400/15",
-    image: "/alaminu1.jpg",
-    images: ["/alaminu1.jpg", "/alaminu3.jpg", "/alaminu4.jpg", "/alaminu5.jpg", "/alaminu6.jpg", "/alaminu7.jpg", "/alaminu8.jpg", "/alaminu9.jpg", "/alaminu10.jpeg"],
-  },
-  {
-    id: "21",
-    name: "Ibro Print",
-    category: "Print & Copy",
-    initials: "IP",
-    description: "Printing, scanning, binding, passport photos, banners, stickers and online services. Shop 13, Backside. Open 9am - 9pm.",
-    tags: ["Printing", "Binding", "Graphics"],
-    whatsapp: "2348137917452",
-    accent: "from-orange-300/25 to-emerald-400/15",
-    logo: "/ibrologo.jpg",
-    image: "/ibroshop.jpg",
-    images: ["/ibroshop.jpg"],
-    verified: true,
-  },
-  {
-    id: "22",
-    name: "Yusuf Dankuda Communication",
-    category: "Tech Plug",
-    initials: "YDC",
-    description: "Phone accessories at student-friendly prices. Earpieces, cases, powerbanks, chargers, headphones and MP3 players. Shop 37, Backside. Open 8am - 12pm.",
-    tags: ["Earpiece", "Powerbank", "Charger"],
-    whatsapp: "2347038177322",
-    accent: "from-emerald-400/30 to-cyan-400/10",
-    image: "/yusufdankuda.jpg",
-    images: ["/yusufdankuda.jpg", "/yusufdankuda1.jpg", "/yusufdankuda2.jpg", "/yusufdankuda3.jpg"  ],
-    verified: true,
-  },
-  {
-    id: "23",
-    name: "Dedon Photo Studio",
-    category: "Print & Copy",
-    initials: "DS",
-    description: "Professional passport photos and photocopy services on campus. Fast, affordable and reliable. Backside. Open 8am - 10pm.",
-    tags: ["Passport Photo", "Photocopy", "Studio"],
-    whatsapp: "2348062661141",
-    accent: "from-orange-300/25 to-emerald-400/15",
-    image: "/dedonshop.jpg",
-    images: ["/dedonshop.jpg"],
-  },
-  {
-    id: "24",
-    name: "Taves Kitchen",
-    category: "Uni Eats",
-    initials: "TK",
-    description: "Jollof rice, fried rice, pasta, semo, eba, egusi soup, chicken stew, pepper soup and more. Hot meals delivered campus wide. Opposite Baba Shoe Maker, Backside. Open 8am - 4pm & 7pm - 10pm.",
-    tags: ["Jollof Rice", "Local Meals", "Delivery"],
-    whatsapp: "2348064420724",
-    accent: "from-cyan-400/25 to-emerald-400/15",
-    logo: "/taweslogo.jpg",
-    image: "/tawes1.jpg",
-    images: ["/tawes1.jpg", "/tawes2.jpg", "/tawes3.jpg", "/tawes4.jpg", "/tawes5.jpg"],
-  },
-  {
-    id: "25",
-    name: "High Speed Enterprises",
-    category: "Print & Copy",
-    initials: "HS",
-    description: "Fast printing, scanning, photocopy, project binding and business services on campus. Backside. Open 8am - 4pm & 7pm - 10pm.",
-    tags: ["Printing", "Binding", "Photocopy"],
-    whatsapp: "2349121131739",
-    accent: "from-cyan-400/25 to-emerald-400/15",
-    image: "/highspeedshop.jpg",
-    images: ["/highspeedshop.jpg"],
-    verified: true,
-  },
-  {
-    id: "26",
-    name: "Dynamic Laundry Service",
-    category: "Laundry",
-    initials: "DL",
-    description: "Professional washing and ironing for both male and female students. Clean clothes delivered back to you. Opposite Baba Shoe Maker, Backside. Open 8am - 4pm & 7pm - 10pm.",
-    tags: ["Laundry", "Ironing", "Delivery"],
-    whatsapp: "2348121697125",
-    accent: "from-pink-400/20 to-emerald-400/20",
-    image: "/dynamic1.jpg",
-    images: ["/dynamic1.jpg", "/dynamic2.jpg", "/dynamic3.jpg", "/dynamic4.jpg"],
-  },
-   {
-    id: "27",
-    name: "Fresh Garri",
-    category: "Uni Eats",
-    initials: "FG",
-    description: "premium Ijebu Garri available in Dutse, Crunchy, smooth, no stone.",
-    tags: ["Garri", "Ijebu Garri", "CampusDelivery"],
-    whatsapp: "2348100511947",
-    accent: "from-orange-300/25 to-emerald-400/15",
-    image: "/freshgarri.jpg",
-    images: ["/freshgarri.jpg",],
-  },
-  {
-    id: "28",
-    name: "Hauwerh's Delicacy",
-    category: "Uni Eats",
-    initials: "HB",
-    description: "Snacks:  meatpie, samosa, spring rolls, cup cakes, birthday cakes and fresh small chops — Available for delivery + Pickup.",
-    tags: ["Meatpie", "Snacks", "SmallChops", "Doughnuts"],
-    whatsapp: "2348029213590",
-    accent: "from-orange-300/25 to-emerald-400/15",
-    logo: "/hauwherlogo.jpg",
-    image: "/hauwher1.jpg",
-    images: ["/hauwher1.jpg", "/hauwher2.jpg", "/hauwher3.jpg"],
-  },
+  }
 ];
 
 const STATS = [
@@ -398,6 +270,53 @@ const STATS = [
   { k: "12", v: "Categories" },
   { k: "4.9★", v: "Avg. campus rating" },
   { k: "< 30m", v: "Median response" },
+];
+
+// ── Emergency Contacts ──────────────────────────────────────────────────────
+type EmergencyContact = {
+  id: string;
+  icon: string;
+  category: string;
+  name: string;
+  role: string;
+  number: string;
+  priority?: boolean;
+};
+
+const EMERGENCY_CONTACTS: EmergencyContact[] = [
+  {
+    id: "security",
+    icon: "🚨",
+    category: "Security / Safety Emergency",
+    name: "SUG President",
+    role: "Direct radio link to campus security",
+    number: "07061892231",
+    priority: true,
+  },
+  {
+    id: "medical",
+    icon: "🏥",
+    category: "Medical Emergency",
+    name: "SUG Health Director",
+    role: "Clinic & first response",
+    number: "08156272900",
+  },
+  {
+    id: "general",
+    icon: "📢",
+    category: "General Assistance",
+    name: "SUG PRO",
+    role: "Public relations & info",
+    number: "08144291758",
+  },
+  {
+    id: "welfare",
+    icon: "🤝",
+    category: "Student Welfare",
+    name: "SUG Welfare Director",
+    role: "Student support & advocacy",
+    number: "08133415133",
+  },
 ];
 
 // ── localStorage helpers ───────────────────────────────────────────────────────
@@ -464,6 +383,200 @@ function StarRating({ vendorId }: { vendorId: string }) {
           </span>
         )}
       </div>
+    </div>
+  );
+}
+
+// ── Emergency Panel ───────────────────────────────────────────────────────────
+function EmergencyPanel({ onClose }: { onClose: () => void }) {
+  const [expanded, setExpanded] = useState<string | null>("security");
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      style={{
+        position: "fixed", inset: 0, zIndex: 150,
+        background: "radial-gradient(80% 60% at 50% 0%, color-mix(in oklab, #ef4444 22%, transparent), color-mix(in oklab, var(--background) 88%, transparent))",
+        backdropFilter: "blur(8px)",
+        display: "flex", alignItems: "flex-end", justifyContent: "center",
+        animation: "fadeIn 0.2s ease",
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          width: "100%", maxWidth: "480px", margin: "0 auto",
+          background: "linear-gradient(180deg, color-mix(in oklab, var(--surface-elevated) 95%, transparent), color-mix(in oklab, var(--surface) 98%, transparent))",
+          borderTop: "2px solid #ef4444",
+          borderLeft: "1px solid color-mix(in oklab, var(--foreground) 8%, transparent)",
+          borderRight: "1px solid color-mix(in oklab, var(--foreground) 8%, transparent)",
+          borderRadius: "24px 24px 0 0",
+          boxShadow: "0 -20px 60px -10px rgba(239,68,68,0.14)",
+          overflow: "hidden",
+          animation: "slideUp 0.3s cubic-bezier(0.2,0.8,0.2,1)",
+          maxHeight: "92vh",
+          overflowY: "auto",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div style={{ padding: "1.5rem 1.25rem 1rem", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <span
+              style={{
+                width: 44, height: 44, borderRadius: 16,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: "1.25rem",
+                background: "linear-gradient(135deg, #f87171, #ef4444)",
+                boxShadow: "0 8px 24px -10px rgba(239,68,68,0.7)",
+                flexShrink: 0,
+              }}
+            >
+              🚨
+            </span>
+            <div>
+              <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.25rem", color: "var(--foreground)", lineHeight: 1.2 }}>
+                Emergency Help
+              </div>
+              <div style={{ fontSize: "0.75rem", color: "var(--muted-foreground)", marginTop: 2 }}>
+                Tap to reveal a number, then press Call Now.
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            style={{
+              background: "color-mix(in oklab, var(--foreground) 6%, transparent)",
+              border: "1px solid color-mix(in oklab, var(--foreground) 10%, transparent)",
+              borderRadius: "50%", width: 36, height: 36,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", color: "var(--foreground)", fontSize: "1rem", flexShrink: 0,
+            }}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Contacts */}
+        <div style={{ padding: "0.5rem 1.25rem 1.5rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+          {EMERGENCY_CONTACTS.map((c) => {
+            const isOpen = expanded === c.id;
+            const isPriority = c.priority;
+            return (
+              <div
+                key={c.id}
+                style={{
+                  borderRadius: 16,
+                  background: isPriority
+                    ? "linear-gradient(180deg, rgba(239,68,68,0.14), rgba(239,68,68,0.05))"
+                    : "color-mix(in oklab, var(--foreground) 4%, transparent)",
+                  border: isPriority
+                    ? "1px solid #ef4444"
+                    : isOpen
+                    ? "1px solid color-mix(in oklab, var(--foreground) 20%, transparent)"
+                    : "1px solid color-mix(in oklab, var(--foreground) 8%, transparent)",
+                  boxShadow: isPriority ? "0 10px 40px -20px rgba(239,68,68,0.7)" : "none",
+                  transition: "border-color 0.2s ease, background 0.2s ease",
+                }}
+              >
+                <button
+                  onClick={() => setExpanded(isOpen ? null : c.id)}
+                  style={{
+                    width: "100%", display: "flex", alignItems: "center", gap: 12,
+                    padding: "1rem", background: "none", border: "none",
+                    cursor: "pointer", textAlign: "left",
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: "1.15rem",
+                      background: isPriority
+                        ? "linear-gradient(135deg, #f87171, #ef4444)"
+                        : "color-mix(in oklab, var(--foreground) 6%, transparent)",
+                      border: isPriority ? "none" : "1px solid color-mix(in oklab, var(--foreground) 10%, transparent)",
+                    }}
+                  >
+                    {c.icon}
+                  </span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                      <span style={{ fontFamily: "var(--font-display)", fontSize: "0.95rem", color: isPriority ? "#fecaca" : "var(--foreground)", lineHeight: 1.3 }}>
+                        {c.category}
+                      </span>
+                      {isPriority && (
+                        <span style={{
+                          fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
+                          padding: "2px 6px", borderRadius: 6,
+                          background: "rgba(255,255,255,0.15)", color: "#fff",
+                        }}>
+                          Priority
+                        </span>
+                      )}
+                    </div>
+                    <div style={{ fontSize: "0.75rem", color: "var(--muted-foreground)", marginTop: 2 }}>
+                      {c.name} · {c.role}
+                    </div>
+                  </div>
+                  <span style={{
+                    fontSize: "1rem", color: "var(--muted-foreground)", opacity: 0.7,
+                    transform: isOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s ease",
+                  }}>
+                    ⌄
+                  </span>
+                </button>
+
+                {isOpen && (
+                  <div style={{ padding: "0 1rem 1rem", animation: "fadeIn 0.18s ease" }}>
+                    <div style={{
+                      display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
+                      padding: "0.6rem 0.875rem", borderRadius: 10, marginBottom: 12,
+                      background: "color-mix(in oklab, var(--background) 60%, transparent)",
+                      border: "1px solid color-mix(in oklab, var(--foreground) 8%, transparent)",
+                    }}>
+                      <span style={{ fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted-foreground)" }}>Phone</span>
+                      <span style={{ fontFamily: "monospace", fontSize: "0.9rem", color: "var(--foreground)" }}>{c.number}</span>
+                    </div>
+                    <a
+                      href={`tel:${c.number}`}
+                      style={{
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                        width: "100%", padding: "0.8rem",
+                        background: "linear-gradient(135deg, #f87171, #ef4444)",
+                        color: "white", fontWeight: 700, fontSize: "0.9rem",
+                        borderRadius: 12, border: "none", textDecoration: "none",
+                        boxShadow: "0 10px 30px -10px rgba(239,68,68,0.7)",
+                      }}
+                    >
+                      📞 Call Now
+                    </a>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          <p style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", textAlign: "center", marginTop: 4, lineHeight: 1.5 }}>
+            Contacts provided by FUD SUG &amp; verified by the Dean of Student Affairs. In a life-threatening emergency, also dial <strong style={{ color: "var(--foreground)" }}>112</strong>.
+          </p>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+      `}</style>
     </div>
   );
 }
@@ -667,21 +780,41 @@ function VendorModal({ business, onClose }: { business: Business; onClose: () =>
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1.25rem 1.25rem 0.75rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            {business.logo ? (
-              <img src={business.logo} alt={business.name} style={{ width: 44, height: 44, borderRadius: 10, objectFit: "cover", border: "1px solid rgba(255,255,255,0.1)" }} />
-            ) : (
-              <div style={{ width: 44, height: 44, borderRadius: 10, background: "oklch(0.22 0.022 250)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1rem", fontWeight: 700, color: "oklch(0.85 0.22 158)" }}>
-                {business.initials}
+        <div style={{ padding: "1.25rem 1.25rem 0.75rem" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "0.75rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", minWidth: 0 }}>
+              {business.logo ? (
+                <img src={business.logo} alt={business.name} style={{ width: 44, height: 44, borderRadius: 10, objectFit: "cover", border: "1px solid rgba(255,255,255,0.1)", flexShrink: 0 }} />
+              ) : (
+                <div style={{ width: 44, height: 44, borderRadius: 10, background: "oklch(0.22 0.022 250)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1rem", fontWeight: 700, color: "oklch(0.85 0.22 158)", flexShrink: 0 }}>
+                  {business.initials}
+                </div>
+              )}
+              <div style={{ minWidth: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                  <span style={{
+                    fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em",
+                    color: "oklch(0.62 0.02 250)", background: "oklch(0.96 0.01 180 / 0.06)",
+                    border: "1px solid oklch(0.96 0.01 180 / 0.08)", borderRadius: 999, padding: "3px 8px",
+                  }}>
+                    {business.category}
+                  </span>
+                  {business.verified && (
+                    <span style={{
+                      fontSize: "0.65rem", fontWeight: 600, color: "var(--emerald-bright)",
+                      background: "color-mix(in oklab, var(--emerald-glow) 15%, transparent)",
+                      border: "1px solid color-mix(in oklab, var(--emerald-glow) 40%, transparent)",
+                      borderRadius: 999, padding: "3px 8px", whiteSpace: "nowrap",
+                    }}>
+                      ✓ Verified by EMBIEM
+                    </span>
+                  )}
+                </div>
+                <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.25rem", color: "oklch(0.97 0.01 180)", lineHeight: 1.25, marginTop: 6 }}>{business.name}</div>
               </div>
-            )}
-            <div>
-              <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.1rem", color: "oklch(0.97 0.01 180)", lineHeight: 1.2 }}>{business.name}</div>
-              <div style={{ fontSize: "0.7rem", color: "oklch(0.62 0.02 250)", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 2 }}>{business.category}</div>
             </div>
+            <button onClick={onClose} style={{ background: "oklch(0.26 0.025 250)", border: "none", borderRadius: "50%", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "oklch(0.97 0.01 180)", fontSize: "1rem", flexShrink: 0 }}>✕</button>
           </div>
-          <button onClick={onClose} style={{ background: "oklch(0.26 0.025 250)", border: "none", borderRadius: "50%", width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "oklch(0.97 0.01 180)", fontSize: "1rem" }}>✕</button>
         </div>
 
         {/* Image gallery */}
@@ -769,7 +902,7 @@ function VendorModal({ business, onClose }: { business: Business; onClose: () =>
 }
 
 // ── Nav ───────────────────────────────────────────────────────────────────────
-function Nav({ lightMode, onToggle }: { lightMode: boolean; onToggle: () => void }) {
+function Nav({ lightMode, onToggle, onSOS }: { lightMode: boolean; onToggle: () => void; onSOS: () => void }) {
   return (
     <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/60 border-b border-border/60">
       <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
@@ -788,23 +921,61 @@ function Nav({ lightMode, onToggle }: { lightMode: boolean; onToggle: () => void
           <button
             onClick={onToggle}
             style={{
-              fontSize: "18px",
-              background: "none",
-              border: "none",
+              width: 36,
+              height: 36,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "15px",
+              background: "color-mix(in oklab, var(--foreground) 6%, transparent)",
+              border: "1px solid color-mix(in oklab, var(--foreground) 10%, transparent)",
+              borderRadius: 10,
               cursor: "pointer",
-              padding: "6px",
-              borderRadius: "50%",
               lineHeight: 1,
+              flexShrink: 0,
             }}
             aria-label="Toggle light/dark mode"
           >
             {lightMode ? "🌙" : "☀️"}
           </button>
-          <a href="#directory" className="text-foreground text-xs sm:text-sm font-medium px-4 py-2 rounded-full glow-border bg-surface hover:bg-surface-elevated transition-colors">
-            Explore
-          </a>
+          <button
+            onClick={onSOS}
+            style={{
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.75rem",
+              fontWeight: 700,
+              letterSpacing: "0.02em",
+              color: "white",
+              background: "#ef4444",
+              border: "none",
+              padding: "8px 13px",
+              borderRadius: 10,
+              cursor: "pointer",
+              flexShrink: 0,
+            }}
+            aria-label="Emergency SOS"
+          >
+            <span style={{ position: "relative", display: "inline-flex", width: 7, height: 7 }}>
+              <span style={{
+                position: "absolute", inset: 0, borderRadius: "50%",
+                background: "white", opacity: 0.7,
+                animation: "sosPing 1.6s cubic-bezier(0,0,0.2,1) infinite",
+              }} />
+              <span style={{ position: "relative", width: 7, height: 7, borderRadius: "50%", background: "white" }} />
+            </span>
+            SOS
+          </button>
         </div>
       </div>
+      <style>{`
+        @keyframes sosPing {
+          75%, 100% { transform: scale(2.4); opacity: 0; }
+        }
+      `}</style>
     </header>
   );
 }
@@ -936,14 +1107,31 @@ function Card({ business, index, onOpen }: { business: Business; index: number; 
 
       {/* Top row */}
       <div className="relative flex items-start justify-between gap-3 cursor-pointer" onClick={onOpen}>
-        <div className="h-14 w-14 glow-border bg-surface place-items-center grid rounded-xl shrink-0 overflow-hidden">
-          {business.logo ? (
-            <img src={business.logo} alt={business.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          ) : (
-            <span className="text-gradient-emerald font-display text-lg font-bold tracking-tight">{business.initials}</span>
-          )}
+        <div className="flex items-center gap-3">
+          <div className="h-14 w-14 glow-border bg-surface place-items-center grid rounded-xl shrink-0 overflow-hidden">
+            {business.logo ? (
+              <img src={business.logo} alt={business.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            ) : (
+              <span className="text-gradient-emerald font-display text-lg font-bold tracking-tight">{business.initials}</span>
+            )}
+          </div>
+          <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground/80">{business.category}</span>
         </div>
-        <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground/80 mt-1.5">{business.category}</span>
+        {business.verified && (
+          <span style={{
+            fontSize: "10px",
+            fontWeight: 600,
+            color: "var(--emerald-bright)",
+            background: "color-mix(in oklab, var(--emerald-glow) 15%, transparent)",
+            border: "1px solid color-mix(in oklab, var(--emerald-glow) 40%, transparent)",
+            borderRadius: 999,
+            padding: "4px 9px",
+            whiteSpace: "nowrap",
+            flexShrink: 0,
+          }}>
+            ✓ Verified
+          </span>
+        )}
       </div>
 
       {/* Body */}
@@ -978,14 +1166,6 @@ function Card({ business, index, onOpen }: { business: Business; index: number; 
           </div>
         )}
       </div>
-
-      {business.verified && (
-        <div className="flex items-center gap-1 mt-3 mb-1">
-          <span style={{ fontSize: "11px", color: "#10b981", fontWeight: 600 }}>
-            ✅ Verified by EMBIEM
-          </span>
-        </div>
-      )}
 
       {/* WhatsApp button */}
       <div className="relative mt-5 pt-5 border-t border-border/70">
@@ -1038,6 +1218,7 @@ export default function App() {
   const [active, setActive] = useState<(typeof CATEGORIES)[number]>("All");
   const [query, setQuery] = useState("");
   const [selectedVendor, setSelectedVendor] = useState<Business | null>(null);
+  const [showEmergency, setShowEmergency] = useState(false);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -1050,12 +1231,13 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden" style={{ background: lightMode ? "#f8fafc" : undefined, color: lightMode ? "#0a0f1a" : undefined }}>
-      <Nav lightMode={lightMode} onToggle={() => setLightMode(!lightMode)} />
+      <Nav lightMode={lightMode} onToggle={() => setLightMode(!lightMode)} onSOS={() => setShowEmergency(true)} />
       <Hero />
       <Controls active={active} onActive={setActive} query={query} onQuery={setQuery} />
       <Grid items={filtered} onOpen={setSelectedVendor} />
       <Stats />
       {selectedVendor && <VendorModal business={selectedVendor} onClose={() => setSelectedVendor(null)} />}
+      {showEmergency && <EmergencyPanel onClose={() => setShowEmergency(false)} />}
       {/* Keke Delivery FAB */}
       <KekeFAB />
     </div>
