@@ -782,13 +782,13 @@ function Hero() {
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-bright animate-pulse" />
           Live · 28+ student vendors on campus
         </div>
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold leading-[1.02] tracking-tight">
-          The Blueprint of <br />
-          <span className="text-gradient-emerald">Campus Excellence.</span>
-        </h1>
+         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold leading-[1.02] tracking-tight">
+  Discover & order from <br />
+  <span className="text-gradient-emerald">FUD vendors.</span>
+</h1>
         <p className="mt-6 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed">
-          A curated directory of student-led businesses redefining campus culture — from architectural pastry to bespoke tech. One tap, ordered via WhatsApp.
-        </p>
+       Food, fashion, tech, print — all student-run. One tap away on WhatsApp.
+            </p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <a href="#directory" style={{ textDecoration: "none" }} className="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_-5px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)] transition-shadow">
             Browse the Hub <span className="transition-transform group-hover:translate-x-0.5">→</span>
