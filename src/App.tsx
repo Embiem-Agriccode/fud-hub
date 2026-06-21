@@ -483,6 +483,19 @@ const BUSINESSES: Business[] = [
     image: "/sharp1.jpg",
     images: ["/sharp1.jpg", "/sharp2.jpg",],
   },
+  {
+    id: "36",
+    name: "Jossy's empire",
+    category: "Campus Drip",
+    initials: "JE",
+    description: "I sell vintage materials,packet shirt and short,tote bags and popcorn",
+    tags: ["Vintage", "bags", "ModestWear"],
+    whatsapp: "2349127151817",
+    accent: "from-rose-300/20 to-emerald-400/15",
+    logo: "/jossylogo.jpeg",
+    image: "/jossy1.jpeg",
+    images: ["/jossy1.jpeg"],
+  },
 ];
 
 const STATS = [
