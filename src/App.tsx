@@ -17,8 +17,7 @@ type Business = {
 };
 
 // ── Data ──────────────────────────────────────────────────────────────────────
-const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Tech Plug", "Handmade", "Print & Copy", "Laundry"] as const;
-
+const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Lundary", "Home & Life"] as const;
 const BUSINESSES: Business[] = [
   {
     id: "1",
@@ -390,6 +389,86 @@ const BUSINESSES: Business[] = [
     logo: "/hauwherlogo.jpg",
     image: "/hauwher1.jpg",
     images: ["/hauwher1.jpg", "/hauwher2.jpg", "/hauwher3.jpg"],
+  },
+  {
+    id: "29",
+    name: " BURSTING FLAVORS ",
+    category: "Campus Drip",
+    initials: "BF",
+    description: "Custom cakes, cupcakes, birthday cakes & cake slices. Made fresh for campus events. Order 24hrs before.",
+    tags: ["Cakes", "Cupcakes", "Birthday Cakes", "Cake Slices",],
+    whatsapp: "2349160658322",
+    accent: "from-cyan-400/25 to-emerald-400/15",
+   
+    image: "/burstinglogo.jpeg",
+    images: ["/burstinglogo.jpeg",],
+  },
+  {
+    id: "30",
+    name: "feyy’s iStore",
+    category: "Tech Plug",
+    initials: "FI",
+    description: "your go-to plug for 🇺🇸🇬🇧 Brand new / used iPhones, Samsung, pixels, iPads and lots more.",
+    tags: ["Clothing", "Accessories", "Trendy"],
+    whatsapp: "2348091060095",
+    accent: "from-orange-300/25 to-emerald-400/15",
+    logo: "/feyyslogo.jpeg",
+    image: "/feyys1.jpeg",
+    images: ["/feyys1.jpeg", "/feyys2.jpeg", "/feyys4.jpeg"],
+    verified: false
+  },
+  {
+    id: "31",
+    name: "Marvie's collection (Home of aesthetics&lifestyle)",
+    category: "Campus Drip",
+    initials: "DK",
+    description: "Trendy campus dresses - casual, dinner, weekend fits. Custom sizes + fast delivery.",
+    tags: ["Clothes", "shoes", "Watches", "bags",],
+    whatsapp: "2349067563686",
+    accent: "from-pink-400/20 to-emerald-400/20",
+    logo: "/marvieslogo.jpeg",
+    image: "/marvies1.jpeg",
+    images: ["/marvies1.jpeg", "/marvies2.jpeg", "/marvies3.jpeg", "/marvies4.jpeg"],
+  },
+  {
+    id: "32",
+    name: "Zee arewa treats and treasures",
+    category: "uni eats",
+    initials: "ZT",
+    description: "Cakes, snacks & food orders. Necklaces, rings, watches & accessories. Onitsha + nationwide delivery. DM to order.",
+    tags: ["Cakes", "Food Orders", "Necklaces", "Accessories"],
+    whatsapp: "2349071340953",
+    accent: "from-orange-300/25 to-emerald-400/15",
+    logo: "/zee10.jpeg",
+    image: "/zee11.jpeg",
+    images: ["/zee11.jpeg", "/zee12.jpeg", "/zee13.jpeg", "/zee14.jpeg", "/zee15.jpeg", "/zee16.jpeg", "/zee17.jpeg", "/zee18.jpeg", "/zee19.jpeg", "/zee20.jpeg", "/zee21.jpeg", "/zee22.jpeg", "/zee23.jpeg", "/zee24.jpeg", "/zee25.jpeg", "/zee26.jpeg", "/zee27.jpeg", "/zee28.jpeg", "/zee29.jpeg", "/zee30.jpeg", "/zee1.jpeg", "/zee2.jpeg", "/zee3.jpeg", "/zee4.jpeg", "/zee5.jpeg", "/zee6.jpeg", "/zee7.jpeg", "/zee8.jpeg", "/zee9.jpeg"],
+    verified: false,
+  },
+  {
+    id: "33",
+    name: "CJ'S CUT✂️",
+    category: "Fresh Cuts",
+    initials: "CC",
+    description: "Fresh cuts, fades, line-ups, beard trims and hair designs. Professional barbering services on campus.",
+    tags: ["Fresh Cuts", "Barbering"],
+    whatsapp: "2348028246860",
+    accent: "from-rose-300/20 to-emerald-400/15",
+    logo: "/cjlogo.jpeg",
+    image: "/cj1.jpeg",
+    images: ["/cj1.jpeg",],
+  },
+  {
+    id: "34",
+    name: "Skay Production ",
+    category: "Print & Copy",
+    initials: "SP",
+    description: "Social media designs, Flyer Design, 3D Logo Brochure, Business Card, invitation Card, Calendars, Customized Jotter, Customized Frameless and Frame, Customized Towels, Mugs and Throw Pillows etc",
+    tags: ["Social Media Designs", "Flyer Design", "3D Logo Brochure", ],
+    whatsapp: "2348039859215",
+    accent: "from-rose-300/20 to-emerald-400/15",
+    
+    image: "/skaylogo.jpeg",
+    images: ["/skaylogo.jpeg",],
   },
 ];
 
