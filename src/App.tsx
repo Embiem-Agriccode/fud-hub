@@ -449,7 +449,7 @@ const BUSINESSES: Business[] = [
     name: "CJ'S CUT✂️",
     category: "Fresh Cuts",
     initials: "CC",
-    description: "Fresh cuts, fades, line-ups, beard trims and hair designs. Professional barbering services on campus.",
+    description: "Fresh cuts, fades, line-ups, beard trims and hair designs. Professional barbering services on campus Block B male Hostel.",
     tags: ["Fresh Cuts", "Barbering"],
     whatsapp: "2348028246860",
     accent: "from-rose-300/20 to-emerald-400/15",
@@ -469,6 +469,19 @@ const BUSINESSES: Business[] = [
     
     image: "/skaylogo.jpeg",
     images: ["/skaylogo.jpeg",],
+  },
+   {
+    id: "35",
+    name: "Sharp cut Barber 💈 ",
+    category: "Fresh Cuts",
+    initials: "SB",
+    description: "Professional barbering services on campus Block A male Hostel Available days: Mondays to Sunday.",
+    tags: ["Fresh Cuts", "Barbering"],
+    whatsapp: "2349137817122",
+    accent: "from-rose-300/20 to-emerald-400/15",
+    
+    image: "/sharp1.jpg",
+    images: ["/sharp1.jpg", "/sharp2.jpg",],
   },
 ];
 
