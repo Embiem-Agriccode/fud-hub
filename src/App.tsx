@@ -17,7 +17,7 @@ type Business = {
 };
 
 // ── Data ──────────────────────────────────────────────────────────────────────
-const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Lundary", "Home & Life"] as const;
+const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Lundary", "Home & Life", "Print & Copy",] as const;
 const BUSINESSES: Business[] = [
   {
     id: "1",
