@@ -480,7 +480,7 @@ const BUSINESSES: Business[] = [
     accent: "from-rose-300/20 to-emerald-400/15",
     logo: "/jossylogo.jpeg",
     image: "/jossy1.jpeg",
-    images: ["/jossy1.jpeg"],
+    images: ["/jossy1.jpeg", "/jossy2.jpeg", "/jossy3.jpeg", "/jossy4.jpeg"],
   },
 ];
 
