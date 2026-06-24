@@ -485,7 +485,7 @@ const BUSINESSES: Business[] = [
 ];
 
 const STATS = [
-  { k: "28+", v: "Verified vendors" },
+  { k: "40+", v: "Verified vendors" },
   { k: "7", v: "Categories" },
   { k: "4.9★", v: "Avg. campus rating" },
   { k: "< 30m", v: "Median response" },
