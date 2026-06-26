@@ -485,7 +485,7 @@ const BUSINESSES: Business[] = [
   {
     id: "37",
     name: "Jenny Girly Essentials",
-    category: "campus drip",
+    category: "Campus Drip",
     initials: "JG",
     description: "Your campus girly plug. Facial masks, eye masks, lip masks, earrings & female jewelry. Fast, affordable and reliable..",
     tags: ["Face Mask", "Eye Mask", "Lip Mask", "Earrings", "Jewelry", "Skincare"],
@@ -498,7 +498,7 @@ const BUSINESSES: Business[] = [
   {
     id: "38",
     name: "Al-ameen Yahya Sadeeq",
-    category: "print & copy",
+    category: "Print & Copy",
     initials: "AY",
     description: "We print, we make school projects, business posters, graphics design, website design and many more.",
     tags: ["Print", "Copy", "Design"],
@@ -511,7 +511,7 @@ const BUSINESSES: Business[] = [
   {
     id: "39",
     name: "Isha",
-    category: "uni eats",
+    category: "Uni Eats",
     initials: "I",
     description: "Bakes fresh cakes, birthday cakes, popcorn & bobo. Campus treats plug. Sweet, affordable, and reliable.",
     tags: ["Cake", "Birthday Cake", "Popcorn", "Bobo", "Pastries"],
@@ -524,7 +524,7 @@ const BUSINESSES: Business[] = [
   {
     id: "40",
     name: "Habbie Fit",
-    category: "campus drip",
+    category: "Campus Drip",
     initials: "HF",
     description: "I sell affordable female flat shoes and nightwear. Crispy, comfortable campus fits.",
     tags:["Flat Shoes", "Nightwear", "Female Fashion"],
