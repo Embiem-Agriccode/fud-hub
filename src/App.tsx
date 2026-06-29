@@ -140,6 +140,7 @@ const BUSINESSES: Business[] = [
     image: "/bel1.jpg",
     images: ["/bel1.jpg", "/bel7.jpeg", "/bel3.jpg", "/bel6.jpeg", "/bel2.jpg", "/bel4.jpg", "/bel5.jpeg", "/bel10.jpeg"],
     verified: true,
+    deal: true,
   },
   {
     id: "10",
