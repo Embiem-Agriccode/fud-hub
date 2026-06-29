@@ -34,6 +34,7 @@ const BUSINESSES: Business[] = [
     image: "/temas1.jpg",
     images: ["/temas1.jpg", "/temas2.jpg", "/temas3.jpg", "/temas4.jpg", "/temas5.jpg"],
     verified: true,
+    deal: true,
   },
   {
     id: "2",
@@ -80,20 +81,7 @@ const BUSINESSES: Business[] = [
     verified: true,
     deal: true,
   },
-  {
-    id: "5",
-    name: "Anointed Accessories",
-    category: "Tech Plug",
-    initials: "AA",
-    description: "Phones and accessories at student-friendly prices. Quality devices, fast delivery on campus.",
-    tags: ["Phones", "Accessories", "Gadgets", "Charger", "Earpiece"],
-    whatsapp: "2349129929484",
-    accent: "from-cyan-400/25 to-emerald-400/15",
-    logo: "/aalogo.jpg",
-    image: "/aa1.jpg",
-    images: ["/aa1.jpg", "/aa2.jpg", "/aa3.jpg", "/aa4.jpg"],
-    verified: true,
-  },
+  
   {
     id: "6",
     name: "MBM Gadget",
