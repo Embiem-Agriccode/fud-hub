@@ -169,7 +169,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "10",
+    id: "11",
     name: "NANZZ_LUXURY",
     category: "Campus Drip",
     initials: "NL",
@@ -548,21 +548,6 @@ const BUSINESSES: Business[] = [
     image: "/habbie1.jpeg",
     images: ["/habbie1.jpeg", "/habbie2.jpeg", "/habbie3.jpeg"],
   },
-  {
-    id: "41",
-    name: "Dizzorh.inc",
-    category: "Home & Life",
-    initials: "DI",
-    description: "Handmade epoxy resin art - custom coasters, Home Decor.",
-    tags: ["ResinArt", "Home Decor", "Vases", "Coasters", "Handmade"],
-    whatsapp: "2347069421830",
-    accent: "from-cyan-400/25 to-emerald-400/15",
-    logo: "/dizzorhlogo.jpg",
-    image: "/dizzorh2.jpg",
-    images: ["/dizzorh2.jpg", "/dizzorh3.jpg", "/dizzorh4.jpg"],
-    verified: true,
-    deal: true,
-  },
 ];
 
 const STATS = [
@@ -884,17 +869,20 @@ function Controls({ active, onActive, query, onQuery }: {
           </svg>
           <input value={query} onChange={(e) => onQuery(e.target.value)} placeholder="Search vendors, food, gadgets, barber..." className="w-full bg-surface/60 border text-foreground rounded-xl pl-11 pr-4 py-3 text-sm placeholder:text-muted-foreground/70 focus:outline-none focus:border-emerald-glow transition" />
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
-          {CATEGORIES.map((c) => {
-            const isActive = c === active;
-            return (
-              <button key={c} onClick={() => onActive(c)}
-                style={{ padding: "8px 16px", borderRadius: 999, fontSize: "0.8125rem", fontWeight: isActive ? 600 : 400, cursor: "pointer", transition: "all 0.25s ease", border: isActive ? "1px solid transparent" : "1px solid rgba(255,255,255,0.1)", background: isActive ? "oklch(0.72 0.21 152)" : "rgba(255,255,255,0.04)", color: isActive ? "oklch(0.12 0.02 160)" : "oklch(0.65 0.02 250)", boxShadow: isActive ? "0 0 24px -6px oklch(0.72 0.21 152)" : "none", whiteSpace: "nowrap" }}
-                onMouseEnter={(e) => { if (!isActive) { (e.currentTarget as HTMLButtonElement).style.color = "oklch(0.92 0.01 180)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(16,185,129,0.4)"; } }}
-                onMouseLeave={(e) => { if (!isActive) { (e.currentTarget as HTMLButtonElement).style.color = "oklch(0.65 0.02 250)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.1)"; } }}
-              >{c}</button>
-            );
-          })}
+        <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch", scrollbarWidth: "none", msOverflowStyle: "none", margin: "0 -1rem", padding: "0 1rem" }}>
+          <div style={{ display: "flex", gap: "8px", alignItems: "center", width: "max-content" }}>
+            {CATEGORIES.map((c) => {
+              const isActive = c === active;
+              return (
+                <button key={c} onClick={() => onActive(c)}
+                  style={{ padding: "8px 18px", borderRadius: 999, fontSize: "0.8125rem", fontWeight: isActive ? 600 : 400, cursor: "pointer", transition: "all 0.25s ease", border: isActive ? "1px solid transparent" : "1px solid rgba(255,255,255,0.1)", background: isActive ? "oklch(0.72 0.21 152)" : "rgba(255,255,255,0.04)", color: isActive ? "oklch(0.12 0.02 160)" : "oklch(0.65 0.02 250)", boxShadow: isActive ? "0 0 24px -6px oklch(0.72 0.21 152)" : "none", whiteSpace: "nowrap", flexShrink: 0 }}
+                  onMouseEnter={(e) => { if (!isActive) { (e.currentTarget as HTMLButtonElement).style.color = "oklch(0.92 0.01 180)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(16,185,129,0.4)"; } }}
+                  onMouseLeave={(e) => { if (!isActive) { (e.currentTarget as HTMLButtonElement).style.color = "oklch(0.65 0.02 250)"; (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.1)"; } }}
+                >{c}</button>
+              );
+            })}
+          </div>
+          <style>{`div::-webkit-scrollbar { display: none; }`}</style>
         </div>
       </div>
     </section>
