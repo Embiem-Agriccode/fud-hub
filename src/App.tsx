@@ -48,6 +48,7 @@ const BUSINESSES: Business[] = [
     logo: "/amakalogo.jpeg",
     image: "/amaka1.jpeg",
     images: ["/amaka1.jpeg", "/amaka2.jpeg", "/amaka3.jpeg", "/amaka4.jpeg", "/amaka5.jpeg"],
+    verified: true,
     deal: true,
   },
   {
