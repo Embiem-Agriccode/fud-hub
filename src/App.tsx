@@ -51,7 +51,7 @@ type Broadcast = {
 };
 
 // ── Data ──────────────────────────────────────────────────────────────────────
-const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Laundry", "Home & Life", "Print & Copy", "Data/Airtime"] as const;
+const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Laundry", "Home & Life", "Print & Copy", "Data & Airtime"] as const;
 const DEPARTMENTS: Department[] = ["Fisheries", "Animal Science", "Crop Science"];
 const AUDIENCE_OPTIONS: { id: Audience; label: string; icon: string }[] = [
   { id: "Students", label: "Students", icon: "🎓" },
@@ -294,14 +294,14 @@ const BUSINESSES: Business[] = [
    {
     id: "15",
     name: "KHALCARE DATAPLUG",
-    category: "Data/Airtime",
+    category: "Data & Airtime",
     initials: "KD",
     description: "Affordable Data + Airtime + bill payments + Utility Bills, Fast and Reliable",
     tags: ["Data", "Airtime", "Bill", "Airtel", "Glo", "9mobile"],
     whatsapp: "2348128795646",
     accent: "from-cyan-400/25 to-emerald-400/15",
-    
-   
+    logo: "",
+    image: "",
   },
   {
     id: "15",
