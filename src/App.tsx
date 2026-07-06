@@ -81,10 +81,6 @@ const BUSINESSES: Business[] = [
     verified: true,
     deal: true,
     dealLabel: "20% Off",
-    textReviews: [
-  { id: "mc-r1", text: "The quality is amazing! Best customer service on campus 🔥", rating: 5, isSample: true },
-  { id: "mc-r2", text: "Delivered right to my hostel on time. Highly recommended!", rating: 5, isSample: true },
-],
   },
   {
     id: "7",
