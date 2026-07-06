@@ -1663,7 +1663,9 @@ function ManagementPortal({ setAgriProducts, addToast, onSendBroadcast }: {
   };
 
   if (!authed) return <PinGate onUnlock={handleUnlock} attempt={attempt} />;
-return <FarmManagerPortal setAgriProducts={setAgriProducts} addToast={addToast} onLock={() => setAuthed(false)} onSendBroadcast={onSendBroadcast} />;
+  return <FarmManagerPortal setAgriProducts={setAgriProducts} addToast={addToast} onLock={() => setAuthed(false)} onSendBroadcast={onSendBroadcast} />;
+}
+
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App() {
   useReveal();
@@ -1743,8 +1745,9 @@ export default function App() {
         <AgriMarket products={filteredAgri} filter={agriFilter} onFilter={setAgriFilter} />
       )}
 
-      {activeTab === "management" && (
-          <ManagementPortal setAgriProducts={setAgriProducts} addToast={addToast} onSendBroadcast={onSendBroadcast} />      )}
+     {activeTab === "management" && (
+        <ManagementPortal setAgriProducts={setAgriProducts} addToast={addToast} onSendBroadcast={handleSendBroadcast} />
+      )}
 
       {selectedVendor && (
         <VendorModal business={selectedVendor} onClose={() => setSelectedVendor(null)} onShowTestimonials={openTestimonials} />
