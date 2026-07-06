@@ -1645,8 +1645,7 @@ function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast 
   );
 }
 
-function ManagementPortal({ agriProducts, setAgriProducts, addToast, onSendBroadcast }: {
-  agriProducts: AgriProduct[];
+function ManagementPortal({ setAgriProducts, addToast, onSendBroadcast }: {
   setAgriProducts: React.Dispatch<React.SetStateAction<AgriProduct[]>>;
   addToast: (message: string, tone?: ToastTone) => void;
   onSendBroadcast: (message: string, audiences: Audience[]) => void;
@@ -1664,8 +1663,7 @@ function ManagementPortal({ agriProducts, setAgriProducts, addToast, onSendBroad
   };
 
   if (!authed) return <PinGate onUnlock={handleUnlock} attempt={attempt} />;
-return <FarmManagerPortal setAgriProducts={setAgriProducts} addToast={addToast} onLock={() => setAuthed(false)} onSendBroadcast={onSendBroadcast} />;}
-
+return <FarmManagerPortal setAgriProducts={setAgriProducts} addToast={addToast} onLock={() => setAuthed(false)} onSendBroadcast={onSendBroadcast} />;
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App() {
   useReveal();
@@ -1746,8 +1744,7 @@ export default function App() {
       )}
 
       {activeTab === "management" && (
-        <ManagementPortal agriProducts={agriProducts} setAgriProducts={setAgriProducts} addToast={addToast} onSendBroadcast={handleSendBroadcast} />
-      )}
+          <ManagementPortal setAgriProducts={setAgriProducts} addToast={addToast} onSendBroadcast={onSendBroadcast} />      )}
 
       {selectedVendor && (
         <VendorModal business={selectedVendor} onClose={() => setSelectedVendor(null)} onShowTestimonials={openTestimonials} />
