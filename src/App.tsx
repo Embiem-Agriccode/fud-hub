@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
+type VerifiedSale = {
+  id: string;
+  // A single combined screenshot: WhatsApp order chat + payment receipt + delivery confirmation.
+  image: string;
+};
+
 type Business = {
   id: string;
   name: string;
@@ -15,13 +21,52 @@ type Business = {
   images?: string[];
   verified?: boolean;
   deal?: boolean;
+  dealLabel?: string;
+  verifiedSales?: VerifiedSale[];
+};
+
+type Department = "Fisheries" | "Animal Science" | "Crop Science";
+
+type AgriProduct = {
+  id: string;
+  name: string;
+  department: Department;
+  price: number;
+  unit: string;
+  quantity: number;
+  image: string;
+  description: string;
+};
+
+type ToastTone = "success" | "error";
+type ToastItem = { id: number; message: string; tone: ToastTone };
+type Tab = "vendors" | "agri" | "management";
+
+type Audience = "Students" | "Vendors" | "Keke Operators" | "Senate";
+type Broadcast = {
+  id: string;
+  message: string;
+  audiences: Audience[];
+  createdAt: number;
 };
 
 // ── Data ──────────────────────────────────────────────────────────────────────
-const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Laundry", "Home & Life", "Print & Copy"] as const;
+const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Laundry", "Home & Life", "Print & Copy", "Data/Airtime"] as const;
+const DEPARTMENTS: Department[] = ["Fisheries", "Animal Science", "Crop Science"];
+const AUDIENCE_OPTIONS: { id: Audience; label: string; icon: string }[] = [
+  { id: "Students", label: "Students", icon: "🎓" },
+  { id: "Vendors", label: "Vendors", icon: "🛍️" },
+  { id: "Keke Operators", label: "Keke Operators", icon: "🛺" },
+  { id: "Senate", label: "Senate", icon: "🏛️" },
+];
+
+// Faculty of Agriculture farm order line — update to the real farm desk number.
+const FARM_WHATSAPP = "2348012345678";
+// Rotate this PIN whenever farm management staff changes.
+const MANAGEMENT_PIN = "2468";
 
 const BUSINESSES: Business[] = [
-   {
+  {
     id: "4",
     name: "Maroonette Creates",
     category: "Home & Life",
@@ -35,6 +80,11 @@ const BUSINESSES: Business[] = [
     images: ["/maroonette1.jpg", "/maroonette2.jpg", "/maroonette3.jpg", "/maroonette4.jpg", "/maroonette5.jpg", "/maroonette6.jpg", "/maroonette7.jpg"],
     verified: true,
     deal: true,
+    dealLabel: "20% Off",
+    textReviews: [
+  { id: "mc-r1", text: "The quality is amazing! Best customer service on campus 🔥", rating: 5, isSample: true },
+  { id: "mc-r2", text: "Delivered right to my hostel on time. Highly recommended!", rating: 5, isSample: true },
+],
   },
   {
     id: "7",
@@ -65,6 +115,9 @@ const BUSINESSES: Business[] = [
     images: ["/bel7.jpeg", "/bel1.jpeg", "/bel3.jpg", "/bel6.jpeg", "/bel2.jpg", "/bel4.jpg", "/bel5.jpeg", "/bel10.jpeg"],
     verified: true,
     deal: true,
+    verifiedSales: [
+      { id: "bc-vs1", image: "/bel1.jpeg" }
+    ],
   },
   {
     id: "5",
@@ -125,6 +178,8 @@ const BUSINESSES: Business[] = [
     images: ["/temas1.jpg", "/temas2.jpg", "/temas3.jpg", "/temas4.jpg", "/temas5.jpg"],
     verified: true,
     deal: true,
+    dealLabel: "20% Off",
+    
   },
   {
     id: "8",
@@ -138,6 +193,8 @@ const BUSINESSES: Business[] = [
     logo: "/jossylogo.jpeg",
     image: "/jossy1.jpeg",
     images: ["/jossy1.jpeg", "/jossy2.jpeg", "/jossy3.jpeg", "/jossy4.jpeg"],
+    verified: true,
+    deal: true,
   },
   {
     id: "9",
@@ -157,9 +214,9 @@ const BUSINESSES: Business[] = [
   {
     id: "10",
     name: "Deerjah Leeyu's",
-    category: "Campus Drip ",
+    category: "Campus Drip",
     initials: "DI",
-    description: "Abaya, jersey veils, hand sleeves, socks, perfume, brooches, and different types of veils and hijab.", 
+    description: "Abaya, jersey veils, hand sleeves, socks, perfume, brooches, and different types of veils and hijab.",
     tags: ["Abaya", "Hijab", "Hand Sleeve", "Perfume", "Veils"],
     whatsapp: "2347061435338",
     accent: "from-cyan-400/25 to-emerald-400/15",
@@ -170,7 +227,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "10",
+    id: "36",
     name: "Shaffy's Treats",
     category: "Uni Eats",
     initials: "ST",
@@ -237,6 +294,18 @@ const BUSINESSES: Business[] = [
     image: "/kel1.jpeg",
     images: ["/kel1.jpeg", "/kel2.jpeg", "/kel3.jpeg", "/kel4.jpeg"],
     deal: true,
+  },
+   {
+    id: "15",
+    name: "KHALCARE DATAPLUG",
+    category: "Data/Airtime",
+    initials: "KD",
+    description: "Affordable Data + Airtime + bill payments + Utility Bills, Fast and Reliable",
+    tags: ["Data", "Airtime", "Bill", "Airtel", "Glo", "9mobile"],
+    whatsapp: "2348128795646",
+    accent: "from-cyan-400/25 to-emerald-400/15",
+    
+   
   },
   {
     id: "15",
@@ -573,6 +642,59 @@ const STATS = [
   { k: "< 30m", v: "Median response" },
 ];
 
+const INITIAL_AGRI_PRODUCTS: AgriProduct[] = [
+  {
+    id: "agri-1",
+    name: "Fresh Faculty Catfish",
+    department: "Fisheries",
+    price: 2500,
+    unit: "kg",
+    quantity: 60,
+    image: "https://images.unsplash.com/photo-1544943910-4c1dc44aab44?w=800&q=80",
+    description: "Farm-raised, harvested fresh weekly from the Faculty of Agriculture fish ponds — no preservatives, no middlemen.",
+  },
+  {
+    id: "agri-2",
+    name: "Broiler Chickens (Live)",
+    department: "Animal Science",
+    price: 6500,
+    unit: "bird",
+    quantity: 40,
+    image: "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=800&q=80",
+    description: "Healthy, well-fed broilers reared by the Department of Animal Science. Available live or dressed on request.",
+  },
+  {
+    id: "agri-3",
+    name: "Free-Range Eggs",
+    department: "Animal Science",
+    price: 3200,
+    unit: "crate",
+    quantity: 25,
+    image: "https://images.unsplash.com/photo-1518569656558-1f25e69d93d7?w=800&q=80",
+    description: "Rich, golden-yolk eggs from the poultry unit. Collected daily and sold same-day for peak freshness.",
+  },
+  {
+    id: "agri-4",
+    name: "Sweet Corn (Fresh Cobs)",
+    department: "Crop Science",
+    price: 800,
+    unit: "cob",
+    quantity: 120,
+    image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=800&q=80",
+    description: "Sweet, tender cobs harvested at peak ripeness from the Crop Science demonstration farm.",
+  },
+  {
+    id: "agri-5",
+    name: "Farm Tomatoes",
+    department: "Crop Science",
+    price: 1200,
+    unit: "basket",
+    quantity: 12,
+    image: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?w=800&q=80",
+    description: "Vine-ripened tomatoes, hand-picked twice a week. Great for stews, sauces and campus kitchens.",
+  },
+];
+
 // ── Emergency Contacts ────────────────────────────────────────────────────────
 type EmergencyContact = {
   id: string; icon: string; category: string;
@@ -613,6 +735,170 @@ function StarRating({ vendorId }: { vendorId: string }) {
         })}
         {rating > 0 && <span style={{ fontSize: "0.75rem", color: "#10b981", alignSelf: "center", marginLeft: 4, fontWeight: 600 }}>{rating}/5</span>}
       </div>
+    </div>
+  );
+}
+
+// ── Toast Stack ───────────────────────────────────────────────────────────────
+function ToastStack({ toasts }: { toasts: ToastItem[] }) {
+  return (
+    <div style={{ position: "fixed", bottom: 24, left: "50%", transform: "translateX(-50%)", zIndex: 300, display: "flex", flexDirection: "column", gap: 10, width: "calc(100% - 32px)", maxWidth: 420, pointerEvents: "none" }}>
+      {toasts.map((t) => (
+        <div key={t.id} style={{ padding: "0.9rem 1.15rem", borderRadius: 14, background: t.tone === "error" ? "linear-gradient(135deg, #f87171, #ef4444)" : "linear-gradient(135deg, #34d399, #059669)", color: t.tone === "error" ? "#fff" : "oklch(0.12 0.02 160)", fontSize: "0.875rem", fontWeight: 700, boxShadow: "0 20px 50px -15px rgba(0,0,0,0.55)", animation: "toastIn 0.35s cubic-bezier(0.2,0.8,0.2,1)", textAlign: "center" }}>
+          {t.message}
+        </div>
+      ))}
+      <style>{`@keyframes toastIn{from{opacity:0;transform:translateY(20px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}`}</style>
+    </div>
+  );
+}
+
+// ── Campus Broadcast Banners ─────────────────────────────────────────────────
+function getBroadcastAccent(audiences: Audience[]) {
+  if (audiences.includes("Senate")) {
+    return { border: "#f59e0b", bg: "linear-gradient(135deg, rgba(245,158,11,0.16), rgba(239,68,68,0.09))", glow: "rgba(245,158,11,0.35)", icon: "🏛️" };
+  }
+  if (audiences.includes("Vendors")) {
+    return { border: "#059669", bg: "linear-gradient(135deg, rgba(5,150,105,0.20), rgba(16,185,129,0.07))", glow: "rgba(5,150,105,0.35)", icon: "🛍️" };
+  }
+  if (audiences.includes("Keke Operators")) {
+    return { border: "#06b6d4", bg: "linear-gradient(135deg, rgba(6,182,212,0.16), rgba(16,185,129,0.06))", glow: "rgba(6,182,212,0.3)", icon: "🛺" };
+  }
+  return { border: "#10b981", bg: "linear-gradient(135deg, rgba(16,185,129,0.16), rgba(16,185,129,0.05))", glow: "rgba(16,185,129,0.3)", icon: "🎓" };
+}
+
+function BroadcastBanners({ broadcasts, onDismiss }: { broadcasts: Broadcast[]; onDismiss: (id: string) => void }) {
+  if (broadcasts.length === 0) return null;
+  return (
+    <div style={{ position: "relative", zIndex: 45, padding: "12px 24px 0" }}>
+      <div className="mx-auto max-w-7xl" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {broadcasts.map((b) => {
+          const accent = getBroadcastAccent(b.audiences);
+          return (
+            <div key={b.id} style={{ position: "relative", borderRadius: 16, padding: "14px 46px 14px 16px", background: accent.bg, borderLeft: `4px solid ${accent.border}`, border: `1px solid color-mix(in oklab, ${accent.border} 35%, transparent)`, boxShadow: `0 14px 34px -18px ${accent.glow}`, animation: "bannerIn 0.35s cubic-bezier(0.2,0.8,0.2,1)", backdropFilter: "blur(6px)" }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                <span style={{ fontSize: "1.2rem", flexShrink: 0, lineHeight: 1.4 }}>{accent.icon}</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ fontSize: "0.875rem", fontWeight: 500, color: "var(--foreground)", lineHeight: 1.55, margin: 0 }}>{b.message}</p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 9 }}>
+                    {b.audiences.map((a) => {
+                      const opt = AUDIENCE_OPTIONS.find((o) => o.id === a);
+                      return (
+                        <span key={a} style={{ fontSize: "0.65rem", fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.1)", color: "var(--muted-foreground)", whiteSpace: "nowrap" }}>
+                          {opt?.icon} {opt?.label}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+              <button onClick={() => onDismiss(b.id)} aria-label="Dismiss broadcast" style={{ position: "absolute", top: 12, right: 12, width: 26, height: 26, borderRadius: "50%", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.14)", color: "var(--muted-foreground)", fontSize: "0.7rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>✕</button>
+            </div>
+          );
+        })}
+      </div>
+      <style>{`@keyframes bannerIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}`}</style>
+    </div>
+  );
+}
+
+// ── Testimonials Modal (rate vendor + real verified transaction vouchers) ───
+function TestimonialViewer({ business, index, onClose, onNav }: { business: Business; index: number; onClose: () => void; onNav: (dir: 1 | -1) => void }) {
+  const sales = business.verifiedSales || [];
+  const [tab, setTab] = useState<"reviews" | "vouchers">(sales.length > 0 ? "vouchers" : "reviews");
+  const [zoomed, setZoomed] = useState<number | null>(sales.length > 0 ? index : null);
+  const waHref = `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(`Hi ${business.name}, I'd like to place an order via FUD Hub.`)}`;
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { if (zoomed !== null) setZoomed(null); else onClose(); }
+      if (zoomed !== null) {
+        if (e.key === "ArrowRight") setZoomed((z) => (z === null ? z : (z + 1) % sales.length));
+        if (e.key === "ArrowLeft") setZoomed((z) => (z === null ? z : (z - 1 + sales.length) % sales.length));
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = ""; document.removeEventListener("keydown", onKey); };
+  }, [onClose, onNav, zoomed, sales.length]);
+
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 500, background: "rgba(0,0,0,0.85)", backdropFilter: "blur(6px)", display: "flex", alignItems: "flex-end", justifyContent: "center", animation: "fadeIn 0.2s ease" }} onClick={onClose}>
+      <div style={{ width: "100%", maxWidth: 480, margin: "0 auto", background: "oklch(0.18 0.02 250)", borderRadius: "24px 24px 0 0", border: "1px solid color-mix(in oklab, oklch(0.72 0.21 152) 20%, transparent)", overflow: "hidden", animation: "slideUp 0.35s cubic-bezier(0.2,0.8,0.2,1)", maxHeight: "90vh", display: "flex", flexDirection: "column" }} onClick={(e) => e.stopPropagation()}>
+
+        <div style={{ padding: "1.25rem 1.25rem 1rem", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+              {business.logo
+                ? <img src={business.logo} alt={business.name} style={{ width: 44, height: 44, borderRadius: 10, objectFit: "cover", flexShrink: 0, border: "1px solid rgba(255,255,255,0.1)" }} />
+                : <div style={{ width: 44, height: 44, borderRadius: 10, background: "oklch(0.22 0.022 250)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1rem", fontWeight: 700, color: "oklch(0.85 0.22 158)", flexShrink: 0 }}>{business.initials}</div>
+              }
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.05rem", color: "oklch(0.97 0.01 180)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{business.name}</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 5 }}>
+                  {business.verified && (
+                    <span style={{ fontSize: "0.62rem", fontWeight: 700, color: "var(--emerald-bright)", background: "color-mix(in oklab, var(--emerald-glow) 15%, transparent)", border: "1px solid color-mix(in oklab, var(--emerald-glow) 40%, transparent)", borderRadius: 999, padding: "3px 8px", whiteSpace: "nowrap" }}>🔒 Secured & Verified by EMBIEM</span>
+                  )}
+                  {sales.length > 0 && (
+                    <span style={{ fontSize: "0.62rem", fontWeight: 700, color: "#34d399", background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.3)", borderRadius: 999, padding: "3px 8px", whiteSpace: "nowrap" }}>🧾 {sales.length} Verified Transaction{sales.length > 1 ? "s" : ""}</span>
+                  )}
+                </div>
+              </div>
+            </div>
+            <button onClick={onClose} aria-label="Close" style={{ width: 32, height: 32, borderRadius: "50%", background: "oklch(0.26 0.025 250)", border: "none", color: "oklch(0.97 0.01 180)", fontSize: "1rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>✕</button>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: 6, padding: "0 1.25rem", flexShrink: 0 }}>
+          <button onClick={() => setTab("reviews")} style={{ flex: 1, padding: "0.7rem", borderRadius: "12px 12px 0 0", border: "none", borderBottom: tab === "reviews" ? "2px solid #10b981" : "2px solid transparent", background: tab === "reviews" ? "rgba(16,185,129,0.08)" : "transparent", color: tab === "reviews" ? "var(--emerald-bright)" : "oklch(0.62 0.02 250)", fontWeight: 700, fontSize: "0.8rem", cursor: "pointer" }}>⭐ Rate This Vendor</button>
+          <button onClick={() => setTab("vouchers")} style={{ flex: 1, padding: "0.7rem", borderRadius: "12px 12px 0 0", border: "none", borderBottom: tab === "vouchers" ? "2px solid #10b981" : "2px solid transparent", background: tab === "vouchers" ? "rgba(16,185,129,0.08)" : "transparent", color: tab === "vouchers" ? "var(--emerald-bright)" : "oklch(0.62 0.02 250)", fontWeight: 700, fontSize: "0.8rem", cursor: "pointer" }}>📸 Transaction Vouchers</button>
+        </div>
+
+        <div style={{ padding: "1.25rem", overflowY: "auto", flex: 1, minHeight: 0 }}>
+          {tab === "reviews" && (
+            <div>
+              <StarRating vendorId={business.id} />
+              <p style={{ fontSize: "0.75rem", color: "var(--muted-foreground)", lineHeight: 1.6, marginTop: 4 }}>
+                Ratings are submitted directly by FUD students who've ordered from {business.name}. This app doesn't publish written reviews yet — only the transaction vouchers below are independently verifiable.
+              </p>
+            </div>
+          )}
+          {tab === "vouchers" && (
+            sales.length > 0 ? (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+                {sales.map((s, i) => (
+                  <button key={s.id} onClick={() => setZoomed(i)} style={{ borderRadius: 14, overflow: "hidden", border: "2px solid #10b981", cursor: "pointer", background: "oklch(0.2 0.02 250)", padding: 0, aspectRatio: "1/1", position: "relative" }}>
+                    <img src={s.image} alt="Verified transaction slip" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "4px 6px", background: "rgba(16,185,129,0.85)", fontSize: "0.6rem", fontWeight: 700, color: "#052e1e", textAlign: "center" }}>✅ Verified</div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p style={{ fontSize: "0.85rem", color: "var(--muted-foreground)", textAlign: "center", padding: "1.5rem 0" }}>No verified transaction vouchers uploaded yet for {business.name}.</p>
+            )
+          )}
+        </div>
+
+        <div style={{ padding: "1rem 1.25rem 1.25rem", flexShrink: 0 }}>
+          <a href={waHref} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "0.9rem", borderRadius: 14, background: "oklch(0.78 0.19 155)", color: "oklch(0.15 0.02 250)", fontWeight: 700, fontSize: "0.9rem", textDecoration: "none", boxShadow: "0 0 30px -5px oklch(0.72 0.21 152)" }}>
+            🛍️ Order via WB
+          </a>
+        </div>
+      </div>
+
+      {zoomed !== null && sales[zoomed] && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 600, background: "rgba(0,0,0,0.95)", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem 1rem" }} onClick={(e) => { e.stopPropagation(); setZoomed(null); }}>
+          {sales.length > 1 && (
+            <button onClick={(e) => { e.stopPropagation(); setZoomed((z) => (z === null ? z : (z - 1 + sales.length) % sales.length)); }} aria-label="Previous" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", width: 42, height: 42, borderRadius: "50%", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", color: "#fff", fontSize: "1.3rem", cursor: "pointer" }}>‹</button>
+          )}
+          <img src={sales[zoomed].image} alt="Verified transaction slip full view" style={{ maxWidth: "100%", maxHeight: "80vh", borderRadius: 16, border: "2px solid #10b981", objectFit: "contain" }} onClick={(e) => e.stopPropagation()} />
+          {sales.length > 1 && (
+            <button onClick={(e) => { e.stopPropagation(); setZoomed((z) => (z === null ? z : (z + 1) % sales.length)); }} aria-label="Next" style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", width: 42, height: 42, borderRadius: "50%", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", color: "#fff", fontSize: "1.3rem", cursor: "pointer" }}>›</button>
+          )}
+          <button onClick={(e) => { e.stopPropagation(); setZoomed(null); }} aria-label="Close zoom" style={{ position: "absolute", top: 16, right: 16, width: 38, height: 38, borderRadius: "50%", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", color: "#fff", fontSize: "1.1rem", cursor: "pointer" }}>✕</button>
+        </div>
+      )}
+      <style>{`@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}`}</style>
     </div>
   );
 }
@@ -718,7 +1004,7 @@ function useReveal() {
 }
 
 // ── Vendor Modal ──────────────────────────────────────────────────────────────
-function VendorModal({ business, onClose }: { business: Business; onClose: () => void }) {
+function VendorModal({ business, onClose, onShowTestimonials }: { business: Business; onClose: () => void; onShowTestimonials: (business: Business, index?: number) => void }) {
   const [current, setCurrent] = useState(0);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
@@ -744,7 +1030,7 @@ function VendorModal({ business, onClose }: { business: Business; onClose: () =>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                   <span style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "oklch(0.62 0.02 250)", background: "oklch(0.96 0.01 180 / 0.06)", border: "1px solid oklch(0.96 0.01 180 / 0.08)", borderRadius: 999, padding: "3px 8px" }}>{business.category}</span>
                   {business.verified && <span style={{ fontSize: "0.65rem", fontWeight: 600, color: "var(--emerald-bright)", background: "color-mix(in oklab, var(--emerald-glow) 15%, transparent)", border: "1px solid color-mix(in oklab, var(--emerald-glow) 40%, transparent)", borderRadius: 999, padding: "3px 8px", whiteSpace: "nowrap" }}>✓ Verified by EMBIEM</span>}
-                  {business.deal && <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "oklch(0.25 0.04 60)", background: "linear-gradient(135deg, oklch(0.88 0.16 85), oklch(0.78 0.18 65))", borderRadius: 999, padding: "3px 8px", whiteSpace: "nowrap" }}>🏷️ FUD Hub Deal</span>}
+                  {business.deal && <span style={{ fontSize: "0.65rem", fontWeight: 700, color: "oklch(0.25 0.04 60)", background: "linear-gradient(135deg, oklch(0.88 0.16 85), oklch(0.78 0.18 65))", borderRadius: 999, padding: "3px 8px", whiteSpace: "nowrap" }}>🏷️ {business.dealLabel || "5% Off"}</span>}
                 </div>
                 <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.25rem", color: "oklch(0.97 0.01 180)", lineHeight: 1.25, marginTop: 6 }}>{business.name}</div>
               </div>
@@ -773,14 +1059,50 @@ function VendorModal({ business, onClose }: { business: Business; onClose: () =>
         )}
         <div style={{ padding: "0 1.25rem 1.25rem" }}>
           <p style={{ fontSize: "0.9rem", color: "oklch(0.75 0.02 250)", lineHeight: 1.65, marginBottom: "0.875rem" }}>{business.description}</p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: "1.25rem" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: business.verifiedSales && business.verifiedSales.length > 0 ? "1.25rem" : "1.25rem" }}>
             {business.tags.map((t) => <span key={t} style={{ padding: "4px 12px", background: "oklch(0.22 0.022 250)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 999, fontSize: "0.75rem", color: "oklch(0.75 0.02 250)" }}>{t}</span>)}
           </div>
+
+          {business.verifiedSales && business.verifiedSales.length > 0 && (
+            <div style={{ marginBottom: "1.5rem" }}>
+              <div style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--emerald-bright)", marginBottom: 10 }}>
+                🧾 Verified Campus Sales
+              </div>
+              <div style={{ display: "flex", gap: 10, overflowX: "auto", paddingBottom: 4, scrollbarWidth: "none" }}>
+                {business.verifiedSales.map((sale, idx) => (
+                  <button
+                    key={sale.id}
+                    onClick={() => onShowTestimonials(business, idx)}
+                    aria-label="View verified transaction slip"
+                    style={{ display: "flex", flexDirection: "column", width: 128, flexShrink: 0, borderRadius: 16, overflow: "hidden", border: "2px solid #10b981", cursor: "pointer", background: "oklch(0.2 0.02 250)", padding: 0, boxShadow: "0 8px 24px -10px rgba(16,185,129,0.4)" }}
+                  >
+                    <div style={{ width: "100%", aspectRatio: "1/1", overflow: "hidden" }}>
+                      <img src={sale.image} alt="Verified transaction slip preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 4, padding: "6px 4px", background: "rgba(16,185,129,0.18)" }}>
+                      <span style={{ fontSize: "0.65rem" }}>✅</span>
+                      <span style={{ fontSize: "0.6rem", fontWeight: 700, color: "#34d399", lineHeight: 1.15, textAlign: "center" }}>Verified Transaction Slip</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+              <p style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", marginTop: 8 }}>Tap a slip to view the full WhatsApp order, payment receipt & delivery confirmation.</p>
+            </div>
+          )}
+
           <StarRating vendorId={business.id} />
-          <a href={waHref} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "0.875rem", background: "oklch(0.78 0.19 155)", color: "oklch(0.15 0.02 250)", fontWeight: 700, fontSize: "0.9375rem", borderRadius: 14, border: "none", textDecoration: "none", boxShadow: "0 0 30px -5px oklch(0.72 0.21 152)" }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-            Order via WhatsApp
-          </a>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+            <a href={waHref} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "0.875rem 0.5rem", background: "oklch(0.78 0.19 155)", color: "oklch(0.15 0.02 250)", fontWeight: 700, fontSize: "0.875rem", borderRadius: 14, border: "none", textDecoration: "none", boxShadow: "0 0 30px -5px oklch(0.72 0.21 152)" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+              <span style={{ whiteSpace: "nowrap" }}>Order via WB</span>
+            </a>
+            <button
+              onClick={() => onShowTestimonials(business, 0)}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "0.875rem 0.5rem", borderRadius: 14, border: "1px solid color-mix(in oklab, var(--emerald-glow) 45%, transparent)", background: "color-mix(in oklab, var(--emerald-glow) 12%, transparent)", color: "var(--emerald-bright)", fontWeight: 700, fontSize: "0.875rem", cursor: "pointer", whiteSpace: "nowrap" }}
+            >
+              🧾 Testimonials
+            </button>
+          </div>
         </div>
       </div>
       <style>{`@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}`}</style>
@@ -789,25 +1111,22 @@ function VendorModal({ business, onClose }: { business: Business; onClose: () =>
 }
 
 // ── Nav ───────────────────────────────────────────────────────────────────────
-function Nav({ lightMode, onToggle, onSOS }: { lightMode: boolean; onToggle: () => void; onSOS: () => void }) {
+function Nav({ onSOS, activeTab, onTab }: { onSOS: () => void; activeTab: Tab; onTab: (t: Tab) => void }) {  const tabs: { id: Tab; label: string }[] = [
+    { id: "vendors", label: "FUD Vendors" },
+    { id: "agri", label: "Agri-Market" },
+    { id: "management", label: "Management" },
+  ];
   return (
     <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/60 border-b border-border/60">
-      <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+      <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="relative h-10 w-10 rounded-xl overflow-hidden border border-white/10 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.8)]">
             <img src="/embiem-logo.png" alt="EMBIEM" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
           <span className="font-display font-semibold tracking-tight text-lg">FUD Hub</span>
         </div>
-        <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-          <a href="#directory" style={{ textDecoration: "none" }} className="hover:text-foreground transition-colors">Directory</a>
-          <a href="#stats" style={{ textDecoration: "none" }} className="hover:text-foreground transition-colors">Numbers</a>
-          <a href="#embiem" style={{ textDecoration: "none" }} className="hover:text-foreground transition-colors">For Founders</a>
-        </nav>
-        <div className="flex items-center gap-2">
-          <button onClick={onToggle} style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", background: "color-mix(in oklab, var(--foreground) 6%, transparent)", border: "1px solid color-mix(in oklab, var(--foreground) 10%, transparent)", borderRadius: 10, cursor: "pointer", lineHeight: 1, flexShrink: 0 }} aria-label="Toggle light/dark mode">
-            {lightMode ? "🌙" : "☀️"}
-          </button>
+        <div className="flex items-center gap-2 shrink-0">
+          
           <button onClick={onSOS} style={{ position: "relative", display: "flex", alignItems: "center", gap: "6px", fontFamily: "var(--font-sans)", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.02em", color: "white", background: "#ef4444", border: "none", padding: "8px 13px", borderRadius: 10, cursor: "pointer", flexShrink: 0 }} aria-label="Emergency SOS">
             <span style={{ position: "relative", display: "inline-flex", width: 7, height: 7 }}>
               <span style={{ position: "absolute", inset: 0, borderRadius: "50%", background: "white", opacity: 0.7, animation: "sosPing 1.6s cubic-bezier(0,0,0.2,1) infinite" }} />
@@ -815,6 +1134,19 @@ function Nav({ lightMode, onToggle, onSOS }: { lightMode: boolean; onToggle: () 
             </span>
             SOS
           </button>
+        </div>
+      </div>
+      <div className="mx-auto max-w-7xl px-6 pb-3" style={{ overflowX: "auto", scrollbarWidth: "none" }}>
+        <div style={{ display: "flex", gap: 8, width: "max-content" }}>
+          {tabs.map((t) => {
+            const isActive = t.id === activeTab;
+            return (
+              <button key={t.id} onClick={() => onTab(t.id)}
+                style={{ padding: "8px 18px", borderRadius: 999, fontSize: "0.8125rem", fontWeight: isActive ? 700 : 500, cursor: "pointer", transition: "all 0.25s ease", border: isActive ? "1px solid transparent" : "1px solid rgba(255,255,255,0.1)", background: isActive ? "oklch(0.72 0.21 152)" : "rgba(255,255,255,0.04)", color: isActive ? "oklch(0.12 0.02 160)" : "oklch(0.65 0.02 250)", boxShadow: isActive ? "0 0 24px -6px oklch(0.72 0.21 152)" : "none", whiteSpace: "nowrap" }}>
+                {t.label}
+              </button>
+            );
+          })}
         </div>
       </div>
       <style>{`@keyframes sosPing{75%,100%{transform:scale(2.4);opacity:0}}`}</style>
@@ -905,8 +1237,8 @@ function Controls({ active, onActive, query, onQuery }: {
   );
 }
 
-// ── Card ──────────────────────────────────────────────────────────────────────
-function Card({ business, index, onOpen }: { business: Business; index: number; onOpen: () => void }) {
+// ── Vendor Card ───────────────────────────────────────────────────────────────
+function Card({ business, index, onOpen, onShowTestimonials }: { business: Business; index: number; onOpen: () => void; onShowTestimonials: (business: Business) => void }) {
   const waHref = `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(`Hi ${business.name}, I'd like to place an order via FUD Hub.`)}`;
   const displayTags = business.tags.slice(0, 3);
   return (
@@ -926,8 +1258,8 @@ function Card({ business, index, onOpen }: { business: Business; index: number; 
           {business.verified && (
             <span style={{ fontSize: "10px", fontWeight: 600, color: "var(--emerald-bright)", background: "color-mix(in oklab, var(--emerald-glow) 15%, transparent)", border: "1px solid color-mix(in oklab, var(--emerald-glow) 40%, transparent)", borderRadius: 999, padding: "4px 9px", whiteSpace: "nowrap" }}>✓ Verified</span>
           )}
-          {business.deal && (
-            <span style={{ fontSize: "10px", fontWeight: 700, color: "oklch(0.25 0.04 60)", background: "linear-gradient(135deg, oklch(0.88 0.16 85), oklch(0.78 0.18 65))", borderRadius: 999, padding: "4px 9px", whiteSpace: "nowrap", boxShadow: "0 2px 8px -2px oklch(0.78 0.18 65 / 0.5)" }}>🏷️ Deal</span>
+         {business.deal && (
+            <span style={{ fontSize: "10px", fontWeight: 700, color: "oklch(0.25 0.04 60)", background: "linear-gradient(135deg, oklch(0.88 0.16 85), oklch(0.78 0.18 65))", borderRadius: 999, padding: "4px 9px", whiteSpace: "nowrap", boxShadow: "0 2px 8px -2px oklch(0.78 0.18 65 / 0.5)" }}>🏷️ {business.dealLabel || "5% Off"}</span>
           )}
         </div>
       </div>
@@ -959,25 +1291,33 @@ function Card({ business, index, onOpen }: { business: Business; index: number; 
           <div style={{ position: "absolute", bottom: 8, right: 8, background: "rgba(0,0,0,0.6)", borderRadius: 999, padding: "3px 10px", fontSize: "0.7rem", color: "white", backdropFilter: "blur(4px)" }}>+{business.images.length - 1} more</div>
         )}
       </div>
-      <div className="relative mt-5 pt-5 border-t border-border/70">
-        <a href={waHref} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }} className="inline-flex items-center justify-center gap-2 w-full rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-all duration-400 shadow-[0_0_24px_-6px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)]">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-          Order via WhatsApp
+      <div className="relative mt-5 pt-5 border-t border-border/70 grid grid-cols-2 gap-2">
+        <a href={waHref} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", padding: "0.7rem 0.4rem", fontSize: "0.8125rem" }} className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-primary font-semibold text-primary-foreground transition-all duration-400 shadow-[0_0_24px_-6px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)]">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+          <span style={{ whiteSpace: "nowrap" }}>Order via WB</span>
         </a>
+        <button
+          onClick={(e) => { e.stopPropagation(); onShowTestimonials(business); }}
+          style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, borderRadius: 12, padding: "0.7rem 0.4rem", fontSize: "0.8125rem", fontWeight: 700, border: "1px solid color-mix(in oklab, var(--emerald-glow) 40%, transparent)", background: "color-mix(in oklab, var(--emerald-glow) 10%, transparent)", color: "var(--emerald-bright)", cursor: "pointer", whiteSpace: "nowrap" }}
+        >
+          🧾 Testimonials
+        </button>
       </div>
     </article>
   );
 }
 
 // ── Grid ──────────────────────────────────────────────────────────────────────
-function Grid({ items, onOpen }: { items: Business[]; onOpen: (b: Business) => void }) {
+function Grid({ items, onOpen, onShowTestimonials }: { items: Business[]; onOpen: (b: Business) => void; onShowTestimonials: (b: Business) => void }) {
   return (
     <section className="mx-auto max-w-7xl px-6 py-12 sm:py-16">
       {items.length === 0 ? (
         <div className="glass-card rounded-2xl p-16 text-center text-muted-foreground">No vendors match that search. Try another category.</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-          {items.map((b, i) => <Card key={b.id} business={b} index={i} onOpen={() => onOpen(b)} />)}
+          {items.map((b, i) => (
+            <Card key={b.id} business={b} index={i} onOpen={() => onOpen(b)} onShowTestimonials={onShowTestimonials} />
+          ))}
         </div>
       )}
     </section>
@@ -1000,14 +1340,389 @@ function Stats() {
   );
 }
 
+// ── Agri-Market ───────────────────────────────────────────────────────────────
+function AgriHero() {
+  return (
+    <section className="mx-auto max-w-7xl px-6 pt-16 pb-10">
+      <div className="reveal max-w-2xl">
+        <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/60 px-3 py-1.5 text-xs text-foreground mb-6">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-bright animate-pulse" />
+          Direct from the Faculty of Agriculture farms
+        </div>
+        <h1 className="text-4xl sm:text-5xl font-display font-bold leading-[1.05] tracking-tight">
+          Farm-fresh produce, <span className="text-gradient-emerald">straight to campus.</span>
+        </h1>
+        <p className="mt-5 max-w-xl text-base text-muted-foreground leading-relaxed">
+          Fish, livestock and crops raised and harvested by FUD's own Faculty of Agriculture departments — no middlemen, just the farm.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function AgriFilterBar({ filter, onFilter }: { filter: "All" | Department; onFilter: (d: "All" | Department) => void }) {
+  const options: ("All" | Department)[] = ["All", ...DEPARTMENTS];
+  return (
+    <section className="mx-auto max-w-7xl px-6">
+      <div className="reveal glass-card rounded-2xl p-4 flex gap-2" style={{ overflowX: "auto", scrollbarWidth: "none" }}>
+        {options.map((o) => {
+          const isActive = o === filter;
+          return (
+            <button key={o} onClick={() => onFilter(o)}
+              style={{ padding: "8px 18px", borderRadius: 999, fontSize: "0.8125rem", fontWeight: isActive ? 600 : 400, cursor: "pointer", transition: "all 0.25s ease", border: isActive ? "1px solid transparent" : "1px solid rgba(255,255,255,0.1)", background: isActive ? "oklch(0.72 0.21 152)" : "rgba(255,255,255,0.04)", color: isActive ? "oklch(0.12 0.02 160)" : "oklch(0.65 0.02 250)", boxShadow: isActive ? "0 0 24px -6px oklch(0.72 0.21 152)" : "none", whiteSpace: "nowrap", flexShrink: 0 }}>
+              {o}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function AgriCard({ product, index }: { product: AgriProduct; index: number }) {
+  const waHref = `https://wa.me/${FARM_WHATSAPP}?text=${encodeURIComponent(`Hi! I'd like to order ${product.name} from the FUD Faculty of Agriculture Agri-Market.`)}`;
+  const low = product.quantity < 15;
+  return (
+   <article className="reveal group relative glass-card rounded-2xl overflow-hidden flex flex-col hover:-translate-y-1 hover:scale-[1.03] hover:shadow-[0_30px_60px_-20px_color-mix(in_oklab,var(--emerald-glow),55%,transparent)] hover:border-emerald-glow/60 transition-all duration-400" style={{ transitionDelay: `${(index % 9) * 40}ms` }}>
+      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-emerald-400/15 to-cyan-400/10 pointer-events-none" />
+      <div style={{ position: "relative", aspectRatio: "4/3", overflow: "hidden" }}>
+        <img src={product.image} alt={product.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        <span style={{ position: "absolute", top: 10, left: 10, fontSize: "0.65rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", padding: "4px 10px", borderRadius: 999, background: "rgba(0,0,0,0.55)", color: "#fff", backdropFilter: "blur(4px)" }}>{product.department}</span>
+        {low && <span style={{ position: "absolute", top: 10, right: 10, fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, background: "rgba(245,158,11,0.92)", color: "#1a1206" }}>Low stock</span>}
+      </div>
+      <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", flex: 1 }}>
+        <h3 className="text-lg font-display font-semibold tracking-tight">{product.name}</h3>
+        <p className="mt-1.5 text-sm text-muted-foreground" style={{ flex: 1 }}>{product.description}</p>
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginTop: "0.9rem", flexWrap: "wrap", gap: 6 }}>
+          <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.15rem", color: "var(--emerald-bright)" }}>
+            ₦{product.price.toLocaleString()}<span style={{ fontSize: "0.75rem", color: "var(--muted-foreground)", fontWeight: 400 }}> /{product.unit}</span>
+          </span>
+          <span style={{ fontSize: "0.75rem", color: "var(--muted-foreground)" }}>{product.quantity}{product.unit} available</span>
+        </div>
+        <a href={waHref} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", marginTop: "1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "0.8rem", borderRadius: 12, background: "oklch(0.78 0.19 155)", color: "oklch(0.15 0.02 250)", fontWeight: 700, fontSize: "0.875rem" }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+          Order via WhatsApp
+        </a>
+      </div>
+    </article>
+  );
+}
+
+function AgriMarket({ products, filter, onFilter }: { products: AgriProduct[]; filter: "All" | Department; onFilter: (d: "All" | Department) => void }) {
+  return (
+    <>
+      <AgriHero />
+      <AgriFilterBar filter={filter} onFilter={onFilter} />
+      <section className="mx-auto max-w-7xl px-6 py-12">
+        {products.length === 0 ? (
+          <div className="glass-card rounded-2xl p-16 text-center text-muted-foreground">No produce listed in this department yet. Check back soon.</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            {products.map((p, i) => <AgriCard key={p.id} product={p} index={i} />)}
+          </div>
+        )}
+      </section>
+    </>
+  );
+}
+
+// ── Management: PIN Gate ─────────────────────────────────────────────────────
+function PinGate({ onUnlock, attempt }: { onUnlock: (pin: string) => void; attempt: number }) {
+  const [digits, setDigits] = useState(["", "", "", ""]);
+  const refs = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
+
+  useEffect(() => {
+    setDigits(["", "", "", ""]);
+    refs[0].current?.focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [attempt]);
+
+  const handleChange = (i: number, val: string) => {
+    const clean = val.replace(/\D/g, "").slice(-1);
+    const next = [...digits];
+    next[i] = clean;
+    setDigits(next);
+    if (clean && i < 3) refs[i + 1].current?.focus();
+    if (next.every((d) => d !== "")) onUnlock(next.join(""));
+  };
+
+  const handleKeyDown = (i: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && !digits[i] && i > 0) refs[i - 1].current?.focus();
+  };
+
+  return (
+    <section className="mx-auto max-w-md px-6 py-24 text-center">
+      <div className={`glass-card rounded-2xl p-8 sm:p-10 ${attempt > 0 ? "pin-shake" : ""}`}>
+        <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>🔒</div>
+        <h2 className="text-2xl font-display font-semibold tracking-tight">Management Access</h2>
+        <p className="mt-2 text-sm text-muted-foreground">Enter the 4-digit Farm Manager PIN to continue.</p>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: "2rem" }}>
+          {digits.map((d, i) => (
+            <input key={i} ref={refs[i]} value={d} onChange={(e) => handleChange(i, e.target.value)} onKeyDown={(e) => handleKeyDown(i, e)}
+              inputMode="numeric" maxLength={1} type="password" autoFocus={i === 0}
+              style={{ width: 52, height: 60, textAlign: "center", fontSize: "1.5rem", fontWeight: 700, borderRadius: 14, background: "oklch(0.2 0.02 250)", border: "1px solid color-mix(in oklab, var(--emerald-glow) 30%, transparent)", color: "oklch(0.97 0.01 180)", outline: "none" }} />
+          ))}
+        </div>
+        <p className="mt-6 text-xs text-muted-foreground/70">Restricted to the Faculty of Agriculture farm management team.</p>
+      </div>
+      <style>{`.pin-shake{animation:pinShake 0.4s ease}@keyframes pinShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}`}</style>
+    </section>
+  );
+}
+
+// ── Management: Farm Manager Portal ──────────────────────────────────────────
+const inputStyle: React.CSSProperties = {
+  width: "100%", padding: "0.75rem 1rem", borderRadius: 12, background: "oklch(0.2 0.02 250)",
+  border: "1px solid rgba(255,255,255,0.1)", color: "oklch(0.95 0.01 180)", fontSize: "0.9rem", outline: "none", marginTop: 6,
+};
+const labelStyle: React.CSSProperties = {
+  fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "oklch(0.62 0.02 250)", display: "block",
+};
+
+function BroadcastComposer({ onSend, addToast }: { onSend: (message: string, audiences: Audience[]) => void; addToast: (message: string, tone?: ToastTone) => void }) {
+  const [message, setMessage] = useState("");
+  const [selected, setSelected] = useState<Audience[]>([]);
+
+  const toggle = (a: Audience) => {
+    setSelected((prev) => (prev.includes(a) ? prev.filter((x) => x !== a) : [...prev, a]));
+  };
+
+  const handleSend = () => {
+    if (!message.trim()) { addToast("Write a message before broadcasting.", "error"); return; }
+    if (selected.length === 0) { addToast("Select at least one target audience.", "error"); return; }
+    onSend(message.trim(), selected);
+    setMessage("");
+    setSelected([]);
+    addToast("📢 Broadcast sent live to campus!");
+  };
+
+  return (
+    <div className="reveal glass-card rounded-2xl p-6 sm:p-8" style={{ marginBottom: "2.5rem" }}>
+      <h3 className="text-lg font-display font-semibold mb-1">📢 Campus Broadcast</h3>
+      <p className="text-sm text-muted-foreground mb-6">Send a live announcement straight to the FUD Hub homepage.</p>
+
+      <label style={labelStyle}>Message</label>
+      <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={4} placeholder="Write a campus-wide announcement..." style={{ ...inputStyle, resize: "vertical", marginBottom: "1.5rem" }} />
+
+      <label style={labelStyle}>Target audience</label>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginTop: 8, marginBottom: "1.75rem" }}>
+        {AUDIENCE_OPTIONS.map((opt) => {
+          const isActive = selected.includes(opt.id);
+          return (
+            <button
+              key={opt.id}
+              type="button"
+              onClick={() => toggle(opt.id)}
+              style={{ display: "flex", alignItems: "center", gap: 8, padding: "0.75rem 1rem", borderRadius: 12, border: isActive ? "2px solid #10b981" : "1px solid rgba(255,255,255,0.1)", background: isActive ? "rgba(16,185,129,0.15)" : "rgba(255,255,255,0.03)", color: isActive ? "var(--emerald-bright)" : "oklch(0.75 0.02 250)", fontWeight: isActive ? 700 : 500, fontSize: "0.85rem", cursor: "pointer", transition: "all 0.2s ease" }}
+            >
+              <span style={{ fontSize: "1.1rem" }}>{opt.icon}</span>
+              {opt.label}
+              {isActive && <span style={{ marginLeft: "auto", fontSize: "0.8rem" }}>✓</span>}
+            </button>
+          );
+        })}
+      </div>
+
+      <button onClick={handleSend} style={{ width: "100%", padding: "0.9rem", borderRadius: 14, border: "none", background: "oklch(0.72 0.21 152)", color: "oklch(0.12 0.02 160)", fontWeight: 700, fontSize: "0.9375rem", cursor: "pointer", boxShadow: "0 0 30px -5px oklch(0.72 0.21 152)" }}>
+        Send Live Broadcast
+      </button>
+    </div>
+  );
+}
+
+function FarmManagerPortal({ agriProducts, setAgriProducts, addToast, onLock, onSendBroadcast }: {
+  agriProducts: AgriProduct[];
+  setAgriProducts: React.Dispatch<React.SetStateAction<AgriProduct[]>>;
+  addToast: (message: string, tone?: ToastTone) => void;
+  onLock: () => void;
+  onSendBroadcast: (message: string, audiences: Audience[]) => void;
+}) {
+  const [name, setName] = useState("");
+  const [department, setDepartment] = useState<Department>("Fisheries");
+  const [price, setPrice] = useState("");
+  const [unit, setUnit] = useState("kg");
+  const [quantity, setQuantity] = useState("");
+  const [description, setDescription] = useState("");
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImagePick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) setImagePreview(URL.createObjectURL(file));
+  };
+
+  const resetForm = () => {
+    setName(""); setPrice(""); setQuantity(""); setDescription(""); setImagePreview(null); setDepartment("Fisheries"); setUnit("kg");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const fallbackImages: Record<Department, string> = {
+    Fisheries: "https://images.unsplash.com/photo-1544943910-4c1dc44aab44?w=800&q=80",
+    "Animal Science": "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=800&q=80",
+    "Crop Science": "https://images.unsplash.com/photo-1592841200221-a6898f307baa?w=800&q=80",
+  };
+
+  const handlePublish = () => {
+    const priceNum = parseFloat(price);
+    const qtyNum = parseFloat(quantity);
+    if (!name.trim()) { addToast("Add a product name before publishing.", "error"); return; }
+    if (!department) { addToast("Select a department.", "error"); return; }
+    if (!priceNum || priceNum <= 0) { addToast("Enter a valid price per unit.", "error"); return; }
+    if (!qtyNum || qtyNum <= 0) { addToast("Enter the quantity available.", "error"); return; }
+
+    const newProduct: AgriProduct = {
+      id: `agri-${Date.now()}`,
+      name: name.trim(),
+      department,
+      price: priceNum,
+      unit: unit.trim() || "unit",
+      quantity: qtyNum,
+      image: imagePreview || fallbackImages[department],
+      description: description.trim() || `Fresh from the Department of ${department}, FUD Faculty of Agriculture.`,
+    };
+
+    setAgriProducts((prev) => [newProduct, ...prev]);
+    addToast(`${newProduct.name} is now live on the Agri-Market 🌾`);
+    resetForm();
+  };
+
+  return (
+    <section className="mx-auto max-w-4xl px-6 py-16">
+      <div className="reveal flex items-start justify-between gap-4 mb-8 flex-wrap">
+        <div>
+          <div className="text-[10px] uppercase tracking-[0.18em] text-emerald-bright mb-2">Faculty of Agriculture</div>
+          <h2 className="text-2xl sm:text-3xl font-display font-bold tracking-tight">🌾 Faculty Farm Management Portal</h2>
+        </div>
+        <button onClick={onLock} style={{ padding: "8px 16px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)", color: "oklch(0.65 0.02 250)", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap" }}>🔒 Lock Portal</button>
+      </div>
+
+      <BroadcastComposer onSend={onSendBroadcast} addToast={addToast} />
+
+      <div className="reveal glass-card rounded-2xl p-6 sm:p-8">
+        <h3 className="text-lg font-display font-semibold mb-6">Publish a new product</h3>
+        <div className="grid gap-4">
+          <div>
+            <label style={labelStyle}>Product name</label>
+            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Fresh Faculty Catfish" style={inputStyle} />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label style={labelStyle}>Department</label>
+              <select value={department} onChange={(e) => setDepartment(e.target.value as Department)} style={inputStyle}>
+                {DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}
+              </select>
+            </div>
+            <div>
+              <label style={labelStyle}>Unit</label>
+              <input value={unit} onChange={(e) => setUnit(e.target.value)} placeholder="kg / dozen / crate" style={inputStyle} />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label style={labelStyle}>Price per unit (₦)</label>
+              <input value={price} onChange={(e) => setPrice(e.target.value)} type="number" min="0" placeholder="2500" style={inputStyle} />
+            </div>
+            <div>
+              <label style={labelStyle}>Quantity available</label>
+              <input value={quantity} onChange={(e) => setQuantity(e.target.value)} type="number" min="0" placeholder="60" style={inputStyle} />
+            </div>
+          </div>
+          <div>
+            <label style={labelStyle}>Description (optional)</label>
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} style={{ ...inputStyle, resize: "vertical" }} placeholder="Farm-fresh, harvested this week..." />
+          </div>
+          <div>
+            <label style={labelStyle}>Product photo</label>
+            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImagePick} style={{ display: "none" }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 6 }}>
+              <button onClick={() => fileInputRef.current?.click()} style={{ padding: "0.7rem 1.1rem", borderRadius: 12, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.04)", color: "oklch(0.9 0.01 180)", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer" }}>
+                {imagePreview ? "📷 Change photo" : "📷 Upload photo"}
+              </button>
+              {imagePreview && <img src={imagePreview} alt="Preview" style={{ width: 56, height: 56, borderRadius: 10, objectFit: "cover", border: "1px solid rgba(255,255,255,0.1)" }} />}
+            </div>
+          </div>
+          <button onClick={handlePublish} style={{ marginTop: 8, width: "100%", padding: "0.9rem", borderRadius: 14, border: "none", background: "oklch(0.72 0.21 152)", color: "oklch(0.12 0.02 160)", fontWeight: 700, fontSize: "0.9375rem", cursor: "pointer", boxShadow: "0 0 30px -5px oklch(0.72 0.21 152)" }}>
+            Publish Live to Agri-Market →
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ManagementPortal({ agriProducts, setAgriProducts, addToast, onSendBroadcast }: {
+  agriProducts: AgriProduct[];
+  setAgriProducts: React.Dispatch<React.SetStateAction<AgriProduct[]>>;
+  addToast: (message: string, tone?: ToastTone) => void;
+  onSendBroadcast: (message: string, audiences: Audience[]) => void;
+}) {
+  const [authed, setAuthed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+
+  const handleUnlock = (pin: string) => {
+    if (pin === MANAGEMENT_PIN) {
+      setAuthed(true);
+    } else {
+      setAttempt((a) => a + 1);
+      addToast("Incorrect PIN — access denied.", "error");
+    }
+  };
+
+  if (!authed) return <PinGate onUnlock={handleUnlock} attempt={attempt} />;
+  return <FarmManagerPortal agriProducts={agriProducts} setAgriProducts={setAgriProducts} addToast={addToast} onLock={() => setAuthed(false)} onSendBroadcast={onSendBroadcast} />;
+}
+
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App() {
-  const [lightMode, setLightMode] = useState(false);
   useReveal();
+  const [activeTab, setActiveTab] = useState<Tab>("vendors");
   const [active, setActive] = useState<(typeof CATEGORIES)[number]>("All");
   const [query, setQuery] = useState("");
   const [selectedVendor, setSelectedVendor] = useState<Business | null>(null);
   const [showEmergency, setShowEmergency] = useState(false);
+  const [agriProducts, setAgriProducts] = useState<AgriProduct[]>(INITIAL_AGRI_PRODUCTS);
+  const [agriFilter, setAgriFilter] = useState<"All" | Department>("All");
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
+  const [broadcasts, setBroadcasts] = useState<Broadcast[]>([]);
+  const [testimonialView, setTestimonialView] = useState<{ business: Business; index: number } | null>(null);
+
+  const addToast = (message: string, tone: ToastTone = "success") => {
+    const id = Date.now() + Math.random();
+    setToasts((t) => [...t, { id, message, tone }]);
+    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 3600);
+  };
+
+  const handleSendBroadcast = (message: string, audiences: Audience[]) => {
+    // Internal site banner — displays live at the top of the homepage.
+    const newBroadcast: Broadcast = { id: `bc-${Date.now()}`, message, audiences, createdAt: Date.now() };
+    setBroadcasts((prev) => [newBroadcast, ...prev]);
+
+    // Simulated external SMS gateway dispatch (Termii / Africa's Talking style) — for demo purposes only, no real SMS is sent.
+    setTimeout(() => {
+      addToast("📡 Gateway Broadcast: SMS payload successfully routed via Termii API to registered student mobile lines.");
+    }, 500);
+  };
+
+  const dismissBroadcast = (id: string) => {
+    setBroadcasts((prev) => prev.filter((b) => b.id !== id));
+  };
+
+  const openTestimonials = (business: Business, index: number = 0) => {
+    if (!business.verifiedSales || business.verifiedSales.length === 0) {
+      addToast(`No verified sales uploaded yet for ${business.name}.`, "error");
+      return;
+    }
+    setTestimonialView({ business, index });
+  };
+
+  const navTestimonial = (dir: 1 | -1) => {
+    setTestimonialView((v) => {
+      if (!v) return v;
+      const total = v.business.verifiedSales?.length || 1;
+      const nextIndex = (v.index + dir + total) % total;
+      return { ...v, index: nextIndex };
+    });
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -1018,16 +1733,42 @@ export default function App() {
     });
   }, [active, query]);
 
+  const filteredAgri = useMemo(() => agriProducts.filter((p) => agriFilter === "All" || p.department === agriFilter), [agriProducts, agriFilter]);
+
   return (
-    <div className="relative min-h-screen overflow-x-hidden" style={{ background: lightMode ? "#f8fafc" : undefined, color: lightMode ? "#0a0f1a" : undefined }}>
-      <Nav lightMode={lightMode} onToggle={() => setLightMode(!lightMode)} onSOS={() => setShowEmergency(true)} />
-      <Hero />
-      <Controls active={active} onActive={setActive} query={query} onQuery={setQuery} />
-      <Grid items={filtered} onOpen={setSelectedVendor} />
-      <Stats />
-      {selectedVendor && <VendorModal business={selectedVendor} onClose={() => setSelectedVendor(null)} />}
+    <div className="relative min-h-screen overflow-x-hidden">      <BroadcastBanners broadcasts={broadcasts} onDismiss={dismissBroadcast} />
+        <Nav onSOS={() => setShowEmergency(true)} activeTab={activeTab} onTab={setActiveTab} />
+      {activeTab === "vendors" && (
+        <>
+          <Hero />
+          <Controls active={active} onActive={setActive} query={query} onQuery={setQuery} />
+          <Grid items={filtered} onOpen={setSelectedVendor} onShowTestimonials={openTestimonials} />
+          <Stats />
+        </>
+      )}
+
+      {activeTab === "agri" && (
+        <AgriMarket products={filteredAgri} filter={agriFilter} onFilter={setAgriFilter} />
+      )}
+
+      {activeTab === "management" && (
+        <ManagementPortal agriProducts={agriProducts} setAgriProducts={setAgriProducts} addToast={addToast} onSendBroadcast={handleSendBroadcast} />
+      )}
+
+      {selectedVendor && (
+        <VendorModal business={selectedVendor} onClose={() => setSelectedVendor(null)} onShowTestimonials={openTestimonials} />
+      )}
+      {testimonialView && (
+        <TestimonialViewer
+          business={testimonialView.business}
+          index={testimonialView.index}
+          onClose={() => setTestimonialView(null)}
+          onNav={navTestimonial}
+        />
+      )}
       {showEmergency && <EmergencyPanel onClose={() => setShowEmergency(false)} />}
       <KekeFAB />
+      <ToastStack toasts={toasts} />
     </div>
   );
 }
