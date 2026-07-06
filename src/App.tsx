@@ -1526,8 +1526,7 @@ function BroadcastComposer({ onSend, addToast }: { onSend: (message: string, aud
   );
 }
 
-function FarmManagerPortal({ agriProducts, setAgriProducts, addToast, onLock, onSendBroadcast }: {
-  agriProducts: AgriProduct[];
+function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast }: {
   setAgriProducts: React.Dispatch<React.SetStateAction<AgriProduct[]>>;
   addToast: (message: string, tone?: ToastTone) => void;
   onLock: () => void;
@@ -1665,8 +1664,7 @@ function ManagementPortal({ agriProducts, setAgriProducts, addToast, onSendBroad
   };
 
   if (!authed) return <PinGate onUnlock={handleUnlock} attempt={attempt} />;
-  return <FarmManagerPortal agriProducts={agriProducts} setAgriProducts={setAgriProducts} addToast={addToast} onLock={() => setAuthed(false)} onSendBroadcast={onSendBroadcast} />;
-}
+return <FarmManagerPortal setAgriProducts={setAgriProducts} addToast={addToast} onLock={() => setAuthed(false)} onSendBroadcast={onSendBroadcast} />;}
 
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App() {
