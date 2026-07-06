@@ -21,6 +21,21 @@ type Business = {
 const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Laundry", "Home & Life", "Print & Copy"] as const;
 
 const BUSINESSES: Business[] = [
+   {
+    id: "4",
+    name: "Maroonette Creates",
+    category: "Home & Life",
+    initials: "MC",
+    description: "A creative brand built on passion, innovation, and the art bringing ideas to life.",
+    tags: ["Crochet", "Wearable Art", "Aesthetics", "Handmade"],
+    whatsapp: "2348086816625",
+    accent: "from-pink-400/20 to-emerald-400/20",
+    logo: "/maroonettelogo.jpg",
+    image: "/maroonette1.jpg",
+    images: ["/maroonette1.jpg", "/maroonette2.jpg", "/maroonette3.jpg", "/maroonette4.jpg", "/maroonette5.jpg", "/maroonette6.jpg", "/maroonette7.jpg"],
+    verified: true,
+    deal: true,
+  },
   {
     id: "3",
     name: "Bel's Closet",
@@ -48,21 +63,6 @@ const BUSINESSES: Business[] = [
     logo: "/amakalogo.jpeg",
     image: "/amaka1.jpeg",
     images: ["/amaka1.jpeg", "/amaka2.jpeg", "/amaka3.jpeg", "/amaka4.jpeg", "/amaka5.jpeg"],
-    verified: true,
-    deal: true,
-  },
-  {
-    id: "4",
-    name: "Maroonette Creates",
-    category: "Home & Life",
-    initials: "MC",
-    description: "A creative brand built on passion, innovation, and the art bringing ideas to life.",
-    tags: ["Crochet", "Wearable Art", "Aesthetics", "Handmade"],
-    whatsapp: "2348086816625",
-    accent: "from-pink-400/20 to-emerald-400/20",
-    logo: "/maroonettelogo.jpg",
-    image: "/maroonette1.jpg",
-    images: ["/maroonette1.jpg", "/maroonette2.jpg", "/maroonette3.jpg", "/maroonette4.jpg", "/maroonette5.jpg", "/maroonette6.jpg", "/maroonette7.jpg"],
     verified: true,
     deal: true,
   },
