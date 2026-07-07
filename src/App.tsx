@@ -799,8 +799,7 @@ function BroadcastBanners({ broadcasts, onDismiss }: { broadcasts: Broadcast[]; 
 }
 
 // ── Testimonials Modal (rate vendor + real verified transaction vouchers) ───
-function TestimonialViewer({ business, index, onClose, onNav }: { business: Business; index: number; onClose: () => void; onNav: (dir: 1 | -1) => void }) {
-  const sales = business.verifiedSales || [];
+function TestimonialViewer({ business, index: _index, onClose, onNav }: { business: Business; index: number; onClose: () => void; onNav: (dir: 1 | -1) => void }) {  const sales = business.verifiedSales || [];
   const [tab, setTab] = useState<"reviews" | "vouchers">(sales.length > 0 ? "vouchers" : "reviews");
   const [zoomed, setZoomed] = useState<number | null>(null);
   const waHref = `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(`Hi ${business.name}, I'd like to place an order via FUD Hub.`)}`;
@@ -1772,5 +1771,5 @@ export default function App() {
       <KekeFAB />
       <ToastStack toasts={toasts} />
     </div>
-  );
+    );
 }
