@@ -1471,7 +1471,7 @@ function PinGate({ onUnlock, attempt }: { onUnlock: (pin: string) => void; attem
       <style>{`.pin-shake{animation:pinShake 0.4s ease}@keyframes pinShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}`}</style>
     </section>
   );
-}qqqq
+}
 
 
 // ── Management: Farm Manager Portal ──────────────────────────────────────────
