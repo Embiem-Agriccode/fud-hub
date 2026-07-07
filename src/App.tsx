@@ -291,8 +291,8 @@ const BUSINESSES: Business[] = [
     images: ["/kel1.jpeg", "/kel2.jpeg", "/kel3.jpeg", "/kel4.jpeg"],
     deal: true,
   },
-   {
-    id: "15",
+  {
+    id: "59",
     name: "KHALCARE DATAPLUG",
     category: "Data & Airtime",
     initials: "KD",
@@ -802,7 +802,7 @@ function BroadcastBanners({ broadcasts, onDismiss }: { broadcasts: Broadcast[]; 
 function TestimonialViewer({ business, index, onClose, onNav }: { business: Business; index: number; onClose: () => void; onNav: (dir: 1 | -1) => void }) {
   const sales = business.verifiedSales || [];
   const [tab, setTab] = useState<"reviews" | "vouchers">(sales.length > 0 ? "vouchers" : "reviews");
-  const [zoomed, setZoomed] = useState<number | null>(sales.length > 0 ? index : null);
+const [zoomed, setZoomed] = useState<number | null>(null);
   const waHref = `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(`Hi ${business.name}, I'd like to place an order via FUD Hub.`)}`;
 
   useEffect(() => {
@@ -1339,23 +1339,22 @@ function Stats() {
 // ── Agri-Market ───────────────────────────────────────────────────────────────
 function AgriHero() {
   return (
-    <section className="mx-auto max-w-7xl px-6 pt-16 pb-10">
+    <section className="mx-auto max-w-7xl px-6" style={{ paddingTop: "7rem", paddingBottom: "3rem" }}>
       <div className="reveal max-w-2xl">
-        <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/60 px-3 py-1.5 text-xs text-foreground mb-6">
+        <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/60 px-3 py-1.5 text-xs text-foreground" style={{ marginBottom: "2rem" }}>
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-bright animate-pulse" />
           Direct from the Faculty of Agriculture farms
         </div>
-        <h1 className="text-4xl sm:text-5xl font-display font-bold leading-[1.05] tracking-tight">
+        <h1 className="text-4xl sm:text-5xl font-display font-bold tracking-tight" style={{ lineHeight: "1.25" }}>
           Farm-fresh produce, <span className="text-gradient-emerald">straight to campus.</span>
         </h1>
-        <p className="mt-5 max-w-xl text-base text-muted-foreground leading-relaxed">
+        <p className="max-w-xl text-base text-muted-foreground leading-relaxed" style={{ marginTop: "1.75rem", marginBottom: "2.5rem" }}>
           Fish, livestock and crops raised and harvested by FUD's own Faculty of Agriculture departments — no middlemen, just the farm.
         </p>
       </div>
     </section>
   );
 }
-
 function AgriFilterBar({ filter, onFilter }: { filter: "All" | Department; onFilter: (d: "All" | Department) => void }) {
   const options: ("All" | Department)[] = ["All", ...DEPARTMENTS];
   return (
@@ -1447,24 +1446,33 @@ function PinGate({ onUnlock, attempt }: { onUnlock: (pin: string) => void; attem
   };
 
   return (
-    <section className="mx-auto max-w-md px-6 py-24 text-center">
+    <section className="mx-auto max-w-md px-6 text-center" style={{ paddingTop: "7rem", paddingBottom: "4rem" }}>
       <div className={`glass-card rounded-2xl p-8 sm:p-10 ${attempt > 0 ? "pin-shake" : ""}`}>
-        <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>🔒</div>
+        <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>🔒</div>
+        
         <h2 className="text-2xl font-display font-semibold tracking-tight">Management Access</h2>
-        <p className="mt-2 text-sm text-muted-foreground">Enter the 4-digit Farm Manager PIN to continue.</p>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: "2rem" }}>
+        
+        <p className="text-sm text-muted-foreground" style={{ marginTop: "0.75rem" }}>
+          Enter the 4-digit Farm Manager PIN to continue.
+        </p>
+        
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: "2.5rem" }}>
           {digits.map((d, i) => (
             <input key={i} ref={refs[i]} value={d} onChange={(e) => handleChange(i, e.target.value)} onKeyDown={(e) => handleKeyDown(i, e)}
               inputMode="numeric" maxLength={1} type="password" autoFocus={i === 0}
               style={{ width: 52, height: 60, textAlign: "center", fontSize: "1.5rem", fontWeight: 700, borderRadius: 14, background: "oklch(0.2 0.02 250)", border: "1px solid color-mix(in oklab, var(--emerald-glow) 30%, transparent)", color: "oklch(0.97 0.01 180)", outline: "none" }} />
           ))}
         </div>
-        <p className="mt-6 text-xs text-muted-foreground/70">Restricted to the Faculty of Agriculture farm management team.</p>
+        
+        <p className="text-xs text-muted-foreground/70" style={{ marginTop: "2.25rem" }}>
+          Restricted to the Faculty of Agriculture farm management team.
+        </p>
       </div>
       <style>{`.pin-shake{animation:pinShake 0.4s ease}@keyframes pinShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}`}</style>
     </section>
   );
-}
+}qqqq
+
 
 // ── Management: Farm Manager Portal ──────────────────────────────────────────
 const inputStyle: React.CSSProperties = {
