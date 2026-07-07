@@ -802,7 +802,7 @@ function BroadcastBanners({ broadcasts, onDismiss }: { broadcasts: Broadcast[]; 
 function TestimonialViewer({ business, index, onClose, onNav }: { business: Business; index: number; onClose: () => void; onNav: (dir: 1 | -1) => void }) {
   const sales = business.verifiedSales || [];
   const [tab, setTab] = useState<"reviews" | "vouchers">(sales.length > 0 ? "vouchers" : "reviews");
-const [zoomed, setZoomed] = useState<number | null>(sales.length > 0 ? index : null);
+  const [zoomed, setZoomed] = useState<number | null>(null);
   const waHref = `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(`Hi ${business.name}, I'd like to place an order via FUD Hub.`)}`;
 
   useEffect(() => {
