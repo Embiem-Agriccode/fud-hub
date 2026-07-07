@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { supabase } from './supabaseClient';
+
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type VerifiedSale = {
@@ -633,63 +635,11 @@ const BUSINESSES: Business[] = [
 
 const STATS = [
   { k: "40+", v: "Verified vendors" },
-  { k: "8", v: "Categories" },
+  { k: "9", v: "Categories" },
   { k: "4.9★", v: "Avg. campus rating" },
   { k: "< 30m", v: "Median response" },
 ];
 
-const INITIAL_AGRI_PRODUCTS: AgriProduct[] = [
-  {
-    id: "agri-1",
-    name: "Fresh Faculty Catfish",
-    department: "Fisheries",
-    price: 2500,
-    unit: "kg",
-    quantity: 60,
-    image: "https://images.unsplash.com/photo-1544943910-4c1dc44aab44?w=800&q=80",
-    description: "Farm-raised, harvested fresh weekly from the Faculty of Agriculture fish ponds — no preservatives, no middlemen.",
-  },
-  {
-    id: "agri-2",
-    name: "Broiler Chickens (Live)",
-    department: "Animal Science",
-    price: 6500,
-    unit: "bird",
-    quantity: 40,
-    image: "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=800&q=80",
-    description: "Healthy, well-fed broilers reared by the Department of Animal Science. Available live or dressed on request.",
-  },
-  {
-    id: "agri-3",
-    name: "Free-Range Eggs",
-    department: "Animal Science",
-    price: 3200,
-    unit: "crate",
-    quantity: 25,
-    image: "https://images.unsplash.com/photo-1518569656558-1f25e69d93d7?w=800&q=80",
-    description: "Rich, golden-yolk eggs from the poultry unit. Collected daily and sold same-day for peak freshness.",
-  },
-  {
-    id: "agri-4",
-    name: "Sweet Corn (Fresh Cobs)",
-    department: "Crop Science",
-    price: 800,
-    unit: "cob",
-    quantity: 120,
-    image: "https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=800&q=80",
-    description: "Sweet, tender cobs harvested at peak ripeness from the Crop Science demonstration farm.",
-  },
-  {
-    id: "agri-5",
-    name: "Farm Tomatoes",
-    department: "Crop Science",
-    price: 1200,
-    unit: "basket",
-    quantity: 12,
-    image: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?w=800&q=80",
-    description: "Vine-ripened tomatoes, hand-picked twice a week. Great for stews, sauces and campus kitchens.",
-  },
-];
 
 // ── Emergency Contacts ────────────────────────────────────────────────────────
 type EmergencyContact = {
@@ -1681,8 +1631,19 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [selectedVendor, setSelectedVendor] = useState<Business | null>(null);
   const [showEmergency, setShowEmergency] = useState(false);
-  const [agriProducts, setAgriProducts] = useState<AgriProduct[]>(INITIAL_AGRI_PRODUCTS);
+  const [agriProducts, setAgriProducts] = useState<AgriProduct[]>([]);
   const [agriFilter, setAgriFilter] = useState<"All" | Department>("All");
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data, error } = await supabase.from('agri_products').select('*').order('created_at', { ascending: false });
+      if (error) {
+        console.error('Error fetching products:', error);
+        return;
+      }
+      if (data) setAgriProducts(data as AgriProduct[]);
+    };
+    fetchProducts();
+  }, []);
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const [broadcasts, setBroadcasts] = useState<Broadcast[]>([]);
   const [testimonialView, setTestimonialView] = useState<{ business: Business; index: number } | null>(null);
