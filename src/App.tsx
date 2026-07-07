@@ -63,7 +63,11 @@ const AUDIENCE_OPTIONS: { id: Audience; label: string; icon: string }[] = [
 ];
 
 // Faculty of Agriculture farm order line — update to the real farm desk number.
-const FARM_WHATSAPP = "2348012345678";
+const DEPARTMENT_WHATSAPP: Record<Department, string> = {
+  Fisheries: "2349168443166",
+  "Animal Science": "234835660064",
+  "Crop Science": "2347044389234",
+};
 // Rotate this PIN whenever farm management staff changes.
 const MANAGEMENT_PIN = "2468";
 
@@ -1324,8 +1328,7 @@ function AgriFilterBar({ filter, onFilter }: { filter: "All" | Department; onFil
 }
 
 function AgriCard({ product, index }: { product: AgriProduct; index: number }) {
-  const waHref = `https://wa.me/${FARM_WHATSAPP}?text=${encodeURIComponent(`Hi! I'd like to order ${product.name} from the FUD Faculty of Agriculture Agri-Market.`)}`;
-  const low = product.quantity < 15;
+  const waHref = `https://wa.me/${DEPARTMENT_WHATSAPP[product.department]}?text=${encodeURIComponent(`Hi! I'd like to order ${product.name} from the FUD Faculty of Agriculture Agri-Market.`)}`;  const low = product.quantity < 15;
   return (
    <article className="reveal group relative glass-card rounded-2xl overflow-hidden flex flex-col hover:-translate-y-1 hover:scale-[1.03] hover:shadow-[0_30px_60px_-20px_color-mix(in_oklab,var(--emerald-glow),55%,transparent)] hover:border-emerald-glow/60 transition-all duration-400" style={{ transitionDelay: `${(index % 9) * 40}ms` }}>
       <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-emerald-400/15 to-cyan-400/10 pointer-events-none" />
