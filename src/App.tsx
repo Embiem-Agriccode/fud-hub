@@ -1328,29 +1328,38 @@ function AgriFilterBar({ filter, onFilter }: { filter: "All" | Department; onFil
 }
 
 function AgriCard({ product, index }: { product: AgriProduct; index: number }) {
-  const waHref = `https://wa.me/${DEPARTMENT_WHATSAPP[product.department]}?text=${encodeURIComponent(`Hi! I'd like to order ${product.name} from the FUD Faculty of Agriculture Agri-Market.`)}`;  const low = product.quantity < 15;
+  const waHref = `https://wa.me/${DEPARTMENT_WHATSAPP[product.department]}?text=${encodeURIComponent(`Hi! I'd like to order ${product.name} from the FUD Faculty of Agriculture Agri-Market.`)}`;  const low = product.quantity < 15 && product.quantity > 0;
+  const outOfStock = product.quantity <= 0;
   return (
    <article className="reveal group relative glass-card rounded-2xl overflow-hidden flex flex-col hover:-translate-y-1 hover:scale-[1.03] hover:shadow-[0_30px_60px_-20px_color-mix(in_oklab,var(--emerald-glow),55%,transparent)] hover:border-emerald-glow/60 transition-all duration-400" style={{ transitionDelay: `${(index % 9) * 40}ms` }}>
       <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-emerald-400/15 to-cyan-400/10 pointer-events-none" />
       <div style={{ position: "relative", aspectRatio: "4/3", overflow: "hidden" }}>
         <img src={product.image} alt={product.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
         <span style={{ position: "absolute", top: 10, left: 10, fontSize: "0.65rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", padding: "4px 10px", borderRadius: 999, background: "rgba(0,0,0,0.55)", color: "#fff", backdropFilter: "blur(4px)" }}>{product.department}</span>
-        {low && <span style={{ position: "absolute", top: 10, right: 10, fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, background: "rgba(245,158,11,0.92)", color: "#1a1206" }}>Low stock</span>}
-      </div>
-      <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", flex: 1 }}>
-        <h3 className="text-lg font-display font-semibold tracking-tight">{product.name}</h3>
-        <p className="mt-1.5 text-sm text-muted-foreground" style={{ flex: 1 }}>{product.description}</p>
-        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginTop: "0.9rem", flexWrap: "wrap", gap: 6 }}>
-          <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.15rem", color: "var(--emerald-bright)" }}>
-            ₦{product.price.toLocaleString()}<span style={{ fontSize: "0.75rem", color: "var(--muted-foreground)", fontWeight: 400 }}> /{product.unit}</span>
-          </span>
-          <span style={{ fontSize: "0.75rem", color: "var(--muted-foreground)" }}>{product.quantity}{product.unit} available</span>
-        </div>
-        <a href={waHref} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", marginTop: "1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "0.8rem", borderRadius: 12, background: "oklch(0.78 0.19 155)", color: "oklch(0.15 0.02 250)", fontWeight: 700, fontSize: "0.875rem" }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-          Order via WhatApp
-        </a>
-      </div>
+            {low && <span style={{ position: "absolute", top: 10, right: 10, fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, background: "rgba(245,158,11,0.92)", color: "#1a1206" }}>Low stock</span>}
+            {outOfStock && <span style={{ position: "absolute", top: 10, right: 10, fontSize: "0.65rem", fontWeight: 700, padding: "4px 10px", borderRadius: 999, background: "rgba(239,68,68,0.92)", color: "#fff" }}>Out of Stock</span>}
+          </div>
+          <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", flex: 1 }}>
+            <h3 className="text-lg font-display font-semibold tracking-tight">{product.name}</h3>
+            <p className="mt-1.5 text-sm text-muted-foreground" style={{ flex: 1 }}>{product.description}</p>
+            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginTop: "0.9rem", flexWrap: "wrap", gap: 6 }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.15rem", color: "var(--emerald-bright)" }}>
+                ₦{product.price.toLocaleString()}<span style={{ fontSize: "0.75rem", color: "var(--muted-foreground)", fontWeight: 400 }}> /{product.unit}</span>
+              </span>
+              <span style={{ fontSize: "0.75rem", color: outOfStock ? "#f87171" : "var(--muted-foreground)" }}>
+                {outOfStock ? "Out of stock" : `${product.quantity}${product.unit} available`}
+              </span>
+            </div>
+            {outOfStock ? (
+              <div style={{ marginTop: "1rem", textAlign: "center", padding: "0.8rem", borderRadius: 12, background: "rgba(255,255,255,0.05)", color: "var(--muted-foreground)", fontSize: "0.875rem", fontWeight: 600 }}>
+                Currently Out of Stock
+              </div>
+            ) : (
+              <a href={waHref} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", marginTop: "1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "0.8rem", borderRadius: 12, background: "oklch(0.78 0.19 155)", color: "oklch(0.15 0.02 250)", fontWeight: 700, fontSize: "0.875rem" }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+                Order via WhatsApp
+              </a>
+            )}</div>
     </article>
   );
 }
