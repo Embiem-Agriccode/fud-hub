@@ -1526,7 +1526,7 @@ function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast 
     "Crop Science": "https://images.unsplash.com/photo-1592841200221-a6898f307baa?w=800&q=80",
   };
 
-  const handlePublish = () => {
+ const handlePublish = async () => {
     const priceNum = parseFloat(price);
     const qtyNum = parseFloat(quantity);
     if (!name.trim()) { addToast("Add a product name before publishing.", "error"); return; }
@@ -1544,7 +1544,21 @@ function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast 
       image: imagePreview || fallbackImages[department],
       description: description.trim() || `Fresh from the Department of ${department}, FUD Faculty of Agriculture.`,
     };
+      const { error } = await supabase.from('agri_products').insert({
+      name: newProduct.name,
+      department: newProduct.department,
+      price: newProduct.price,
+      unit: newProduct.unit,
+      quantity: newProduct.quantity,
+      image: newProduct.image,
+      description: newProduct.description,
+    });
 
+    if (error) {
+      addToast('Failed to publish — try again.', 'error');
+      console.error(error);
+      return;
+    }
     setAgriProducts((prev) => [newProduct, ...prev]);
     addToast(`${newProduct.name} is now live on the Agri-Market 🌾`);
     resetForm();
