@@ -64,7 +64,7 @@ const AUDIENCE_OPTIONS: { id: Audience; label: string; icon: string }[] = [
 
 // Faculty of Agriculture farm order line — update to the real farm desk number.
 const DEPARTMENT_WHATSAPP: Record<Department, string> = {
-  Fisheries: "2349168443166",
+  Fisheries: "2348024511795",
   "Animal Science": "2348035660064",
   "Crop Science": "2347044389234",
 };
