@@ -69,7 +69,62 @@ const DEPARTMENT_WHATSAPP: Record<Department, string> = {
   "Crop Science": "2347044389234",
 };
 // Rotate this PIN whenever farm management staff changes.
-const MANAGEMENT_PIN = "2468";
+function LoginGate({ onUnlock }: { onUnlock: () => void }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setError("");
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setLoading(false);
+    if (error) {
+      setError("Incorrect email or password.");
+      return;
+    }
+    onUnlock();
+  };
+
+  return (
+    <section className="mx-auto max-w-md px-6 text-center" style={{ paddingTop: "7rem", paddingBottom: "4rem" }}>
+      <div className="glass-card rounded-2xl p-8 sm:p-10">
+        <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>🔒</div>
+        <h2 className="text-2xl font-display font-semibold tracking-tight">Management Access</h2>
+        <p className="text-sm text-muted-foreground" style={{ marginTop: "0.75rem" }}>
+          Sign in with your admin account to continue.
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: "2rem" }}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{ padding: "0.75rem 1rem", borderRadius: 12, background: "oklch(0.2 0.02 250)", border: "1px solid rgba(255,255,255,0.1)", color: "oklch(0.95 0.01 180)", fontSize: "0.9rem", outline: "none" }}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+            style={{ padding: "0.75rem 1rem", borderRadius: 12, background: "oklch(0.2 0.02 250)", border: "1px solid rgba(255,255,255,0.1)", color: "oklch(0.95 0.01 180)", fontSize: "0.9rem", outline: "none" }}
+          />
+          {error && <p style={{ color: "#f87171", fontSize: "0.8rem" }}>{error}</p>}
+          <button
+            onClick={handleLogin}
+            disabled={loading}
+            style={{ padding: "0.85rem", borderRadius: 14, border: "none", background: "oklch(0.72 0.21 152)", color: "oklch(0.12 0.02 160)", fontWeight: 700, fontSize: "0.9rem", cursor: "pointer", opacity: loading ? 0.6 : 1 }}
+          >
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 
 const BUSINESSES: Business[] = [
   {
@@ -195,6 +250,35 @@ const BUSINESSES: Business[] = [
     logo: "/jossylogo.jpeg",
     image: "/jossy1.jpeg",
     images: ["/jossy1.jpeg", "/jossy2.jpeg", "/jossy3.jpeg", "/jossy4.jpeg"],
+    verified: true,
+    deal: true,
+  },
+  {
+    id: "30",
+    name: "GADGETS AND ACCESSORIES BY NONSO",
+    category: "Tech Plug",
+    initials: "FI",
+    description: " Your tech plug 💻📱From the latest phones and laptops to must-have accessories.Buy, sell, swap — only the best makes it to you.",
+    tags: ["iPhone", "Samsung", "iPad", "UK-Used", "Phones"],
+    whatsapp: "2348135450002",
+    accent: "from-orange-300/25 to-emerald-400/15",
+    logo: "/gadgetslogo.jpeg",
+    image: "/gadget1.jpeg",
+    images: ["/gadget1.jpeg", "/gadget2.jpeg", "/gadget3.jpeg", "/gadget5.jpeg", "/gadget6.jpeg"],
+    verified: true,
+  },
+  {
+    id: "36",
+    name: "Mairalicious Food",
+    category: "Uni Eats",
+    initials: "ST",
+    description: "Serving delicious burgers, smoky jollof rice with chicken & egg, tasty shawarma, hot tea and soft drinks. Good food, good mood.",
+    tags: ["Burgers", "Jollof Rice", "Chicken", "Shawarma", "Tea", "Soft Drinks"],
+    whatsapp: "2349014998304",
+    accent: "from-amber-300/30 to-emerald-400/20",
+    logo: "/mairalogo.jpeg",
+    image: "/maira1.jpeg",
+    images: ["/maira1.jpeg", "/maira2.jpeg", "/maira3.jpeg", "/maira4.jpeg"],
     verified: true,
     deal: true,
   },
@@ -1573,7 +1657,6 @@ function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast 
         </div>
         <button onClick={onLock} style={{ padding: "8px 16px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)", color: "oklch(0.65 0.02 250)", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap" }}>🔒 Lock Portal</button>
       </div>
-
       <BroadcastComposer onSend={onSendBroadcast} addToast={addToast} />
 
       <div className="reveal glass-card rounded-2xl p-6 sm:p-8">
@@ -1634,19 +1717,19 @@ function ManagementPortal({ setAgriProducts, addToast, onSendBroadcast }: {
   onSendBroadcast: (message: string, audiences: Audience[]) => void;
 }) {
   const [authed, setAuthed] = useState(false);
-  const [attempt, setAttempt] = useState(0);
 
-  const handleUnlock = (pin: string) => {
-    if (pin === MANAGEMENT_PIN) {
-      setAuthed(true);
-    } else {
-      setAttempt((a) => a + 1);
-      addToast("Incorrect PIN — access denied.", "error");
-    }
-  };
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setAuthed(!!data.session && data.session.user.email === "embiem590@gmail.com");
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setAuthed(!!session && session.user.email === "embiem590@gmail.com");
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
-  if (!authed) return <PinGate onUnlock={handleUnlock} attempt={attempt} />;
-  return <FarmManagerPortal setAgriProducts={setAgriProducts} addToast={addToast} onLock={() => setAuthed(false)} onSendBroadcast={onSendBroadcast} />;
+  if (!authed) return <LoginGate onUnlock={() => setAuthed(true)} />;
+  return <FarmManagerPortal setAgriProducts={setAgriProducts} addToast={addToast} onLock={() => supabase.auth.signOut()} onSendBroadcast={onSendBroadcast} />;
 }
 
 // ── App ───────────────────────────────────────────────────────────────────────
@@ -1680,16 +1763,20 @@ export default function App() {
     setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 3600);
   };
 
-  const handleSendBroadcast = (message: string, audiences: Audience[]) => {
-    // Internal site banner — displays live at the top of the homepage.
-    const newBroadcast: Broadcast = { id: `bc-${Date.now()}`, message, audiences, createdAt: Date.now() };
-    setBroadcasts((prev) => [newBroadcast, ...prev]);
+ const handleSendBroadcast = async (message: string, audiences: Audience[]) => {
+  const newBroadcast: Broadcast = { id: `bc-${Date.now()}`, message, audiences, createdAt: Date.now() };
+  setBroadcasts((prev) => [newBroadcast, ...prev]);
 
-    // Simulated external SMS gateway dispatch (Termii / Africa's Talking style) — for demo purposes only, no real SMS is sent.
-    setTimeout(() => {
-      addToast("📡 Gateway Broadcast: SMS payload successfully routed via Termii API to registered student mobile lines.");
-    }, 500);
-  };
+  const { data, error } = await supabase.functions.invoke('send-broadcast', {
+    body: { message, audiences },
+  });
+
+  if (error) {
+    addToast(`Broadcast failed: ${error.message}`, "error");
+  } else {
+    addToast(`📡 Broadcast sent to ${data?.sent ?? 0} recipient(s).`);
+  }
+};
 
   const dismissBroadcast = (id: string) => {
     setBroadcasts((prev) => prev.filter((b) => b.id !== id));
