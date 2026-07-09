@@ -1474,59 +1474,6 @@ function AgriMarket({ products, filter, onFilter }: { products: AgriProduct[]; f
   );
 }
 
-// ── Management: PIN Gate ─────────────────────────────────────────────────────
-function PinGate({ onUnlock, attempt }: { onUnlock: (pin: string) => void; attempt: number }) {
-  const [digits, setDigits] = useState(["", "", "", ""]);
-  const refs = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
-
-  useEffect(() => {
-    setDigits(["", "", "", ""]);
-    refs[0].current?.focus();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [attempt]);
-
-  const handleChange = (i: number, val: string) => {
-    const clean = val.replace(/\D/g, "").slice(-1);
-    const next = [...digits];
-    next[i] = clean;
-    setDigits(next);
-    if (clean && i < 3) refs[i + 1].current?.focus();
-    if (next.every((d) => d !== "")) onUnlock(next.join(""));
-  };
-
-  const handleKeyDown = (i: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace" && !digits[i] && i > 0) refs[i - 1].current?.focus();
-  };
-
-  return (
-    <section className="mx-auto max-w-md px-6 text-center" style={{ paddingTop: "7rem", paddingBottom: "4rem" }}>
-      <div className={`glass-card rounded-2xl p-8 sm:p-10 ${attempt > 0 ? "pin-shake" : ""}`}>
-        <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>🔒</div>
-        
-        <h2 className="text-2xl font-display font-semibold tracking-tight">Management Access</h2>
-        
-        <p className="text-sm text-muted-foreground" style={{ marginTop: "0.75rem" }}>
-          Enter the 4-digit Farm Manager PIN to continue.
-        </p>
-        
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: "2.5rem" }}>
-          {digits.map((d, i) => (
-            <input key={i} ref={refs[i]} value={d} onChange={(e) => handleChange(i, e.target.value)} onKeyDown={(e) => handleKeyDown(i, e)}
-              inputMode="numeric" maxLength={1} type="password" autoFocus={i === 0}
-              style={{ width: 52, height: 60, textAlign: "center", fontSize: "1.5rem", fontWeight: 700, borderRadius: 14, background: "oklch(0.2 0.02 250)", border: "1px solid color-mix(in oklab, var(--emerald-glow) 30%, transparent)", color: "oklch(0.97 0.01 180)", outline: "none" }} />
-          ))}
-        </div>
-        
-        <p className="text-xs text-muted-foreground/70" style={{ marginTop: "2.25rem" }}>
-          Restricted to the Faculty of Agriculture farm management team.
-        </p>
-      </div>
-      <style>{`.pin-shake{animation:pinShake 0.4s ease}@keyframes pinShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}`}</style>
-    </section>
-  );
-}
-
-
 // ── Management: Farm Manager Portal ──────────────────────────────────────────
 const inputStyle: React.CSSProperties = {
   width: "100%", padding: "0.75rem 1rem", borderRadius: 12, background: "oklch(0.2 0.02 250)",
