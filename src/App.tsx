@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { supabase } from './supabaseClient';
+import { SubscribeModal } from "./components/SubscribeForm";
 
-
+ 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type VerifiedSale = {
   id: string;
   // A single combined screenshot: WhatsApp order chat + payment receipt + delivery confirmation.
   image: string;
 };
-
+ 
 type Business = {
   id: string;
   name: string;
@@ -26,9 +28,9 @@ type Business = {
   dealLabel?: string;
   verifiedSales?: VerifiedSale[];
 };
-
+ 
 type Department = "Fisheries" | "Animal Science" | "Crop Science";
-
+ 
 type AgriProduct = {
   id: string;
   name: string;
@@ -39,11 +41,11 @@ type AgriProduct = {
   image: string;
   description: string;
 };
-
+ 
 type ToastTone = "success" | "error";
 type ToastItem = { id: number; message: string; tone: ToastTone };
 type Tab = "vendors" | "agri" | "management";
-
+ 
 type Audience = "Students" | "Vendors" | "Keke Operators" | "Senate";
 type Broadcast = {
   id: string;
@@ -51,7 +53,7 @@ type Broadcast = {
   audiences: Audience[];
   createdAt: number;
 };
-
+ 
 // ── Data ──────────────────────────────────────────────────────────────────────
 const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Laundry", "Home & Life", "Print & Copy", "Data & Airtime"] as const;
 const DEPARTMENTS: Department[] = ["Fisheries", "Animal Science", "Crop Science"];
@@ -61,7 +63,7 @@ const AUDIENCE_OPTIONS: { id: Audience; label: string; icon: string }[] = [
   { id: "Keke Operators", label: "Keke Operators", icon: "🛺" },
   { id: "Senate", label: "Senate", icon: "🏛️" },
 ];
-
+ 
 // Faculty of Agriculture farm order line — update to the real farm desk number.
 const DEPARTMENT_WHATSAPP: Record<Department, string> = {
   Fisheries: "2348024511795",
@@ -74,7 +76,7 @@ function LoginGate({ onUnlock }: { onUnlock: () => void }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+ 
   const handleLogin = async () => {
     setError("");
     setLoading(true);
@@ -86,7 +88,7 @@ function LoginGate({ onUnlock }: { onUnlock: () => void }) {
     }
     onUnlock();
   };
-
+ 
   return (
     <section className="mx-auto max-w-md px-6 text-center" style={{ paddingTop: "7rem", paddingBottom: "4rem" }}>
       <div className="glass-card rounded-2xl p-8 sm:p-10">
@@ -124,8 +126,8 @@ function LoginGate({ onUnlock }: { onUnlock: () => void }) {
     </section>
   );
 }
-
-
+ 
+ 
 const BUSINESSES: Business[] = [
   {
     id: "11",
@@ -334,7 +336,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "36",
+    id: "41",
     name: "Shaffy's Treats",
     category: "Uni Eats",
     initials: "ST",
@@ -388,7 +390,7 @@ const BUSINESSES: Business[] = [
     images: ["/kel1.jpeg", "/kel2.jpeg", "/kel3.jpeg", "/kel4.jpeg"],
     deal: true,
   },
-  {
+ {
     id: "59",
     name: "KHALCARE DATAPLUG",
     category: "Data & Airtime",
@@ -513,7 +515,7 @@ const BUSINESSES: Business[] = [
     name: "Dedon Photo Studio",
     category: "Print & Copy",
     initials: "DS",
-    description: "Professional passport photos and photocopy services on campus. Fast, affordable and reliable. Backside. Open 8am–10pm.",
+    description: "Pro26usaae2ional passport photos and photocopy services on campus. Fast, affordable and reliable. Backside. Open 8am–10pm.",
     tags: ["Passport Photo", "Photocopy", "Studio", "Printing", "ID Photo"],
     whatsapp: "2348062661141",
     accent: "from-orange-300/25 to-emerald-400/15",
@@ -597,7 +599,7 @@ const BUSINESSES: Business[] = [
     images: ["/burstinglogo.jpeg"],
   },
   {
-    id: "30",
+    id: "42",
     name: "feyy's iStore",
     category: "Tech Plug",
     initials: "FI",
@@ -728,28 +730,28 @@ const BUSINESSES: Business[] = [
     images: ["/habbie1.jpeg", "/habbie2.jpeg", "/habbie3.jpeg"],
   },
 ];
-
+ 
 const STATS = [
   { k: "40+", v: "Verified vendors" },
   { k: "9", v: "Categories" },
   { k: "4.9★", v: "Avg. campus rating" },
   { k: "< 30m", v: "Median response" },
 ];
-
-
+ 
+ 
 // ── Emergency Contacts ────────────────────────────────────────────────────────
 type EmergencyContact = {
   id: string; icon: string; category: string;
   name: string; role: string; number: string; priority?: boolean;
 };
-
+ 
 const EMERGENCY_CONTACTS: EmergencyContact[] = [
   { id: "security", icon: "🚨", category: "Security / Safety Emergency", name: "SUG President", role: "Direct radio link to campus security", number: "07061892231", priority: true },
   { id: "medical", icon: "🏥", category: "Medical Emergency", name: "SUG Health Director", role: "Clinic & first response", number: "08156272900" },
   { id: "general", icon: "📢", category: "General Assistance", name: "SUG PRO", role: "Public relations & info", number: "08144291758" },
   { id: "welfare", icon: "🤝", category: "Student Welfare", name: "SUG Welfare Director", role: "Student support & advocacy", number: "08133415133" },
 ];
-
+ 
 // ── localStorage helpers ──────────────────────────────────────────────────────
 function getRating(vendorId: string): number {
   try { return parseInt(localStorage.getItem(`fudhub_rating_${vendorId}`) || "0", 10) || 0; } catch { return 0; }
@@ -757,7 +759,7 @@ function getRating(vendorId: string): number {
 function saveRating(vendorId: string, rating: number) {
   try { localStorage.setItem(`fudhub_rating_${vendorId}`, String(rating)); } catch { /* ignore */ }
 }
-
+ 
 // ── Star Rating ───────────────────────────────────────────────────────────────
 function StarRating({ vendorId }: { vendorId: string }) {
   const [rating, setRating] = useState(() => getRating(vendorId));
@@ -780,7 +782,7 @@ function StarRating({ vendorId }: { vendorId: string }) {
     </div>
   );
 }
-
+ 
 // ── Toast Stack ───────────────────────────────────────────────────────────────
 function ToastStack({ toasts }: { toasts: ToastItem[] }) {
   return (
@@ -794,7 +796,7 @@ function ToastStack({ toasts }: { toasts: ToastItem[] }) {
     </div>
   );
 }
-
+ 
 // ── Campus Broadcast Banners ─────────────────────────────────────────────────
 function getBroadcastAccent(audiences: Audience[]) {
   if (audiences.includes("Senate")) {
@@ -808,7 +810,7 @@ function getBroadcastAccent(audiences: Audience[]) {
   }
   return { border: "#10b981", bg: "linear-gradient(135deg, rgba(16,185,129,0.16), rgba(16,185,129,0.05))", glow: "rgba(16,185,129,0.3)", icon: "🎓" };
 }
-
+ 
 function BroadcastBanners({ broadcasts, onDismiss }: { broadcasts: Broadcast[]; onDismiss: (id: string) => void }) {
   if (broadcasts.length === 0) return null;
   return (
@@ -843,13 +845,13 @@ function BroadcastBanners({ broadcasts, onDismiss }: { broadcasts: Broadcast[]; 
     </div>
   );
 }
-
+ 
 // ── Testimonials Modal (rate vendor + real verified transaction vouchers) ───
 function TestimonialViewer({ business, index: _index, onClose, onNav }: { business: Business; index: number; onClose: () => void; onNav: (dir: 1 | -1) => void }) {  const sales = business.verifiedSales || [];
   const [tab, setTab] = useState<"reviews" | "vouchers">(sales.length > 0 ? "vouchers" : "reviews");
   const [zoomed, setZoomed] = useState<number | null>(null);
   const waHref = `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(`Hi ${business.name}, I'd like to place an order via FUD Hub.`)}`;
-
+ 
   useEffect(() => {
     document.body.style.overflow = "hidden";
     const onKey = (e: KeyboardEvent) => {
@@ -862,11 +864,11 @@ function TestimonialViewer({ business, index: _index, onClose, onNav }: { busine
     document.addEventListener("keydown", onKey);
     return () => { document.body.style.overflow = ""; document.removeEventListener("keydown", onKey); };
   }, [onClose, onNav, zoomed, sales.length]);
-
+ 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 500, background: "rgba(0,0,0,0.85)", backdropFilter: "blur(6px)", display: "flex", alignItems: "flex-end", justifyContent: "center", animation: "fadeIn 0.2s ease" }} onClick={onClose}>
       <div style={{ width: "100%", maxWidth: 480, margin: "0 auto", background: "oklch(0.18 0.02 250)", borderRadius: "24px 24px 0 0", border: "1px solid color-mix(in oklab, oklch(0.72 0.21 152) 20%, transparent)", overflow: "hidden", animation: "slideUp 0.35s cubic-bezier(0.2,0.8,0.2,1)", maxHeight: "90vh", display: "flex", flexDirection: "column" }} onClick={(e) => e.stopPropagation()}>
-
+ 
         <div style={{ padding: "1.25rem 1.25rem 1rem", flexShrink: 0 }}>
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
@@ -889,12 +891,12 @@ function TestimonialViewer({ business, index: _index, onClose, onNav }: { busine
             <button onClick={onClose} aria-label="Close" style={{ width: 32, height: 32, borderRadius: "50%", background: "oklch(0.26 0.025 250)", border: "none", color: "oklch(0.97 0.01 180)", fontSize: "1rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>✕</button>
           </div>
         </div>
-
+ 
         <div style={{ display: "flex", gap: 6, padding: "0 1.25rem", flexShrink: 0 }}>
           <button onClick={() => setTab("reviews")} style={{ flex: 1, padding: "0.7rem", borderRadius: "12px 12px 0 0", border: "none", borderBottom: tab === "reviews" ? "2px solid #10b981" : "2px solid transparent", background: tab === "reviews" ? "rgba(16,185,129,0.08)" : "transparent", color: tab === "reviews" ? "var(--emerald-bright)" : "oklch(0.62 0.02 250)", fontWeight: 700, fontSize: "0.8rem", cursor: "pointer" }}>⭐ Rate This Vendor</button>
           <button onClick={() => setTab("vouchers")} style={{ flex: 1, padding: "0.7rem", borderRadius: "12px 12px 0 0", border: "none", borderBottom: tab === "vouchers" ? "2px solid #10b981" : "2px solid transparent", background: tab === "vouchers" ? "rgba(16,185,129,0.08)" : "transparent", color: tab === "vouchers" ? "var(--emerald-bright)" : "oklch(0.62 0.02 250)", fontWeight: 700, fontSize: "0.8rem", cursor: "pointer" }}>📸 Transaction Vouchers</button>
         </div>
-
+ 
         <div style={{ padding: "1.25rem", overflowY: "auto", flex: 1, minHeight: 0 }}>
           {tab === "reviews" && (
             <div>
@@ -919,14 +921,14 @@ function TestimonialViewer({ business, index: _index, onClose, onNav }: { busine
             )
           )}
         </div>
-
+ 
         <div style={{ padding: "1rem 1.25rem 1.25rem", flexShrink: 0 }}>
           <a href={waHref} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "0.9rem", borderRadius: 14, background: "oklch(0.78 0.19 155)", color: "oklch(0.15 0.02 250)", fontWeight: 700, fontSize: "0.9rem", textDecoration: "none", boxShadow: "0 0 30px -5px oklch(0.72 0.21 152)" }}>
             🛍️ Order via WhatsApp
           </a>
         </div>
       </div>
-
+ 
       {zoomed !== null && sales[zoomed] && (
         <div style={{ position: "fixed", inset: 0, zIndex: 600, background: "rgba(0,0,0,0.95)", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem 1rem" }} onClick={(e) => { e.stopPropagation(); setZoomed(null); }}>
           {sales.length > 1 && (
@@ -943,7 +945,7 @@ function TestimonialViewer({ business, index: _index, onClose, onNav }: { busine
     </div>
   );
 }
-
+ 
 // ── Emergency Panel ───────────────────────────────────────────────────────────
 function EmergencyPanel({ onClose }: { onClose: () => void }) {
   const [expanded, setExpanded] = useState<string | null>("security");
@@ -953,7 +955,7 @@ function EmergencyPanel({ onClose }: { onClose: () => void }) {
     document.addEventListener("keydown", onKey);
     return () => { document.body.style.overflow = ""; document.removeEventListener("keydown", onKey); };
   }, [onClose]);
-
+ 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 150, background: "radial-gradient(80% 60% at 50% 0%, color-mix(in oklab, #ef4444 22%, transparent), color-mix(in oklab, var(--background) 88%, transparent))", backdropFilter: "blur(8px)", display: "flex", alignItems: "flex-end", justifyContent: "center", animation: "fadeIn 0.2s ease" }} onClick={onClose}>
       <div style={{ width: "100%", maxWidth: "480px", margin: "0 auto", background: "linear-gradient(180deg, color-mix(in oklab, var(--surface-elevated) 95%, transparent), color-mix(in oklab, var(--surface) 98%, transparent))", borderTop: "2px solid #ef4444", borderLeft: "1px solid color-mix(in oklab, var(--foreground) 8%, transparent)", borderRight: "1px solid color-mix(in oklab, var(--foreground) 8%, transparent)", borderRadius: "24px 24px 0 0", boxShadow: "0 -20px 60px -10px rgba(239,68,68,0.14)", overflow: "hidden", animation: "slideUp 0.3s cubic-bezier(0.2,0.8,0.2,1)", maxHeight: "92vh", overflowY: "auto" }} onClick={(e) => e.stopPropagation()}>
@@ -1005,29 +1007,7 @@ function EmergencyPanel({ onClose }: { onClose: () => void }) {
     </div>
   );
 }
-
-// ── Keke FAB ──────────────────────────────────────────────────────────────────
-function KekeFAB() {
-  const [showPopup, setShowPopup] = useState(false);
-  return (
-    <>
-      <button onClick={() => setShowPopup(true)} aria-label="Keke Delivery - Coming Soon" style={{ position: "fixed", bottom: 28, right: 24, zIndex: 90, width: 60, height: 60, borderRadius: "50%", background: "linear-gradient(135deg, #059669, #10b981)", border: "2px solid rgba(16,185,129,0.5)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.6rem", animation: "kekePulse 2s infinite" }}>🛺</button>
-      {showPopup && (
-        <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)", animation: "fadeIn 0.2s ease" }} onClick={() => setShowPopup(false)}>
-          <div onClick={(e) => e.stopPropagation()} style={{ background: "oklch(0.18 0.02 250)", border: "1px solid rgba(16,185,129,0.35)", borderRadius: 24, padding: "2rem 2rem 1.75rem", maxWidth: 320, width: "calc(100% - 48px)", textAlign: "center", boxShadow: "0 0 60px -10px rgba(16,185,129,0.4)", animation: "popIn 0.3s cubic-bezier(0.2,0.8,0.2,1)" }}>
-            <div style={{ fontSize: "3rem", marginBottom: "0.75rem" }}>🛺</div>
-            <div style={{ fontSize: "1.25rem", fontWeight: 700, color: "oklch(0.97 0.01 180)", marginBottom: "0.5rem", fontFamily: "var(--font-display)" }}>Keke Delivery</div>
-            <div style={{ display: "inline-block", background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.4)", borderRadius: 999, padding: "3px 14px", fontSize: "0.7rem", color: "#10b981", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "1rem" }}>Coming Soon</div>
-            <p style={{ fontSize: "0.875rem", color: "oklch(0.65 0.02 250)", lineHeight: 1.6, marginBottom: "1.5rem" }}>Campus-wide keke delivery is on its way. Order from any FUD Hub vendor and get it dropped right at your hostel door. 🚀</p>
-            <button onClick={() => setShowPopup(false)} style={{ background: "#10b981", color: "#0a1a14", border: "none", borderRadius: 12, padding: "0.75rem 2rem", fontWeight: 700, fontSize: "0.9rem", cursor: "pointer", width: "100%", boxShadow: "0 0 24px -6px rgba(16,185,129,0.6)" }}>Got it, can't wait!</button>
-          </div>
-        </div>
-      )}
-      <style>{`@keyframes kekePulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,0.7)}70%{box-shadow:0 0 0 14px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}@keyframes popIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}`}</style>
-    </>
-  );
-}
-
+ 
 // ── Reveal hook ───────────────────────────────────────────────────────────────
 function useReveal() {
   useEffect(() => {
@@ -1043,7 +1023,7 @@ function useReveal() {
     return () => { io.disconnect(); mo.disconnect(); document.documentElement.classList.remove("reveal-ready"); };
   }, []);
 }
-
+ 
 // ── Vendor Modal ──────────────────────────────────────────────────────────────
 function VendorModal({ business, onClose, onShowTestimonials }: { business: Business; onClose: () => void; onShowTestimonials: (business: Business, index?: number) => void }) {
   const [current, setCurrent] = useState(0);
@@ -1056,7 +1036,7 @@ function VendorModal({ business, onClose, onShowTestimonials }: { business: Busi
   const next = () => setCurrent((c) => (c + 1) % images.length);
   const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
   const handleTouchEnd = (e: React.TouchEvent) => { touchEndX.current = e.changedTouches[0].clientX; const diff = touchStartX.current - touchEndX.current; if (Math.abs(diff) > 40) diff > 0 ? next() : prev(); };
-
+ 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 100, background: "rgba(0,0,0,0.85)", backdropFilter: "blur(8px)", display: "flex", alignItems: "flex-end", animation: "fadeIn 0.2s ease" }} onClick={onClose}>
       <div style={{ width: "100%", maxWidth: "480px", margin: "0 auto", background: "oklch(0.18 0.02 250)", borderRadius: "24px 24px 0 0", border: "1px solid color-mix(in oklab, oklch(0.72 0.21 152) 20%, transparent)", overflow: "hidden", animation: "slideUp 0.35s cubic-bezier(0.2,0.8,0.2,1)", maxHeight: "90vh", overflowY: "auto" }} onClick={(e) => e.stopPropagation()}>
@@ -1103,7 +1083,7 @@ function VendorModal({ business, onClose, onShowTestimonials }: { business: Busi
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: business.verifiedSales && business.verifiedSales.length > 0 ? "1.25rem" : "1.25rem" }}>
             {business.tags.map((t) => <span key={t} style={{ padding: "4px 12px", background: "oklch(0.22 0.022 250)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 999, fontSize: "0.75rem", color: "oklch(0.75 0.02 250)" }}>{t}</span>)}
           </div>
-
+ 
           {business.verifiedSales && business.verifiedSales.length > 0 && (
             <div style={{ marginBottom: "1.5rem" }}>
               <div style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--emerald-bright)", marginBottom: 10 }}>
@@ -1130,7 +1110,7 @@ function VendorModal({ business, onClose, onShowTestimonials }: { business: Busi
               <p style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", marginTop: 8 }}>Tap a slip to view the full WhatsApp order, payment receipt & delivery confirmation.</p>
             </div>
           )}
-
+ 
           <StarRating vendorId={business.id} />
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
             <a href={waHref} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "0.875rem 0.5rem", background: "oklch(0.78 0.19 155)", color: "oklch(0.15 0.02 250)", fontWeight: 700, fontSize: "0.875rem", borderRadius: 14, border: "none", textDecoration: "none", boxShadow: "0 0 30px -5px oklch(0.72 0.21 152)" }}>
@@ -1150,7 +1130,7 @@ function VendorModal({ business, onClose, onShowTestimonials }: { business: Busi
     </div>
   );
 }
-
+ 
 // ── Nav ───────────────────────────────────────────────────────────────────────
 function Nav({ onSOS, activeTab, onTab }: { onSOS: () => void; activeTab: Tab; onTab: (t: Tab) => void }) {  const tabs: { id: Tab; label: string }[] = [
     { id: "vendors", label: "FUD Vendors" },
@@ -1194,9 +1174,9 @@ function Nav({ onSOS, activeTab, onTab }: { onSOS: () => void; activeTab: Tab; o
     </header>
   );
 }
-
+ 
 // ── Hero ──────────────────────────────────────────────────────────────────────
-function Hero() {
+function Hero({ onSubscribeClick }: { onSubscribeClick: () => void }) {
   return (
     <section className="relative mx-auto max-w-7xl px-6 pt-20 pb-16 sm:pt-24">
       <div className="reveal max-w-3xl">
@@ -1215,12 +1195,12 @@ function Hero() {
           <a href="#directory" style={{ textDecoration: "none" }} className="group inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_-5px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)] transition-shadow">
             Browse the Hub <span className="transition-transform group-hover:translate-x-0.5">→</span>
           </a>
-          <a href="#embiem" style={{ textDecoration: "none" }} className="text-foreground inline-flex items-center gap-2 rounded-full glow-border bg-surface px-5 py-3 text-sm font-medium hover:bg-surface-elevated transition-colors">
-            List your business
-          </a>
+          <button onClick={onSubscribeClick} style={{ border: "none", cursor: "pointer" }} className="text-foreground inline-flex items-center gap-2 rounded-full glow-border bg-surface px-5 py-3 text-sm font-medium hover:bg-surface-elevated transition-colors">
+            Subscribe
+          </button>
         </div>
       </div>
-
+ 
       <div id="embiem" className="reveal-slide relative overflow-hidden rounded-2xl border border-emerald-glow/30 bg-gradient-to-br from-surface-elevated to-surface p-6 sm:p-8 shadow-[0_0_40px_-12px_rgba(0,0,0,0.5)]" style={{ marginTop: "4.5rem" }}>
         <div aria-hidden className="pointer-events-none absolute -right-6 -top-6 h-40 w-40 rounded-full bg-emerald-glow/15 blur-3xl" />
         <div className="relative">
@@ -1242,7 +1222,7 @@ function Hero() {
     </section>
   );
 }
-
+ 
 // ── Controls ──────────────────────────────────────────────────────────────────
 function Controls({ active, onActive, query, onQuery }: {
   active: (typeof CATEGORIES)[number];
@@ -1277,7 +1257,7 @@ function Controls({ active, onActive, query, onQuery }: {
     </section>
   );
 }
-
+ 
 // ── Vendor Card ───────────────────────────────────────────────────────────────
 function Card({ business, index, onOpen, onShowTestimonials }: { business: Business; index: number; onOpen: () => void; onShowTestimonials: (business: Business) => void }) {
   const waHref = `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(`Hi ${business.name}, I'd like to place an order via FUD Hub.`)}`;
@@ -1347,7 +1327,7 @@ function Card({ business, index, onOpen, onShowTestimonials }: { business: Busin
     </article>
   );
 }
-
+ 
 // ── Grid ──────────────────────────────────────────────────────────────────────
 function Grid({ items, onOpen, onShowTestimonials }: { items: Business[]; onOpen: (b: Business) => void; onShowTestimonials: (b: Business) => void }) {
   return (
@@ -1364,7 +1344,7 @@ function Grid({ items, onOpen, onShowTestimonials }: { items: Business[]; onOpen
     </section>
   );
 }
-
+ 
 // ── Stats ─────────────────────────────────────────────────────────────────────
 function Stats() {
   return (
@@ -1380,7 +1360,7 @@ function Stats() {
     </section>
   );
 }
-
+ 
 // ── Agri-Market ───────────────────────────────────────────────────────────────
 function AgriHero() {
   return (
@@ -1418,7 +1398,7 @@ function AgriFilterBar({ filter, onFilter }: { filter: "All" | Department; onFil
     </section>
   );
 }
-
+ 
 function AgriCard({ product, index }: { product: AgriProduct; index: number }) {
   const waHref = `https://wa.me/${DEPARTMENT_WHATSAPP[product.department]}?text=${encodeURIComponent(`Hi! I'd like to order ${product.name} from the FUD Faculty of Agriculture Agri-Market.`)}`;  const low = product.quantity < 15 && product.quantity > 0;
   const outOfStock = product.quantity <= 0;
@@ -1455,7 +1435,7 @@ function AgriCard({ product, index }: { product: AgriProduct; index: number }) {
     </article>
   );
 }
-
+ 
 function AgriMarket({ products, filter, onFilter }: { products: AgriProduct[]; filter: "All" | Department; onFilter: (d: "All" | Department) => void }) {
   return (
     <>
@@ -1473,24 +1453,24 @@ function AgriMarket({ products, filter, onFilter }: { products: AgriProduct[]; f
     </>
   );
 }
-
-// ── Management: Farm Manager Portal ──────────────────────────────────────────
+ 
 const inputStyle: React.CSSProperties = {
   width: "100%", padding: "0.75rem 1rem", borderRadius: 12, background: "oklch(0.2 0.02 250)",
   border: "1px solid rgba(255,255,255,0.1)", color: "oklch(0.95 0.01 180)", fontSize: "0.9rem", outline: "none", marginTop: 6,
 };
+ 
 const labelStyle: React.CSSProperties = {
   fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "oklch(0.62 0.02 250)", display: "block",
 };
-
+ 
 function BroadcastComposer({ onSend, addToast }: { onSend: (message: string, audiences: Audience[]) => void; addToast: (message: string, tone?: ToastTone) => void }) {
   const [message, setMessage] = useState("");
   const [selected, setSelected] = useState<Audience[]>([]);
-
+ 
   const toggle = (a: Audience) => {
     setSelected((prev) => (prev.includes(a) ? prev.filter((x) => x !== a) : [...prev, a]));
   };
-
+ 
   const handleSend = () => {
     if (!message.trim()) { addToast("Write a message before broadcasting.", "error"); return; }
     if (selected.length === 0) { addToast("Select at least one target audience.", "error"); return; }
@@ -1499,15 +1479,15 @@ function BroadcastComposer({ onSend, addToast }: { onSend: (message: string, aud
     setSelected([]);
     addToast("📢 Broadcast sent live to campus!");
   };
-
+ 
   return (
     <div className="reveal glass-card rounded-2xl p-6 sm:p-8" style={{ marginBottom: "2.5rem" }}>
       <h3 className="text-lg font-display font-semibold mb-1">📢 Campus Broadcast</h3>
       <p className="text-sm text-muted-foreground mb-6">Send a live announcement straight to the FUD Hub homepage.</p>
-
+ 
       <label style={labelStyle}>Message</label>
       <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={4} placeholder="Write a campus-wide announcement..." style={{ ...inputStyle, resize: "vertical", marginBottom: "1.5rem" }} />
-
+ 
       <label style={labelStyle}>Target audience</label>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10, marginTop: 8, marginBottom: "1.75rem" }}>
         {AUDIENCE_OPTIONS.map((opt) => {
@@ -1526,14 +1506,14 @@ function BroadcastComposer({ onSend, addToast }: { onSend: (message: string, aud
           );
         })}
       </div>
-
+ 
       <button onClick={handleSend} style={{ width: "100%", padding: "0.9rem", borderRadius: 14, border: "none", background: "oklch(0.72 0.21 152)", color: "oklch(0.12 0.02 160)", fontWeight: 700, fontSize: "0.9375rem", cursor: "pointer", boxShadow: "0 0 30px -5px oklch(0.72 0.21 152)" }}>
         Send Live Broadcast
       </button>
     </div>
   );
 }
-
+ 
 function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast }: {
   setAgriProducts: React.Dispatch<React.SetStateAction<AgriProduct[]>>;
   addToast: (message: string, tone?: ToastTone) => void;
@@ -1548,23 +1528,23 @@ function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast 
   const [description, setDescription] = useState("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+ 
   const handleImagePick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) setImagePreview(URL.createObjectURL(file));
   };
-
+ 
   const resetForm = () => {
     setName(""); setPrice(""); setQuantity(""); setDescription(""); setImagePreview(null); setDepartment("Fisheries"); setUnit("kg");
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
-
+ 
   const fallbackImages: Record<Department, string> = {
     Fisheries: "https://images.unsplash.com/photo-1544943910-4c1dc44aab44?w=800&q=80",
     "Animal Science": "https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=800&q=80",
     "Crop Science": "https://images.unsplash.com/photo-1592841200221-a6898f307baa?w=800&q=80",
   };
-
+ 
  const handlePublish = async () => {
     const priceNum = parseFloat(price);
     const qtyNum = parseFloat(quantity);
@@ -1572,7 +1552,7 @@ function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast 
     if (!department) { addToast("Select a department.", "error"); return; }
     if (!priceNum || priceNum <= 0) { addToast("Enter a valid price per unit.", "error"); return; }
     if (!qtyNum || qtyNum <= 0) { addToast("Enter the quantity available.", "error"); return; }
-
+ 
     const newProduct: AgriProduct = {
       id: `agri-${Date.now()}`,
       name: name.trim(),
@@ -1592,7 +1572,7 @@ function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast 
       image: newProduct.image,
       description: newProduct.description,
     });
-
+ 
     if (error) {
       addToast('Failed to publish — try again.', 'error');
       console.error(error);
@@ -1602,7 +1582,7 @@ function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast 
     addToast(`${newProduct.name} is now live on the Agri-Market 🌾`);
     resetForm();
   };
-
+ 
   return (
     <section className="mx-auto max-w-4xl px-6 py-16">
       <div className="reveal flex items-start justify-between gap-4 mb-8 flex-wrap">
@@ -1613,7 +1593,7 @@ function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast 
         <button onClick={onLock} style={{ padding: "8px 16px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)", color: "oklch(0.65 0.02 250)", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap" }}>🔒 Lock Portal</button>
       </div>
       <BroadcastComposer onSend={onSendBroadcast} addToast={addToast} />
-
+ 
       <div className="reveal glass-card rounded-2xl p-6 sm:p-8">
         <h3 className="text-lg font-display font-semibold mb-6">Publish a new product</h3>
         <div className="grid gap-4">
@@ -1665,14 +1645,14 @@ function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast 
     </section>
   );
 }
-
+ 
 function ManagementPortal({ setAgriProducts, addToast, onSendBroadcast }: {
   setAgriProducts: React.Dispatch<React.SetStateAction<AgriProduct[]>>;
   addToast: (message: string, tone?: ToastTone) => void;
   onSendBroadcast: (message: string, audiences: Audience[]) => void;
 }) {
   const [authed, setAuthed] = useState(false);
-
+ 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setAuthed(!!data.session && data.session.user.email === "embiem590@gmail.com");
@@ -1682,14 +1662,298 @@ function ManagementPortal({ setAgriProducts, addToast, onSendBroadcast }: {
     });
     return () => sub.subscription.unsubscribe();
   }, []);
-
+ 
   if (!authed) return <LoginGate onUnlock={() => setAuthed(true)} />;
   return <FarmManagerPortal setAgriProducts={setAgriProducts} addToast={addToast} onLock={() => supabase.auth.signOut()} onSendBroadcast={onSendBroadcast} />;
+}
+ // ============================================================
+// Keke Call Router — zone-based driver calling widget
+// (paste this block directly above `export default function App()`)
+// ============================================================
+
+type DriverStatus = "available" | "busy" | "offline";
+
+interface KekeDriver {
+  id: string;
+  name: string;
+  phone: string;
+  zone: string;
+  status: DriverStatus;
+}
+
+const KEKE_ZONES = ["On-Campus Hostels", "Yalwawa", "Gida Dubu", "Takur"] as const;
+type KekeZone = (typeof KEKE_ZONES)[number];
+
+const KEKE_DEFAULT_DRIVERS: KekeDriver[] = [
+  { id: "Driver 01", name: "Ibrahim Sule", phone: "+2348012345601", zone: "On-Campus Hostels", status: "available" },
+  { id: "Driver 02", name: "Musa Aliyu", phone: "+2348012345602", zone: "On-Campus Hostels", status: "busy" },
+];
+
+const KEKE_STATUS_META: Record<DriverStatus, { label: string; dot: string; text: string }> = {
+  available: { label: "Available now", dot: "bg-emerald-400", text: "text-emerald-300" },
+  busy: { label: "On a trip", dot: "bg-amber-400", text: "text-amber-300" },
+  offline: { label: "Offline", dot: "bg-white/25", text: "text-white/40" },
+};
+
+function KekeIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 30h6l3-10h12l4 10h5" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M17 20h9l2 4" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="13" cy="34" r="4" stroke="currentColor" strokeWidth="2.4" />
+      <circle cx="35" cy="34" r="4" stroke="currentColor" strokeWidth="2.4" />
+      <path d="M27 30V20" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function KekePhoneIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function KekeMapPinIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M12 21s7-6.1 7-11.5S16.6 2 12 2 5 4.8 5 9.5 12 21 12 21Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="9.5" r="2.5" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
+function KekeChevronDown({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function KekeFABButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label="Call a keke driver"
+      className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-400 text-neutral-950 shadow-[0_8px_24px_-4px_rgba(16,185,129,0.5)] transition-transform duration-200 hover:scale-105 active:scale-95"
+    >
+      <KekeIcon className="h-6 w-6" />
+    </button>
+  );
+}
+
+function KekeDriverCard({ driver }: { driver: KekeDriver }) {
+  const meta = KEKE_STATUS_META[driver.status];
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
+      <div className="min-w-0">
+        <div className="flex items-center gap-2">
+          <p className="truncate text-sm font-medium text-white">{driver.name}</p>
+          <span className="shrink-0 rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] font-medium text-white/50">
+            {driver.id}
+          </span>
+        </div>
+        <div className="mt-1 flex items-center gap-1.5">
+          <span className={`h-1.5 w-1.5 rounded-full ${meta.dot}`} />
+          <span className={`text-xs ${meta.text}`}>{meta.label}</span>
+        </div>
+      </div>
+      <a
+        href={`tel:${driver.phone}`}
+        aria-label={`Call ${driver.name}`}
+        className="flex shrink-0 items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3.5 py-2 text-xs font-semibold text-emerald-300 transition-colors duration-150 hover:bg-emerald-400/20 active:scale-95"
+      >
+        <KekePhoneIcon className="h-3.5 w-3.5" />
+        Call
+      </a>
+    </div>
+  );
+}
+
+function KekeCallSheetPanel({
+  open,
+  onClose,
+  drivers,
+  loading,
+}: {
+  open: boolean;
+  onClose: () => void;
+  drivers: KekeDriver[];
+  loading?: boolean;
+}) {
+  const [selectedZone, setSelectedZone] = useState<KekeZone | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  const zoneDrivers = useMemo(() => {
+    if (!selectedZone) return [];
+    return drivers
+      .filter((d) => d.zone === selectedZone)
+      .sort((a, b) => (a.status === "available" ? -1 : 1) - (b.status === "available" ? -1 : 1));
+  }, [drivers, selectedZone]);
+
+  const primaryDriver = zoneDrivers[0] ?? null;
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center" role="dialog" aria-modal="true" aria-label="Call a keke driver">
+      <div onClick={onClose} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div className="relative w-full sm:max-w-md max-h-[85vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl border border-white/10 bg-neutral-950 shadow-2xl animate-[kekeSlideUp_0.3s_cubic-bezier(0.32,0.72,0,1)]">
+        <div className="flex justify-center pt-3 sm:hidden">
+          <div className="h-1.5 w-10 rounded-full bg-white/20" />
+        </div>
+        <button onClick={onClose} aria-label="Close" className="absolute right-4 top-4 hidden sm:flex h-8 w-8 items-center justify-center rounded-full text-white/50 hover:bg-white/10 hover:text-white">
+          <KekeChevronDown className="h-5 w-5 rotate-180" />
+        </button>
+        <div className="px-6 pb-8 pt-4 sm:pt-6">
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400/10 text-emerald-300">
+              <KekeIcon className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.18em] text-emerald-300/80">FUD Hub Keke</p>
+              <h2 className="font-display text-lg font-semibold text-white">Call a driver</h2>
+            </div>
+          </div>
+
+          {loading && <p className="mt-4 text-xs text-white/40">Loading drivers…</p>}
+
+          <div className="mt-5">
+            <p className="mb-2 flex items-center gap-1.5 text-xs font-medium text-white/50">
+              <KekeMapPinIcon className="h-3.5 w-3.5" />
+              Where are you right now?
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {KEKE_ZONES.map((zone) => (
+                <button
+                  key={zone}
+                  onClick={() => setSelectedZone(zone)}
+                  className={`rounded-full border px-3.5 py-2 text-sm font-medium transition-colors duration-150 ${
+                    selectedZone === zone
+                      ? "border-emerald-400 bg-emerald-400/15 text-emerald-300"
+                      : "border-white/10 bg-white/[0.03] text-white/60 hover:border-white/20 hover:text-white/80"
+                  }`}
+                >
+                  {zone}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-5">
+            {!selectedZone && (
+              <div className="rounded-2xl border border-dashed border-white/10 px-4 py-5 text-center text-sm text-white/40">
+                Pick your zone above to see drivers near you
+              </div>
+            )}
+            {selectedZone && !primaryDriver && (
+              <div className="rounded-2xl border border-dashed border-white/10 px-4 py-5 text-center text-sm text-white/40">
+                No drivers assigned to {selectedZone} yet
+              </div>
+            )}
+            {primaryDriver && (
+              <a
+                href={`tel:${primaryDriver.phone}`}
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-400 px-4 py-4 text-base font-semibold text-neutral-950 transition-transform duration-150 hover:scale-[1.02] active:scale-95"
+              >
+                <KekePhoneIcon className="h-5 w-5" />
+                Call nearest driver — {primaryDriver.name}
+              </a>
+            )}
+          </div>
+
+          {zoneDrivers.length > 0 && (
+            <div className="mt-5 space-y-2">
+              <p className="text-xs font-medium text-white/50">Drivers in {selectedZone}</p>
+              {zoneDrivers.map((d) => (
+                <KekeDriverCard key={d.id} driver={d} />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+      <style>{`
+        @keyframes kekeSlideUp {
+          from { transform: translateY(100%); opacity: 0.6; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        @media (min-width: 640px) {
+          @keyframes kekeSlideUp {
+            from { transform: translateY(24px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function KekeCallRouter() {
+  const [open, setOpen] = useState(false);
+  const [fetchedDrivers, setFetchedDrivers] = useState<KekeDriver[]>(KEKE_DEFAULT_DRIVERS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDrivers = async () => {
+      const { data, error } = await supabase
+        .from("keke_drivers")
+        .select("id, name, phone, zone, status")
+        .order("id", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching keke drivers:", error);
+        setLoading(false);
+        return;
+      }
+
+      if (data) {
+        const mapped: KekeDriver[] = data.map((row: any) => ({
+          id: `Driver ${String(row.id).padStart(2, "0")}`,
+          name: row.name,
+          phone: row.phone,
+          zone: row.zone,
+          status: row.status as DriverStatus,
+        }));
+        setFetchedDrivers(mapped);
+      }
+      setLoading(false);
+    };
+
+    fetchDrivers();
+  }, []);
+
+  return createPortal(
+    <>
+      <KekeFABButton onClick={() => setOpen(true)} />
+      <KekeCallSheetPanel open={open} onClose={() => setOpen(false)} drivers={fetchedDrivers} loading={loading} />
+    </>,
+    document.body
+  );
 }
 
 // ── App ───────────────────────────────────────────────────────────────────────
 export default function App() {
   useReveal();
+  const [showSubscribeModal, setShowSubscribeModal] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>("vendors");
   const [active, setActive] = useState<(typeof CATEGORIES)[number]>("All");
   const [query, setQuery] = useState("");
@@ -1711,32 +1975,32 @@ export default function App() {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const [broadcasts, setBroadcasts] = useState<Broadcast[]>([]);
   const [testimonialView, setTestimonialView] = useState<{ business: Business; index: number } | null>(null);
-
+ 
   const addToast = (message: string, tone: ToastTone = "success") => {
     const id = Date.now() + Math.random();
     setToasts((t) => [...t, { id, message, tone }]);
     setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 3600);
   };
-
+ 
  const handleSendBroadcast = async (message: string, audiences: Audience[]) => {
   const newBroadcast: Broadcast = { id: `bc-${Date.now()}`, message, audiences, createdAt: Date.now() };
   setBroadcasts((prev) => [newBroadcast, ...prev]);
-
+ 
   const { data, error } = await supabase.functions.invoke('send-broadcast', {
     body: { message, audiences },
   });
-
+ 
   if (error) {
     addToast(`Broadcast failed: ${error.message}`, "error");
   } else {
     addToast(`📡 Broadcast sent to ${data?.sent ?? 0} recipient(s).`);
   }
 };
-
+ 
   const dismissBroadcast = (id: string) => {
     setBroadcasts((prev) => prev.filter((b) => b.id !== id));
   };
-
+ 
   const openTestimonials = (business: Business, index: number = 0) => {
     if (!business.verifiedSales || business.verifiedSales.length === 0) {
       addToast(`No verified sales uploaded yet for ${business.name}.`, "error");
@@ -1744,7 +2008,7 @@ export default function App() {
     }
     setTestimonialView({ business, index });
   };
-
+ 
   const navTestimonial = (dir: 1 | -1) => {
     setTestimonialView((v) => {
       if (!v) return v;
@@ -1753,7 +2017,7 @@ export default function App() {
       return { ...v, index: nextIndex };
     });
   };
-
+ 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return BUSINESSES.filter((b) => {
@@ -1762,29 +2026,38 @@ export default function App() {
       return matchCat && matchQ;
     });
   }, [active, query]);
-
+ 
   const filteredAgri = useMemo(() => agriProducts.filter((p) => agriFilter === "All" || p.department === agriFilter), [agriProducts, agriFilter]);
-
+ 
   return (
-    <div className="relative min-h-screen overflow-x-hidden">      <BroadcastBanners broadcasts={broadcasts} onDismiss={dismissBroadcast} />
+    <div className="relative min-h-screen overflow-x-hidden">
+      <style>{`
+        html.reveal-ready {
+          transform: none !important;
+          perspective: none !important;
+          filter: none !important;
+          will-change: auto !important;
+        }
+      `}</style>
+      <BroadcastBanners broadcasts={broadcasts} onDismiss={dismissBroadcast} />
         <Nav onSOS={() => setShowEmergency(true)} activeTab={activeTab} onTab={setActiveTab} />
       {activeTab === "vendors" && (
-        <>
-          <Hero />
-          <Controls active={active} onActive={setActive} query={query} onQuery={setQuery} />
-          <Grid items={filtered} onOpen={setSelectedVendor} onShowTestimonials={openTestimonials} />
-          <Stats />
-        </>
-      )}
-
+  <>
+    <Hero onSubscribeClick={() => setShowSubscribeModal(true)} />
+      <Controls active={active} onActive={setActive} query={query} onQuery={setQuery} />
+    <Grid items={filtered} onOpen={setSelectedVendor} onShowTestimonials={openTestimonials} />
+    <Stats />
+  </>
+)}
+ 
       {activeTab === "agri" && (
         <AgriMarket products={filteredAgri} filter={agriFilter} onFilter={setAgriFilter} />
       )}
-
+ 
      {activeTab === "management" && (
         <ManagementPortal setAgriProducts={setAgriProducts} addToast={addToast} onSendBroadcast={handleSendBroadcast} />
       )}
-
+ 
       {selectedVendor && (
         <VendorModal business={selectedVendor} onClose={() => setSelectedVendor(null)} onShowTestimonials={openTestimonials} />
       )}
@@ -1797,7 +2070,8 @@ export default function App() {
         />
       )}
       {showEmergency && <EmergencyPanel onClose={() => setShowEmergency(false)} />}
-      <KekeFAB />
+      <SubscribeModal open={showSubscribeModal} onClose={() => setShowSubscribeModal(false)} />
+      <KekeCallRouter />
       <ToastStack toasts={toasts} />
     </div>
     );
