@@ -665,7 +665,7 @@ const BUSINESSES: Business[] = [
   },
   {
     id: "35",
-    name: "Sharp Cut Barber 💈",
+    name: "Nickolas",
     category: "Fresh Cuts",
     initials: "SB",
     description: "Professional barbering on campus — Block A Male Hostel. Available Monday to Sunday.",
@@ -728,6 +728,20 @@ const BUSINESSES: Business[] = [
     logo: "/habbielogo.jpeg",
     image: "/habbie1.jpeg",
     images: ["/habbie1.jpeg", "/habbie2.jpeg", "/habbie3.jpeg"],
+  },
+  {
+    id: "41",
+    name: "MI Clothing",
+    category: "Campus Drip",
+    initials: "MC",
+    description: "MI Clothing - Premium Nigerian fashion brand. Jallabiyas, Kaftans, Agbadas & Senator wears. Affordable luxury with quality fabrics and perfect tailoring.",
+    tags: ["Jallabiya", "Kaftan", "Agbada", "Senator Wear", "Traditional Wear", "Fashion", "Made in Nigeria"],
+    whatsapp: "2348114411604",
+    accent: "from-rose-300/20 to-emerald-400/15",
+    logo: "/milogo.jpeg",
+    image: "/mi1.jpeg",
+    images: ["/mi1.jpeg", "/mi2.jpeg", "/mi3.jpeg", "/mi4.jpeg"],
+    deal: true,
   },
 ];
  
