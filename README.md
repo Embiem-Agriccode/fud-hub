@@ -1,5 +1,16 @@
-# React + TypeScript + Vite
+# FudHub (fudhub.ng)
 
+The digital campus ecosystem and vendor directory for Federal University Dutse. 
+
+## Tech Stack
+- **Frontend:** React (Vite), TypeScript, Tailwind CSS
+- **Backend/Auth:** Supabase
+
+## Author
+Developed by Mubarak Haruna under **EMBIEM Technology**.
+
+---
+# React + TypeScript + Vite
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
