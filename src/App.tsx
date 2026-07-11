@@ -1810,9 +1810,43 @@ export default function App() {
         />
       )}
       {showEmergency && <EmergencyPanel onClose={() => setShowEmergency(false)} />}
-      <SubscribeModal open={showSubscribeModal} onClose={() => setShowSubscribeModal(false)} />
-      <KekeCallRouter />
-      <ToastStack toasts={toasts} />
-    </div>
+        <SubscribeModal open={showSubscribeModal} onClose={() => setShowSubscribeModal(false)} />
+        <KekeCallRouter />
+        <ToastStack toasts={toasts} />
+
+        {/* ── Footer / SEO Attribution Section ── */}
+        <footer className="w-full border-t border-white/5 bg-black/20 py-8 mt-16 backdrop-blur-md">
+          <div className="mx-auto max-w-7xl px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            
+            <div>
+              <p className="text-sm font-semibold tracking-wide text-white/90">FudHub &copy; 2026</p>
+              <p className="text-xs text-neutral-400 mt-1">
+                The official digital campus ecosystem for Federal University Dutse.
+              </p>
+            </div>
+            <div className="text-xs sm:text-right text-neutral-400">
+              <span>Developed by </span>
+              <a 
+                href="https://github.com/agriccode" 
+                rel="author noopener noreferrer" 
+                target="_blank" 
+                className="font-medium text-emerald-400 hover:text-emerald-300 transition-colors duration-200 underline underline-offset-4"
+                title="Mubarak Haruna"
+              >
+                Mubarak Haruna
+              </a>
+              <span> under </span>
+              <a 
+                href="https://instagram.com/embiem_tech" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="font-medium text-emerald-400 hover:text-emerald-300 transition-colors duration-200 underline underline-offset-4"
+              >
+                EMBIEM Technology
+              </a>
+            </div>
+          </div>
+        </footer>
+      </div>
     );
-}
+  }

@@ -98,7 +98,7 @@ export function KekeCallRouter() {
         }}
       >
         <span style={{ fontSize: "1.1rem" }}>🛺</span>
-        Call a Keke
+        
       </button>
 
       {open && (
