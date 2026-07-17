@@ -1166,10 +1166,7 @@ function Hero() {
   return (
     <section className="relative mx-auto max-w-7xl px-6 pt-20 pb-10 sm:pt-28">
       <div className="reveal max-w-3xl">
-        <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/60 px-3 py-1.5 text-xs text-foreground mb-7">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-bright animate-pulse" />
-        ⦁   Live on campus
-        </div>
+        
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold leading-[1.02] tracking-tight">
           Discover & order from <br />
           <span className="text-gradient-emerald">FUD vendors.</span>
