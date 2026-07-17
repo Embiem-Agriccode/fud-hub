@@ -4,7 +4,7 @@ import { KekeCallRouter } from "./components/KekeCallRouter";
 import { CampusUpdates } from "./components/CampusUpdates";
 import type { Audience, Broadcast } from "./types";
 import { SubscribeModal } from "./components/SubscribeForm";
-import { getBroadcastAccent, timeAgo, formatPostDate, estimateReadTime, AUDIENCE_OPTIONS } from "./types";
+import { AUDIENCE_OPTIONS } from "./types";
 
 // NOTE ON SETUP
 // ─────────────────────────────────────────────────────────────────────────
@@ -1168,7 +1168,7 @@ function Hero() {
       <div className="reveal max-w-3xl">
         <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/60 px-3 py-1.5 text-xs text-foreground mb-7">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-bright animate-pulse" />
-          Live on campus
+        ⦁   Live on campus
         </div>
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold leading-[1.02] tracking-tight">
           Discover & order from <br />
@@ -1186,7 +1186,7 @@ function Hero() {
 // ── Broadcast / Subscribe section ──────────────────────────────────────────────
 // Self-contained — deliberately not using the old SubscribeForm component,
 // which was rendering broken/overlapping text on the homepage.
-function BroadcastSubscribeCard({ addToast, onViewUpdates }: { addToast: (message: string, tone?: ToastTone) => void; onViewUpdates: () => void }) {
+function BroadcastSubscribeCard({ onViewUpdates }: { onViewUpdates: () => void }) {
   const [showSubscribeModal, setShowSubscribeModal] = useState(false);
 
   return (
@@ -1198,11 +1198,11 @@ function BroadcastSubscribeCard({ addToast, onViewUpdates }: { addToast: (messag
         </p>
         <div className="mt-5 flex gap-3">
           <button
-  onClick={onViewUpdates}
-  style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "0.875rem 0.5rem", borderRadius: 14, border: "1px solid color-mix(in oklab, var(--emerald-glow) 40%, transparent)", background: "color-mix(in oklab, var(--emerald-glow) 10%, transparent)", color: "var(--emerald-bright)", fontWeight: 700, fontSize: "0.875rem", cursor: "pointer", whiteSpace: "nowrap" }}
->
-  📰 View
-</button>
+            onClick={onViewUpdates}
+            style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "0.875rem 0.5rem", borderRadius: 14, border: "1px solid color-mix(in oklab, var(--emerald-glow) 40%, transparent)", background: "color-mix(in oklab, var(--emerald-glow) 10%, transparent)", color: "var(--emerald-bright)", fontWeight: 700, fontSize: "0.875rem", cursor: "pointer", whiteSpace: "nowrap" }}
+          >
+            📰 View
+          </button>
           <button
             onClick={() => setShowSubscribeModal(true)}
             style={{ flex: 1, padding: "0.875rem 0.5rem", borderRadius: 14, border: "none", background: "oklch(0.72 0.21 152)", color: "oklch(0.12 0.02 160)", fontWeight: 700, fontSize: "0.875rem", cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 0 30px -5px oklch(0.72 0.21 152)" }}
@@ -1211,7 +1211,7 @@ function BroadcastSubscribeCard({ addToast, onViewUpdates }: { addToast: (messag
           </button>
         </div>
       </div>
-     <SubscribeModal open={showSubscribeModal} onClose={() => setShowSubscribeModal(false)} />
+      <SubscribeModal open={showSubscribeModal} onClose={() => setShowSubscribeModal(false)} />
     </section>
   );
 }
@@ -1484,10 +1484,9 @@ const labelStyle: React.CSSProperties = {
   fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "oklch(0.62 0.02 250)", display: "block",
 };
 
-function BroadcastComposer({ onSend, addToast }: { onSend: (title: string, message: string, audiences: Audience[], image?: string) => void; addToast: (message: string, tone?: ToastTone) => void }) {
+function BroadcastComposer({ onSend, addToast }: { onSend: (title: string, message: string, audiences: Audience[], image?: string) => void; addToast: (message: string, tone?: ToastTone) => void }) {  const [selected, setSelected] = useState<Audience[]>([]);
   const [title, setTitle] = useState("");
-  const [message, setMessage] = useState("");
-  const [selected, setSelected] = useState<Audience[]>([]);
+const [message, setMessage] = useState("");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -1895,7 +1894,7 @@ export default function Home() {
             {/* 2. Hero */}
             <Hero />
             {/* 3. Broadcast / Subscribe section */}
-            <BroadcastSubscribeCard addToast={addToast} onViewUpdates={() => setShowUpdates(true)} />
+            <BroadcastSubscribeCard onViewUpdates={() => setShowUpdates(true)} />
             {/* 4. CTA — 20px top / 30px bottom margin */}
             <ListYourBusinessCTA />
             {/* 5. Search + vendor grid */}
