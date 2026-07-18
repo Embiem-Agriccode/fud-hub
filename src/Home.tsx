@@ -1506,7 +1506,8 @@ const handleImagePick = async (e: React.ChangeEvent<HTMLInputElement>) => {
     .upload(fileName, file);
 
   if (error) {
-    addToast('Image upload failed — try again.', 'error');
+    addToast(`Upload failed: ${error.message}`, 'error');
+console.error('Upload error:', error);
     setUploading(false);
     return;
   }
