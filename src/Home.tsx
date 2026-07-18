@@ -1149,7 +1149,7 @@ function Nav({ onSOS, onMenu, updatesCount, activeTab, onTab }: { onSOS: () => v
             const isActive = t.id === activeTab;
             return (
               <button key={t.id} onClick={() => onTab(t.id)}
-                style={{ flex: 1, textAlign: "center", padding: "10px 12px", borderRadius: 999, fontSize: "0.8125rem", fontWeight: isActive ? 700 : 500, cursor: "pointer", transition: "all 0.25s ease", border: isActive ? "1px solid transparent" : "1px solid rgba(255,255,255,0.1)", background: isActive ? "oklch(0.72 0.21 152)" : "rgba(255,255,255,0.04)", color: isActive ? "oklch(0.12 0.02 160)" : "oklch(0.65 0.02 250)", boxShadow: isActive ? "0 0 24px -6px oklch(0.72 0.21 152)" : "none", whiteSpace: "nowrap" }}>
+                style={{ flex: 1, textAlign: "center", padding: "8px 4px", borderRadius: 999, fontSize: "0.7rem", fontWeight: isActive ? 700 : 500, cursor: "pointer", transition: "all 0.25s ease", border: isActive ? "1px solid transparent" : "1px solid rgba(255,255,255,0.1)", background: isActive ? "oklch(0.72 0.21 152)" : "rgba(255,255,255,0.04)", color: isActive ? "oklch(0.12 0.02 160)" : "oklch(0.65 0.02 250)", boxShadow: isActive ? "0 0 24px -6px oklch(0.72 0.21 152)" : "none", whiteSpace: "nowrap" }}>
                 {t.label}
               </button>
             );
@@ -1491,10 +1491,33 @@ const [message, setMessage] = useState("");
     setSelected((prev) => (prev.includes(a) ? prev.filter((x) => x !== a) : [...prev, a]));
   };
 
-  const handleImagePick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setImagePreview(URL.createObjectURL(file));
-  };
+  const [uploading, setUploading] = useState(false);
+
+const handleImagePick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  setUploading(true);
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${Date.now()}.${fileExt}`;
+
+  const { error } = await supabase.storage
+    .from('broadcast-images')
+    .upload(fileName, file);
+
+  if (error) {
+    addToast('Image upload failed — try again.', 'error');
+    setUploading(false);
+    return;
+  }
+
+  const { data } = supabase.storage
+    .from('broadcast-images')
+    .getPublicUrl(fileName);
+
+  setImagePreview(data.publicUrl);
+  setUploading(false);
+};
 
   const handleSend = () => {
     if (!title.trim()) { addToast("Give the update a title.", "error"); return; }
