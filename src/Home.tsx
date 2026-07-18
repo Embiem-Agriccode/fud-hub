@@ -1546,7 +1546,7 @@ const handleImagePick = async (e: React.ChangeEvent<HTMLInputElement>) => {
       <label style={labelStyle}>Image (optional — e.g. a newsletter graphic)</label>
       <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImagePick} style={{ display: "none" }} />
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 6, marginBottom: "1.75rem" }}>
-        <button type="button" disabled={uploading} onClick={() => fileInputRef.current?.click()} style={{ ... }}>
+       <button type="button" disabled={uploading} onClick={() => fileInputRef.current?.click()} style={{ padding: "0.7rem 1.1rem", borderRadius: 12, border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.04)", color: "oklch(0.9 0.01 180)", fontSize: "0.85rem", fontWeight: 600, cursor: uploading ? "default" : "pointer", opacity: uploading ? 0.6 : 1 }}>
   {uploading ? "Uploading..." : imagePreview ? "🖼️ Change image" : "🖼️ Attach image"}
 </button>
         {imagePreview && <img src={imagePreview} alt="Preview" style={{ width: 56, height: 56, borderRadius: 10, objectFit: "cover", border: "1px solid rgba(255,255,255,0.1)" }} />}
