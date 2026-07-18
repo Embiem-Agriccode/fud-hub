@@ -1167,7 +1167,7 @@ function Hero() {
     <section className="relative mx-auto max-w-7xl px-6 pt-20 pb-10 sm:pt-28">
       <div className="reveal max-w-3xl">
         
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold leading-[1.02] tracking-tight">
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display font-bold leading-[1.02] tracking-tight">
           Discover & order from <br />
           <span className="text-gradient-emerald">FUD vendors.</span>
         </h1>
@@ -1382,16 +1382,16 @@ function Stats() {
 // ── Agri-Market ───────────────────────────────────────────────────────────────
 function AgriHero() {
   return (
-    <section className="mx-auto max-w-4xl px-6" style={{ paddingTop: "7rem", paddingBottom: "4rem" }}>
+    <section className="mx-auto max-w-4xl px-6" style={{ paddingTop: "5rem", paddingBottom: "4rem" }}>
       <div className="reveal max-w-2xl">
         <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/60 px-3 py-1.5 text-xs text-foreground" style={{ marginBottom: "2rem" }}>
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-bright animate-pulse" />
           Direct from the Faculty of Agriculture farms
         </div>
-        <h1 className="text-4xl sm:text-5xl font-display font-bold tracking-tight" style={{ lineHeight: "1.25" }}>
+        <h1 className="text-3xl sm:text-5xl font-display font-bold tracking-tight" style={{ lineHeight: "1.25" }}>
           Farm-fresh produce, <span className="text-gradient-emerald">straight to campus.</span>
         </h1>
-        <p className="max-w-xl text-base text-muted-foreground leading-relaxed" style={{ marginTop: "1.75rem", marginBottom: "2.5rem" }}>
+        <p className="max-w-2xl text-base text-muted-foreground leading-relaxed" style={{ marginTop: "1.75rem",  }}>
           Fish, livestock and crops raised and harvested by FUD's own Faculty of Agriculture departments — no middlemen, just the farm.
         </p>
       </div>
@@ -1625,7 +1625,7 @@ function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast 
   };
 
   return (
-    <section className="mx-auto max-w-4xl px-6 py-16">
+   <section className="mx-auto max-w-4xl px-6 pt-24 pb-16">
       <div className="reveal flex items-start justify-between gap-4 mb-8 flex-wrap">
         <div>
           <div className="text-[10px] uppercase tracking-[0.18em] text-emerald-bright mb-2">Faculty of Agriculture</div>
