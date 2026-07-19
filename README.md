@@ -1,4 +1,4 @@
-# FudHub (fudhub.ng)
+# Fud Hub 
 
 The digital campus ecosystem and vendor directory for Federal University Dutse. 
 
