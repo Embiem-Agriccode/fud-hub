@@ -128,6 +128,40 @@ function LoginGate({ onUnlock }: { onUnlock: () => void }) {
 
 
 const BUSINESSES: Business[] = [
+ {
+    id: "3",
+    name: "Adorable Mimi’s collection",
+    category:  "Tech Plug",
+    initials: "AM",
+    description: "Student budget brand for affordable Aesthetics and lifestyle products like fashion accessories Here you get quality things at a very affordable price 🤝love you all ❤️🥰.",
+    tags: ["Fan", "Comb", "Hand fan", "Student Budget"],
+    whatsapp: "2349165335581",
+    accent: "from-pink-400/20 to-emerald-400/20",
+    logo: "/adorablelogo.jpg",
+    image: "/adorable1.jpg",
+    images: ["/adorable1.jpg", "/adorable2.jpg", "/adorable3.jpg" ],
+    verified: false,
+    deal: false,
+    verifiedSales: [
+      { id: "am-vs1", image: "adorablerep1.jpg" },
+      { id: "am-vs2", image: "adorablerep1.jpg" },
+      { id: "am-vs3", image: "adorablerep3.jpg" },
+      { id: "am-vs4", image: "adorablerep4.jpg" },
+    ],
+  },
+   {
+    id: "15",
+    name: "LOVIA COLLECTIONS",
+    category: "Campus Drip",
+    initials: "LC",
+    description: "We specialize in quality, comfortable, and fashionable footwear for men, women, and kids. Our products are durable, affordable, and perfect for everyday wear.",
+    tags: ["Footwear", "Shoes", "Men", "Women", "Boot"],
+    whatsapp: "2348029943729",
+    accent: "from-cyan-400/25 to-emerald-400/15",
+    logo: "lovialogo.jpg",
+    image: "/lovia1.jpg",
+    images: ["/lovia1.jpg", "/lovia2.jpg", "/lovia3.jpg", "/lovia4.jpg"],
+  },
   {
     id: "11",
     name: "NANZZ_LUXURY",
