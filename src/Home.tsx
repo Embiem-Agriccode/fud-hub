@@ -128,10 +128,10 @@ function LoginGate({ onUnlock }: { onUnlock: () => void }) {
 
 
 const BUSINESSES: Business[] = [
- {
-    id: "3",
+  {
+    id: "1",
     name: "Adorable Mimi’s collection",
-    category:  "Tech Plug",
+    category:"Tech Plug",
     initials: "AM",
     description: "Student budget brand for affordable Aesthetics and lifestyle products like fashion accessories Here you get quality things at a very affordable price 🤝love you all ❤️🥰.",
     tags: ["Fan", "Comb", "Hand fan", "Student Budget"],
@@ -140,7 +140,7 @@ const BUSINESSES: Business[] = [
     logo: "/adorablelogo.jpg",
     image: "/adorable1.jpg",
     images: ["/adorable1.jpg", "/adorable2.jpg", "/adorable3.jpg" ],
-    verified: false,
+    verified: true,
     deal: false,
     verifiedSales: [
       { id: "am-vs1", image: "adorablerep1.jpg" },
@@ -148,9 +148,9 @@ const BUSINESSES: Business[] = [
       { id: "am-vs3", image: "adorablerep3.jpg" },
       { id: "am-vs4", image: "adorablerep4.jpg" },
     ],
-  },
+   },
    {
-    id: "15",
+    id: "2",
     name: "LOVIA COLLECTIONS",
     category: "Campus Drip",
     initials: "LC",
@@ -161,9 +161,11 @@ const BUSINESSES: Business[] = [
     logo: "lovialogo.jpg",
     image: "/lovia1.jpg",
     images: ["/lovia1.jpg", "/lovia2.jpg", "/lovia3.jpg", "/lovia4.jpg"],
+   verified: true,
+    deal: false,
   },
   {
-    id: "11",
+    id: "3",
     name: "NANZZ_LUXURY",
     category: "Campus Drip",
     initials: "NL",
@@ -181,7 +183,7 @@ const BUSINESSES: Business[] = [
   ],
   },
   {
-    id: "1",
+    id: "4",
     name: "Everything Mata",
     category: "Campus Drip",
     initials: "EM",
@@ -199,7 +201,7 @@ const BUSINESSES: Business[] = [
     ],
   },
   {
-    id: "4",
+    id: "5",
     name: "Maroonette Creates",
     category: "Home & Life",
     initials: "MC",
@@ -215,7 +217,7 @@ const BUSINESSES: Business[] = [
     dealLabel: "20% Off",
   },
   {
-    id: "7",
+    id: "6",
     name: "Dizzorh.inc",
     category: "Home & Life",
     initials: "DI",
@@ -230,7 +232,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "3",
+    id: "7",
     name: "Bel's Closet",
     category: "Campus Drip",
     initials: "BC",
@@ -248,7 +250,7 @@ const BUSINESSES: Business[] = [
     ],
   },
   {
-    id: "5",
+    id: "8",
     name: "Pretty Knot",
     category: "Home & Life",
     initials: "PK",
@@ -263,7 +265,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "2",
+    id: "9",
     name: "Shop with Lola",
     category: "Campus Drip",
     initials: "SL",
@@ -278,7 +280,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "6",
+    id: "10",
     name: "Timas Delight",
     category: "Uni Eats",
     initials: "TD",
@@ -295,7 +297,7 @@ const BUSINESSES: Business[] = [
 
   },
   {
-    id: "8",
+    id: "11",
     name: "Jossy's Empire",
     category: "Campus Drip",
     initials: "JE",
@@ -310,7 +312,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "30",
+    id: "12",
     name: "GADGETS AND ACCESSORIES BY NONSO",
     category: "Tech Plug",
     initials: "FI",
@@ -324,7 +326,7 @@ const BUSINESSES: Business[] = [
     verified: true,
   },
   {
-    id: "36",
+    id: "13",
     name: "Mairalicious Food",
     category: "Uni Eats",
     initials: "ST",
@@ -339,7 +341,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "9",
+    id: "14",
     name: "10 Digit Integrated Service",
     category: "Uni Eats",
     initials: "DIS",
@@ -354,7 +356,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "10",
+    id: "15",
     name: "Deerjah Leeyu's",
     category: "Campus Drip",
     initials: "DI",
@@ -369,7 +371,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "43",
+    id: "16",
     name: "Shaffy's Treats",
     category: "Uni Eats",
     initials: "ST",
@@ -384,7 +386,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "12",
+    id: "17",
     name: "KHADI BRAINDS & MORE",
     category: "Campus Drip",
     initials: "KB",
@@ -397,7 +399,7 @@ const BUSINESSES: Business[] = [
     images: ["/khadi1.jpeg", "/khadi12.jpeg", "/khadi4.jpeg", "/khadi11.jpeg", "/khadi6.jpeg", "/khadi9.jpeg"],
   },
   {
-    id: "13",
+    id: "18",
     name: "A.L.M OTAKU WEARS",
     category: "Campus Drip",
     initials: "AO",
@@ -410,7 +412,7 @@ const BUSINESSES: Business[] = [
     images: ["/zaki2.jpeg", "/zaki12.jpeg", "/zaki3.jpeg", "/zaki4.jpeg", "/zaki5.jpeg", "/zaki6.jpeg", "/zaki7.jpeg", "/zaki8.jpeg", "/zaki9.jpeg", "/zaki10.jpeg", "/zaki11.jpeg", "/zaki12.jpeg"],
   },
   {
-    id: "14",
+    id: "19",
     name: "DRIP WITH KEL",
     category: "Campus Drip",
     initials: "DK",
@@ -424,7 +426,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
  {
-    id: "59",
+    id: "20",
     name: "KHALCARE DATAPLUG",
     category: "Data & Airtime",
     initials: "KD",
@@ -437,7 +439,7 @@ const BUSINESSES: Business[] = [
     images: ["/khalcare1.jpeg", "/khalcare2.jpeg", "/khalcare3.jpeg", "/khalcare4.jpeg"],
   },
   {
-    id: "15",
+    id: "21",
     name: "MATASHI",
     category: "Campus Drip",
     initials: "MT",
@@ -450,7 +452,7 @@ const BUSINESSES: Business[] = [
     images: ["/matashi3.jpg", "/matashi4.jpg", "/matashi5.jpg", "/matashi6.jpg"],
   },
   {
-    id: "16",
+    id: "22",
     name: "Glow City",
     category: "Campus Drip",
     initials: "GC",
@@ -463,7 +465,7 @@ const BUSINESSES: Business[] = [
     images: ["/glow2.jpg", "/glow3.jpg", "/glow4.jpg", "/glow5.jpg"],
   },
   {
-    id: "17",
+    id: "23",
     name: "Syms Souvenirs",
     category: "Home & Life",
     initials: "SS",
@@ -476,7 +478,7 @@ const BUSINESSES: Business[] = [
     images: ["/syms1.jpg", "/syms3.jpg", "/syms2.jpg", "/syms4.jpg"],
   },
   {
-    id: "18",
+    id: "24",
     name: "HAZO's Collection",
     category: "Campus Drip",
     initials: "HZ",
@@ -489,7 +491,7 @@ const BUSINESSES: Business[] = [
     images: ["/hazo1.jpeg", "/hazo2.jpeg", "/hazo3.jpeg", "/hazo4.jpeg"],
   },
   {
-    id: "19",
+    id: "25",
     name: "BKD Art & General Printing",
     category: "Print & Copy",
     initials: "BKD",
@@ -503,7 +505,7 @@ const BUSINESSES: Business[] = [
     verified: true,
   },
   {
-    id: "20",
+    id: "26",
     name: "Alaminu Bookshop",
     category: "Print & Copy",
     initials: "AB",
@@ -516,7 +518,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "21",
+    id: "27",
     name: "Ibro Print",
     category: "Print & Copy",
     initials: "IP",
@@ -531,7 +533,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "22",
+    id: "28",
     name: "Yusuf Dankuda Communication",
     category: "Tech Plug",
     initials: "YDC",
@@ -544,7 +546,7 @@ const BUSINESSES: Business[] = [
     verified: true,
   },
   {
-    id: "23",
+    id: "29",
     name: "Dedon Photo Studio",
     category: "Print & Copy",
     initials: "DS",
@@ -556,7 +558,7 @@ const BUSINESSES: Business[] = [
     images: ["/dedonshop.jpg"],
   },
   {
-    id: "24",
+    id: "30",
     name: "Taves Kitchen",
     category: "Uni Eats",
     initials: "TK",
@@ -569,7 +571,7 @@ const BUSINESSES: Business[] = [
     images: ["/tawes1.jpg", "/tawes2.jpg", "/tawes3.jpg", "/tawes4.jpg", "/tawes5.jpg"],
   },
   {
-    id: "25",
+    id: "31",
     name: "High Speed Enterprises",
     category: "Print & Copy",
     initials: "HS",
@@ -582,7 +584,7 @@ const BUSINESSES: Business[] = [
     verified: true,
   },
   {
-    id: "26",
+    id: "32",
     name: "Dynamic Laundry Service",
     category: "Laundry",
     initials: "DL",
@@ -594,7 +596,7 @@ const BUSINESSES: Business[] = [
     images: ["/dynamic1.jpg", "/dynamic2.jpg", "/dynamic3.jpg", "/dynamic4.jpg"],
   },
   {
-    id: "27",
+    id: "33",
     name: "Fresh Garri",
     category: "Uni Eats",
     initials: "FG",
@@ -607,7 +609,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "28",
+    id: "34",
     name: "Hauwerh's Delicacy",
     category: "Uni Eats",
     initials: "HD",
@@ -620,7 +622,7 @@ const BUSINESSES: Business[] = [
     images: ["/hauwher1.jpg", "/hauwher2.jpg", "/hauwher3.jpg"],
   },
   {
-    id: "29",
+    id: "35",
     name: "BURSTING FLAVORS",
     category: "Uni Eats",
     initials: "BF",
@@ -632,7 +634,7 @@ const BUSINESSES: Business[] = [
     images: ["/burstinglogo.jpeg"],
   },
   {
-    id: "42",
+    id: "36",
     name: "feyy's iStore",
     category: "Tech Plug",
     initials: "FI",
@@ -646,7 +648,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "31",
+    id: "37",
     name: "Marvie's Collection",
     category: "Campus Drip",
     initials: "MC",
@@ -659,7 +661,7 @@ const BUSINESSES: Business[] = [
     images: ["/marvies1.jpeg", "/marvies2.jpeg", "/marvies3.jpeg", "/marvies4.jpeg"],
   },
   {
-    id: "32",
+    id: "38",
     name: "Zee Arewa Treats & Treasures",
     category: "Uni Eats",
     initials: "ZT",
@@ -672,7 +674,7 @@ const BUSINESSES: Business[] = [
     images: ["/zee11.jpeg", "/zee12.jpeg", "/zee13.jpeg", "/zee14.jpeg", "/zee15.jpeg", "/zee1.jpeg", "/zee2.jpeg", "/zee3.jpeg"],
   },
   {
-    id: "33",
+    id: "39",
     name: "CJ's Cut ✂️",
     category: "Fresh Cuts",
     initials: "CC",
@@ -685,7 +687,7 @@ const BUSINESSES: Business[] = [
     images: ["/cj1.jpeg"],
   },
   {
-    id: "34",
+    id: "40",
     name: "Skay Production",
     category: "Print & Copy",
     initials: "SP",
@@ -697,7 +699,7 @@ const BUSINESSES: Business[] = [
     images: ["/skaylogo.jpeg"],
   },
   {
-    id: "35",
+    id: "41",
     name: "Nickolas",
     category: "Fresh Cuts",
     initials: "SB",
@@ -710,7 +712,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "37",
+    id: "42",
     name: "Jenny Girly Essentials",
     category: "Campus Drip",
     initials: "JG",
@@ -723,7 +725,7 @@ const BUSINESSES: Business[] = [
     images: ["/jennygirl1.jpeg", "/jennygirl3.jpeg", "/jennygirl2.jpeg"],
   },
   {
-    id: "38",
+    id: "43",
     name: "AY Tech",
     category: "Print & Copy",
     initials: "AY",
@@ -736,7 +738,7 @@ const BUSINESSES: Business[] = [
     images: ["/alameenyahya1.jpeg"],
   },
   {
-    id: "39",
+    id: "44",
     name: "Isha",
     category: "Uni Eats",
     initials: "I",
@@ -750,7 +752,7 @@ const BUSINESSES: Business[] = [
     deal: true,
   },
   {
-    id: "40",
+    id: "45",
     name: "Habbie Fit",
     category: "Campus Drip",
     initials: "HF",
@@ -763,7 +765,7 @@ const BUSINESSES: Business[] = [
     images: ["/habbie1.jpeg", "/habbie2.jpeg", "/habbie3.jpeg"],
   },
   {
-    id: "41",
+    id: "46",
     name: "MI Clothing",
     category: "Campus Drip",
     initials: "MC",
