@@ -129,6 +129,21 @@ function LoginGate({ onUnlock }: { onUnlock: () => void }) {
 
 const BUSINESSES: Business[] = [
   {
+    id: "47",
+    name: "Scents Stories by BintiHafsat",
+    category: "Campus Drip",
+    initials: "SS",
+    description: "Selling all kinds of perfumes together with bodycorn.",
+    tags: ["Gift", "Unisex", "Scents", "Fragrance", "Perfume",],
+    whatsapp: "2348137878894",
+    accent: "from-rose-300/20 to-emerald-400/15",
+    logo: "/scentslogo.jpeg",
+    image: "/scents1.jpeg",
+    images: ["/scents1.jpeg", "/scents2.jpeg", "/scents5.jpeg", "/scents4.jpeg", "/scents6.jpeg", "/scents7.jpeg", "/scents8.jpeg", "/scents9.jpeg"],
+    deal: false,
+    verified: true,
+  },
+  {
     id: "1",
     name: "Adorable Mimi’s collection",
     category:"Tech Plug",
@@ -214,7 +229,6 @@ const BUSINESSES: Business[] = [
     images: ["/maroonette1.jpg", "/maroonette2.jpg", "/maroonette3.jpg", "/maroonette4.jpg", "/maroonette5.jpg", "/maroonette6.jpg", "/maroonette7.jpg"],
     verified: true,
     deal: true,
-    dealLabel: "20% Off",
   },
   {
     id: "6",
