@@ -130,7 +130,7 @@ function LoginGate({ onUnlock }: { onUnlock: () => void }) {
 const BUSINESSES: Business[] = [
   {
     id: "47",
-    name: "Scents Stories by BintiHafsat",
+    name: "Scents Stories by Bintuhafsat",
     category: "Campus Drip",
     initials: "SS",
     description: "Selling all kinds of perfumes together with bodycorn.",
