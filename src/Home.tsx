@@ -165,7 +165,7 @@ const BUSINESSES: Business[] = [
     name: "Adorable Mimi’s collection",
     category:"Tech Plug",
     initials: "AM",
-    description: "Student budget brand for affordable Aesthetics and lifestyle products like fashion accessories Here you get quality things at a very affordable price 🤝love you all ❤️🥰.",
+    description: "Hi lovelies welcome to adorable Mimi’s collection💙 we sell mini hand fans, hair dryer,right light Surprise package also available dm with ur budget let talk business 🥰",
     tags: ["Fan", "Comb", "Hand fan", "Student Budget"],
     whatsapp: "2349165335581",
     accent: "from-pink-400/20 to-emerald-400/20",
