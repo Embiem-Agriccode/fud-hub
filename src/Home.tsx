@@ -1412,21 +1412,20 @@ function Card({ business, index, onOpen, onShowTestimonials }: { business: Busin
   );
 }
 // ── Off-K Lodges ──────────────────────────────────────────────────────────────
-type LodgeImage = {
-  url: string;
-  label: string;
-};
+type LodgeImage = { url: string; label: string };
  
 type Lodge = {
   id: string;
   name: string;
   location: string;
+  landmark: string;
   pricePerYear: number;
   rooms: string;
   amenities: string[];
   images: LodgeImage[];
   whatsapp: string;
   available: boolean;
+  agentVerified?: boolean;
 };
  
 const LODGES: Lodge[] = [
@@ -1434,275 +1433,371 @@ const LODGES: Lodge[] = [
     id: "lodge-1",
     name: "Zaranda Lodge",
     location: "Danbare, behind FUD main gate",
+    landmark: "2 min walk to FUD main gate",
     pricePerYear: 80000,
     rooms: "Self-contain",
-    amenities: ["24hr Security", "Borehole Water", "NEPA Light", "Tiled Rooms"],
+    amenities: ["24hr Security", "Borehole Water", "NEPA Light", "Tiled Floors", "POP Ceiling", "Prepaid Meter"],
     images: [
       { url: "/lodges/zaranda-room.webp", label: "Room" },
-      { url: "/lodges/zaranda-toilet.webp", label: "Toilet" },
-      { url: "/lodges/zaranda-compound.webp", label: "Compound" },
+      { url: "/lodges/zaranda-toilet.webp", label: "WC" },
+      { url: "/lodges/zaranda-compound.webp", label: "Yard" },
       { url: "/lodges/zaranda-gate.webp", label: "Gate" },
     ],
     whatsapp: "2347044389234",
     available: true,
+    agentVerified: true,
   },
   {
     id: "lodge-2",
     name: "Kwankwaso Lodge",
     location: "Danbare, 5 mins walk to FUD gate",
+    landmark: "Behind Access Bank, Danbare",
     pricePerYear: 65000,
     rooms: "Single Room",
-    amenities: ["Borehole Water", "Solar Light", "Gate Security", "Shared Kitchen"],
+    amenities: ["Borehole Water", "Solar Light", "Gate Security", "Shared Kitchen", "Tiled Floors"],
     images: [
       { url: "/lodges/kwankwaso-room.webp", label: "Room" },
       { url: "/lodges/kwankwaso-kitchen.webp", label: "Kitchen" },
-      { url: "/lodges/kwankwaso-toilet.webp", label: "Toilet" },
-      { url: "/lodges/kwankwaso-compound.webp", label: "Compound" },
+      { url: "/lodges/kwankwaso-toilet.webp", label: "WC" },
+      { url: "/lodges/kwankwaso-compound.webp", label: "Yard" },
     ],
     whatsapp: "2347044389234",
     available: true,
+    agentVerified: true,
   },
   {
     id: "lodge-3",
     name: "Unity Hostel",
     location: "Magama, FUD road",
+    landmark: "Opposite FUD second gate",
     pricePerYear: 55000,
     rooms: "Single Room",
     amenities: ["NEPA Light", "Borehole Water", "Fence & Gate"],
     images: [
       { url: "/lodges/unity-room.webp", label: "Room" },
-      { url: "/lodges/unity-toilet.webp", label: "Toilet" },
-      { url: "/lodges/unity-compound.webp", label: "Compound" },
+      { url: "/lodges/unity-toilet.webp", label: "WC" },
+      { url: "/lodges/unity-compound.webp", label: "Yard" },
     ],
     whatsapp: "2347044389234",
     available: false,
+    agentVerified: false,
   },
   {
     id: "lodge-4",
     name: "Excellence Lodge",
     location: "Danbare, behind Zenith Bank",
+    landmark: "100m from Zenith Bank, Danbare",
     pricePerYear: 95000,
     rooms: "Self-contain",
-    amenities: ["24hr Security", "Constant Water", "NEPA + Solar", "CCTV", "Tiled & POP"],
+    amenities: ["24hr Security", "Constant Water", "NEPA + Solar Backup", "CCTV", "Tiled & POP", "Parking Space", "Prepaid Meter"],
     images: [
       { url: "/lodges/excellence-room.webp", label: "Room" },
-      { url: "/lodges/excellence-toilet.webp", label: "Toilet" },
+      { url: "/lodges/excellence-toilet.webp", label: "WC" },
       { url: "/lodges/excellence-kitchen.webp", label: "Kitchen" },
-      { url: "/lodges/excellence-compound.webp", label: "Compound" },
+      { url: "/lodges/excellence-compound.webp", label: "Yard" },
       { url: "/lodges/excellence-gate.webp", label: "Gate" },
     ],
     whatsapp: "2347044389234",
     available: true,
+    agentVerified: true,
   },
   {
     id: "lodge-5",
     name: "Al-Amin Lodge",
     location: "Magama, near FUD junction",
+    landmark: "By FUD junction roundabout",
     pricePerYear: 48000,
     rooms: "Mini Flat",
     amenities: ["Borehole Water", "Gate Security", "Prepaid Meter"],
     images: [
       { url: "/lodges/alamin-room.webp", label: "Room" },
-      { url: "/lodges/alamin-toilet.webp", label: "Toilet" },
-      { url: "/lodges/alamin-compound.webp", label: "Compound" },
+      { url: "/lodges/alamin-toilet.webp", label: "WC" },
+      { url: "/lodges/alamin-compound.webp", label: "Yard" },
     ],
     whatsapp: "2347044389234",
     available: true,
+    agentVerified: false,
   },
   {
     id: "lodge-6",
     name: "Landmark Hostel",
     location: "Danbare, 2 mins to FUD",
+    landmark: "Beside First Bank, Danbare",
     pricePerYear: 72000,
     rooms: "Self-contain",
-    amenities: ["24hr Security", "Borehole Water", "Solar Backup", "Tiled Rooms", "Parking"],
+    amenities: ["24hr Security", "Borehole Water", "Solar Backup", "Tiled Rooms", "Parking Space"],
     images: [
       { url: "/lodges/landmark-room.webp", label: "Room" },
-      { url: "/lodges/landmark-toilet.webp", label: "Toilet" },
-      { url: "/lodges/landmark-compound.webp", label: "Compound" },
+      { url: "/lodges/landmark-toilet.webp", label: "WC" },
+      { url: "/lodges/landmark-compound.webp", label: "Yard" },
       { url: "/lodges/landmark-parking.webp", label: "Parking" },
     ],
     whatsapp: "2347044389234",
     available: true,
+    agentVerified: true,
   },
 ];
  
-function LodgeCard({ lodge, index }: { lodge: Lodge; index: number }) {
+// ── Lodge Detail Modal ────────────────────────────────────────────────────────
+function LodgeModal({ lodge, onClose }: { lodge: Lodge; onClose: () => void }) {
   const [activeImg, setActiveImg] = useState(0);
+ 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+ 
   const waText = encodeURIComponent(
     `Hi! I saw ${lodge.name} on FUD Hub. I'd like to request a video tour and get more details about availability and pricing.`
   );
   const waHref = `https://wa.me/${lodge.whatsapp}?text=${waText}`;
  
   return (
+    <div
+      style={{ position: "fixed", inset: 0, zIndex: 250, background: "rgba(0,0,0,0.88)", backdropFilter: "blur(8px)", display: "flex", alignItems: "flex-end", justifyContent: "center", animation: "fadeIn 0.2s ease" }}
+      onClick={onClose}
+    >
+      <div
+        style={{ width: "100%", maxWidth: 480, margin: "0 auto", background: "oklch(0.16 0.018 250)", borderRadius: "24px 24px 0 0", border: "1px solid rgba(255,255,255,0.1)", overflow: "hidden", animation: "slideUp 0.35s cubic-bezier(0.2,0.8,0.2,1)", maxHeight: "92vh", display: "flex", flexDirection: "column" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* ── Image gallery ── */}
+        <div style={{ position: "relative", aspectRatio: "4/3", flexShrink: 0, background: "oklch(0.12 0.015 250)", overflow: "hidden" }}>
+          <img
+            key={activeImg}
+            src={lodge.images[activeImg].url}
+            alt={`${lodge.name} — ${lodge.images[activeImg].label}`}
+            style={{ width: "100%", height: "100%", objectFit: "cover", animation: "fadeIn 0.22s ease" }}
+            onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0"; }}
+          />
+          {/* Gradient */}
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 50%)" }} />
+ 
+          {/* Close button */}
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            style={{ position: "absolute", top: 14, right: 14, width: 34, height: 34, borderRadius: "50%", background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.2)", color: "#fff", fontSize: "1rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(4px)", zIndex: 1 }}
+          >✕</button>
+ 
+          {/* Available badge */}
+          <span style={{ position: "absolute", top: 14, left: 14, fontSize: "0.65rem", fontWeight: 700, padding: "3px 10px", borderRadius: 999, background: lodge.available ? "rgba(16,185,129,0.92)" : "rgba(239,68,68,0.92)", color: "#fff", backdropFilter: "blur(4px)" }}>
+            {lodge.available ? "Available" : "Currently Full"}
+          </span>
+ 
+          {/* Image counter */}
+          <span style={{ position: "absolute", bottom: 46, right: 12, fontSize: "0.6rem", color: "rgba(255,255,255,0.7)", fontWeight: 600 }}>
+            {activeImg + 1}/{lodge.images.length}
+          </span>
+ 
+          {/* Overlay pill row */}
+          <div style={{ position: "absolute", bottom: 12, left: 12, right: 12, display: "flex", gap: 5 }}>
+            {lodge.images.map((img, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveImg(i)}
+                style={{
+                  padding: "4px 11px", borderRadius: 999, fontSize: "0.65rem", fontWeight: 700,
+                  border: i === activeImg ? "1.5px solid oklch(0.72 0.21 152)" : "1.5px solid rgba(255,255,255,0.3)",
+                  background: i === activeImg ? "oklch(0.72 0.21 152)" : "rgba(0,0,0,0.5)",
+                  color: i === activeImg ? "oklch(0.12 0.02 160)" : "#fff",
+                  cursor: "pointer", backdropFilter: "blur(4px)",
+                  transition: "all 0.15s ease",
+                }}
+              >
+                {img.label}
+              </button>
+            ))}
+          </div>
+        </div>
+ 
+        {/* ── Scrollable body ── */}
+        <div style={{ overflowY: "auto", flex: 1, minHeight: 0 }}>
+          <div style={{ padding: "1.25rem 1.25rem 0" }}>
+ 
+            {/* Name + verified badge */}
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10, marginBottom: 6 }}>
+              <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.3rem", color: "oklch(0.97 0.01 180)", lineHeight: 1.25, margin: 0 }}>
+                {lodge.name}
+              </h2>
+              {lodge.agentVerified && (
+                <span style={{ fontSize: "0.6rem", fontWeight: 700, color: "var(--emerald-bright)", background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.35)", borderRadius: 999, padding: "3px 8px", whiteSpace: "nowrap", flexShrink: 0 }}>
+                  🔒 Verified Agent
+                </span>
+              )}
+            </div>
+ 
+            {/* Room type */}
+            <span style={{ fontSize: "0.72rem", fontWeight: 600, padding: "3px 10px", borderRadius: 999, background: "oklch(0.22 0.022 250)", color: "oklch(0.75 0.02 250)" }}>
+              {lodge.rooms}
+            </span>
+ 
+            {/* Location */}
+            <div style={{ marginTop: "1rem", padding: "0.75rem", borderRadius: 12, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+              <div style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "oklch(0.55 0.02 250)", marginBottom: 4 }}>Location</div>
+              <div style={{ fontSize: "0.875rem", color: "oklch(0.9 0.01 180)", fontWeight: 500 }}>📍 {lodge.location}</div>
+              <div style={{ fontSize: "0.75rem", color: "oklch(0.62 0.02 250)", marginTop: 3 }}>🗺 {lodge.landmark}</div>
+            </div>
+ 
+            {/* Price */}
+            <div style={{ marginTop: "1rem", display: "flex", alignItems: "baseline", gap: 6 }}>
+              <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.6rem", color: "var(--emerald-bright)" }}>
+                ₦{lodge.pricePerYear.toLocaleString()}
+              </span>
+              <span style={{ fontSize: "0.8rem", color: "oklch(0.62 0.02 250)" }}>per year</span>
+            </div>
+ 
+            {/* Amenities */}
+            <div style={{ marginTop: "1rem" }}>
+              <div style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "oklch(0.55 0.02 250)", marginBottom: 8 }}>Amenities</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                {lodge.amenities.map((a) => (
+                  <span key={a} style={{ fontSize: "0.75rem", padding: "4px 10px", borderRadius: 999, background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.25)", color: "var(--emerald-bright)" }}>
+                    ✓ {a}
+                  </span>
+                ))}
+              </div>
+            </div>
+ 
+            <div style={{ height: "5rem" }} />
+          </div>
+        </div>
+ 
+        {/* ── Sticky CTA ── */}
+        <div style={{ padding: "0.9rem 1.25rem 1.25rem", background: "oklch(0.16 0.018 250)", borderTop: "1px solid rgba(255,255,255,0.07)", flexShrink: 0 }}>
+          {lodge.available ? (
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, width: "100%", padding: "0.95rem", borderRadius: 14, background: "oklch(0.72 0.21 152)", color: "oklch(0.12 0.02 160)", fontWeight: 700, fontSize: "0.95rem", textDecoration: "none", boxShadow: "0 0 30px -5px oklch(0.72 0.21 152)" }}
+            >
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+              💬 Request Video Tour on WhatsApp
+            </a>
+          ) : (
+            <div style={{ width: "100%", padding: "0.95rem", borderRadius: 14, background: "rgba(255,255,255,0.04)", color: "oklch(0.5 0.02 250)", fontWeight: 600, fontSize: "0.9rem", textAlign: "center" }}>
+              Currently Full — Check Back Soon
+            </div>
+          )}
+        </div>
+      </div>
+      <style>{`@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}`}</style>
+    </div>
+  );
+}
+ 
+// ── Compact Lodge Card (2-col) ────────────────────────────────────────────────
+function LodgeCard({ lodge, index, onOpen }: { lodge: Lodge; index: number; onOpen: () => void }) {
+  const [activeImg, setActiveImg] = useState(0);
+ 
+  return (
     <article
       className="reveal group relative glass-card rounded-2xl overflow-hidden flex flex-col"
-      style={{ transitionDelay: `${(index % 6) * 50}ms`, transition: "all 0.3s ease" }}
+      style={{ transitionDelay: `${(index % 6) * 50}ms`, cursor: "pointer" }}
+      onClick={onOpen}
     >
-      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-amber-400/10 to-emerald-400/10 pointer-events-none" />
- 
-      {/* ── Main image ─────────────────────────────────── */}
-      <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden", background: "oklch(0.15 0.015 250)", flexShrink: 0 }}>
+      {/* Image + overlay pills */}
+      <div
+        style={{ position: "relative", aspectRatio: "16/9", background: "oklch(0.13 0.015 250)", overflow: "hidden", flexShrink: 0 }}
+      >
         <img
           key={activeImg}
           src={lodge.images[activeImg].url}
           alt={`${lodge.name} — ${lodge.images[activeImg].label}`}
           loading="lazy"
-          onError={(e) => {
-            const el = e.currentTarget as HTMLImageElement;
-            el.style.display = "none";
-            (el.nextElementSibling as HTMLElement | null)?.style.setProperty("display", "flex");
-          }}
-          style={{ width: "100%", height: "100%", objectFit: "cover", animation: "fadeIn 0.25s ease" }}
+          onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0"; }}
+          style={{ width: "100%", height: "100%", objectFit: "cover", animation: "fadeIn 0.22s ease" }}
+          className="transition-transform duration-500 group-hover:scale-105"
         />
-        {/* Fallback placeholder shown when image fails */}
-        <div style={{ display: "none", position: "absolute", inset: 0, alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 6, color: "oklch(0.45 0.02 250)" }}>
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4"><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="9" cy="11" r="2" /><path d="m21 17-5-5-8 8" /></svg>
-          <span style={{ fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.1em" }}>No Photo</span>
-        </div>
- 
-        {/* Gradient overlay */}
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 55%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.78) 0%, transparent 55%)" }} />
  
         {/* Available badge */}
-        <span style={{ position: "absolute", top: 10, right: 10, fontSize: "0.62rem", fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: lodge.available ? "rgba(16,185,129,0.92)" : "rgba(239,68,68,0.92)", color: "#fff", backdropFilter: "blur(4px)" }}>
+        <span style={{ position: "absolute", top: 6, right: 6, fontSize: "0.55rem", fontWeight: 700, padding: "2px 6px", borderRadius: 999, background: lodge.available ? "rgba(16,185,129,0.92)" : "rgba(239,68,68,0.92)", color: "#fff" }}>
           {lodge.available ? "Available" : "Full"}
         </span>
  
-        {/* Active image label */}
-        <span style={{ position: "absolute", bottom: 8, left: 10, fontSize: "0.65rem", fontWeight: 700, padding: "3px 8px", borderRadius: 6, background: "rgba(0,0,0,0.65)", color: "#fff", backdropFilter: "blur(4px)", letterSpacing: "0.04em" }}>
-          {lodge.images[activeImg].label}
-        </span>
- 
-        {/* Image count */}
-        {lodge.images.length > 1 && (
-          <span style={{ position: "absolute", bottom: 8, right: 10, fontSize: "0.6rem", color: "rgba(255,255,255,0.75)", fontWeight: 600 }}>
-            {activeImg + 1}/{lodge.images.length}
-          </span>
-        )}
-      </div>
- 
-      {/* ── Thumbnail strip ────────────────────────────── */}
-      {lodge.images.length > 1 && (
-        <div style={{ display: "flex", gap: 5, padding: "8px 10px", background: "oklch(0.14 0.015 250)", overflowX: "auto", scrollbarWidth: "none", flexShrink: 0 }}>
+        {/* Pill row */}
+        <div
+          style={{ position: "absolute", bottom: 7, left: 7, right: 7, display: "flex", gap: 3, overflow: "hidden" }}
+          onClick={(e) => e.stopPropagation()}
+        >
           {lodge.images.map((img, i) => (
             <button
               key={i}
-              onClick={() => setActiveImg(i)}
+              onClick={(e) => { e.stopPropagation(); setActiveImg(i); }}
               style={{
-                position: "relative",
-                width: 52,
-                height: 44,
-                borderRadius: 7,
-                overflow: "hidden",
-                flexShrink: 0,
-                border: i === activeImg ? "2px solid oklch(0.72 0.21 152)" : "2px solid transparent",
-                padding: 0,
-                cursor: "pointer",
-                background: "oklch(0.18 0.02 250)",
-                boxShadow: i === activeImg ? "0 0 10px -2px oklch(0.72 0.21 152)" : "none",
-                transition: "border-color 0.15s, box-shadow 0.15s",
-              }}
-              aria-label={`View ${img.label}`}
-            >
-              <img
-                src={img.url}
-                alt={img.label}
-                loading="lazy"
-                onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0"; }}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
-              {/* Label overlay on thumbnail */}
-              <span style={{
-                position: "absolute", bottom: 0, left: 0, right: 0,
-                fontSize: "0.5rem", fontWeight: 700, textAlign: "center",
-                padding: "2px 2px",
-                background: i === activeImg ? "oklch(0.72 0.21 152)" : "rgba(0,0,0,0.65)",
+                padding: "3px 6px", borderRadius: 999, fontSize: "0.55rem", fontWeight: 700,
+                border: i === activeImg ? "1.5px solid oklch(0.72 0.21 152)" : "1.5px solid rgba(255,255,255,0.3)",
+                background: i === activeImg ? "oklch(0.72 0.21 152)" : "rgba(0,0,0,0.52)",
                 color: i === activeImg ? "oklch(0.12 0.02 160)" : "#fff",
-                letterSpacing: "0.03em",
-                lineHeight: 1.3,
-              }}>
-                {img.label}
-              </span>
+                cursor: "pointer", flexShrink: 0, backdropFilter: "blur(4px)",
+              }}
+            >
+              {img.label}
             </button>
           ))}
-          <style>{`div::-webkit-scrollbar{display:none}`}</style>
         </div>
-      )}
+      </div>
  
-      {/* ── Card body ──────────────────────────────────── */}
-      <div style={{ padding: "1rem 1.1rem", display: "flex", flexDirection: "column", flex: 1 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
-          <h3 className="font-display font-semibold" style={{ fontSize: "1rem", lineHeight: 1.3, color: "oklch(0.97 0.01 180)" }}>
+      {/* Card body */}
+      <div style={{ padding: "8px 10px 10px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 4 }}>
+          <span style={{ fontWeight: 600, fontSize: "0.72rem", color: "oklch(0.97 0.01 180)", lineHeight: 1.3 }}>
             {lodge.name}
-          </h3>
-          <span style={{ fontSize: "0.65rem", fontWeight: 600, padding: "3px 8px", borderRadius: 999, background: "oklch(0.22 0.022 250)", color: "oklch(0.75 0.02 250)", whiteSpace: "nowrap", flexShrink: 0 }}>
+          </span>
+          <span style={{ fontSize: "0.5rem", padding: "2px 5px", borderRadius: 999, background: "oklch(0.22 0.022 250)", color: "oklch(0.75 0.02 250)", whiteSpace: "nowrap", flexShrink: 0 }}>
             {lodge.rooms}
           </span>
         </div>
  
-        <p style={{ fontSize: "0.72rem", color: "oklch(0.6 0.02 250)", marginTop: 4 }}>📍 {lodge.location}</p>
+        <p style={{ fontSize: "0.58rem", color: "oklch(0.6 0.02 250)", margin: "2px 0 5px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+          📍 {lodge.location.split(",")[0]}
+        </p>
  
-        <div style={{ marginTop: 8, marginBottom: 8 }}>
-          <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.15rem", color: "var(--emerald-bright)" }}>
-            ₦{lodge.pricePerYear.toLocaleString()}
-          </span>
-          <span style={{ fontSize: "0.72rem", color: "oklch(0.62 0.02 250)", marginLeft: 3 }}>/yr</span>
-        </div>
- 
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: "0.9rem" }}>
-          {lodge.amenities.map((a) => (
-            <span key={a} style={{ fontSize: "0.65rem", padding: "3px 7px", borderRadius: 999, background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.25)", color: "var(--emerald-bright)" }}>
-              ✓ {a}
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 4 }}>
+          <div>
+            <span style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--emerald-bright)" }}>
+              ₦{lodge.pricePerYear >= 1000 ? `${lodge.pricePerYear / 1000}k` : lodge.pricePerYear}
             </span>
-          ))}
+            <span style={{ fontSize: "0.55rem", color: "oklch(0.62 0.02 250)", marginLeft: 2 }}>/yr</span>
+          </div>
+          <span style={{ fontSize: "0.55rem", color: "oklch(0.55 0.02 250)", fontWeight: 500 }}>Tap for details →</span>
         </div>
- 
-        <a
-          href={lodge.available ? waHref : undefined}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            marginTop: "auto",
-            display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
-            width: "100%", padding: "0.8rem",
-            borderRadius: 12,
-            background: lodge.available ? "oklch(0.72 0.21 152)" : "rgba(255,255,255,0.05)",
-            color: lodge.available ? "oklch(0.12 0.02 160)" : "oklch(0.5 0.02 250)",
-            fontWeight: 700, fontSize: "0.82rem",
-            textDecoration: "none",
-            cursor: lodge.available ? "pointer" : "default",
-            boxShadow: lodge.available ? "0 0 24px -6px oklch(0.72 0.21 152)" : "none",
-            pointerEvents: lodge.available ? "auto" : "none",
-          }}
-        >
-          {lodge.available ? (
-            <>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-              Request Video Tour on WhatsApp
-            </>
-          ) : "Currently Full"}
-        </a>
       </div>
     </article>
   );
 }
  
+// ── Lodge Grid ────────────────────────────────────────────────────────────────
 function LodgeGrid() {
+  const [selectedLodge, setSelectedLodge] = useState<Lodge | null>(null);
+ 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-12 sm:py-16">
-      <div style={{ marginBottom: "1.5rem" }}>
-        <h2 className="text-2xl font-display font-bold tracking-tight">Off-Campus Lodges</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Verified student housing near FUD — tap thumbnails to preview rooms, then request a WhatsApp video tour.
-        </p>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-        {LODGES.map((lodge, i) => (
-          <LodgeCard key={lodge.id} lodge={lodge} index={i} />
-        ))}
-      </div>
-    </section>
+    <>
+      <section className="mx-auto max-w-7xl px-6 py-12 sm:py-16">
+        <div style={{ marginBottom: "1.25rem" }}>
+          <h2 className="text-2xl font-display font-bold tracking-tight">Off-Campus Lodges</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Verified student housing near FUD — tap a card for full details and video tour.
+          </p>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "0.75rem" }}>
+          {LODGES.map((lodge, i) => (
+            <LodgeCard key={lodge.id} lodge={lodge} index={i} onOpen={() => setSelectedLodge(lodge)} />
+          ))}
+        </div>
+      </section>
+ 
+      {selectedLodge && (
+        <LodgeModal lodge={selectedLodge} onClose={() => setSelectedLodge(null)} />
+      )}
+    </>
   );
 }
  
