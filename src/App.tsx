@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Home";
 import PostDetail from "./PostDetail";
+import ComplaintsPage from "./ComplaintsPage";
 
 // If npm install react-router-dom hasn't been run yet in this project, do
 // that first — everything else here assumes it's available.
@@ -10,6 +11,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/post/:id" element={<PostDetail />} />
+        <Route path="/complaints" element={<ComplaintsPage />} />
       </Routes>
     </BrowserRouter>
   );

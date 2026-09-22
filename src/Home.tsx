@@ -5,7 +5,9 @@ import { CampusUpdates } from "./components/CampusUpdates";
 import type { Audience, Broadcast } from "./types";
 import { SubscribeModal } from "./components/SubscribeForm";
 import { AUDIENCE_OPTIONS } from "./types";
-
+import ReportIssueCTA from "./ReportIssueCTA";
+import ComplaintsManagementSection from "./ComplaintsManagementSection";
+import SUGComplaintForm from "./SUGComplaintForm";
 // NOTE ON SETUP
 // ─────────────────────────────────────────────────────────────────────────
 // Deep linking (fudhub.ng/post/:id) is handled entirely by PostDetail.tsx,
@@ -56,10 +58,10 @@ type AgriProduct = {
 
 type ToastTone = "success" | "error";
 type ToastItem = { id: number; message: string; tone: ToastTone };
-type Tab = "vendors" | "agri" | "management";
+type Tab = "vendors" | "agri" | "welfare";
 
 // ── Data ──────────────────────────────────────────────────────────────────────
-const CATEGORIES = ["All", "Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Laundry", "Home & Life", "Print & Copy", "Data & Airtime"] as const;
+const CATEGORIES = ["All",  "Off-K Lodges","Uni Eats", "Campus Drip", "Fresh Cuts", "Tech Plug", "Laundry", "Home & Life", "Print & Copy", "Data & Airtime"] as const;
 const DEPARTMENTS: Department[] = ["Fisheries", "Animal Science", "Crop Science"];
 
 // Faculty of Agriculture farm order line — update to the real farm desk number.
@@ -1145,35 +1147,57 @@ function VendorModal({ business, onClose, onShowTestimonials }: { business: Busi
     </div>
   );
 }
-
 // ── Nav ───────────────────────────────────────────────────────────────────────
-function Nav({ onSOS, onMenu, updatesCount, activeTab, onTab }: { onSOS: () => void; onMenu: () => void; updatesCount: number; activeTab: Tab; onTab: (t: Tab) => void }) {
+const ADMIN_PIN = "2468";
+
+function AdminPinModal({ open, onClose, onUnlock }: { open: boolean; onClose: () => void; onUnlock: () => void }) {
+  const [pin, setPin] = useState("");
+  const [error, setError] = useState("");
+  useEffect(() => { if (!open) { setPin(""); setError(""); } }, [open]);
+  if (!open) return null;
+  const handleSubmit = () => {
+    if (pin === ADMIN_PIN) { onUnlock(); }
+    else { setError("Incorrect PIN."); setPin(""); }
+  };
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 400, background: "rgba(0,0,0,0.85)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }} onClick={onClose}>
+      <div className="glass-card rounded-2xl p-8" style={{ maxWidth: 320, width: "100%", textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
+        <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🔐</div>
+        <h3 className="text-lg font-display font-semibold">Admin Access</h3>
+        <p className="text-sm text-muted-foreground" style={{ marginTop: 6, marginBottom: "1.25rem" }}>Enter the management PIN to continue.</p>
+        <input type="password" inputMode="numeric" value={pin} onChange={(e) => setPin(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleSubmit()} maxLength={6} autoFocus style={{ width: "100%", textAlign: "center", letterSpacing: "0.4em", fontSize: "1.25rem", padding: "0.75rem 1rem", borderRadius: 12, background: "oklch(0.2 0.02 250)", border: "1px solid rgba(255,255,255,0.1)", color: "oklch(0.95 0.01 180)", outline: "none" }} />
+        {error && <p style={{ color: "#f87171", fontSize: "0.8rem", marginTop: 10 }}>{error}</p>}
+        <button onClick={handleSubmit} style={{ marginTop: "1.25rem", width: "100%", padding: "0.85rem", borderRadius: 14, border: "none", background: "oklch(0.72 0.21 152)", color: "oklch(0.12 0.02 160)", fontWeight: 700, fontSize: "0.9rem", cursor: "pointer" }}>Unlock</button>
+      </div>
+    </div>
+  );
+}
+
+function Nav({ onSOS, onMenu, updatesCount, activeTab, onTab, onLogoSecretTap }: { onSOS: () => void; onMenu: () => void; updatesCount: number; activeTab: Tab; onTab: (t: Tab) => void; onLogoSecretTap: () => void }) {
   const tabs: { id: Tab; label: string }[] = [
     { id: "vendors", label: "FUD Vendors" },
     { id: "agri", label: "Agri-Market" },
-    { id: "management", label: "Management" },
+    { id: "welfare", label: "SUG Welfare" },
   ];
+  const tapTimes = useRef<number[]>([]);
+  const handleLogoTap = () => {
+    const now = Date.now();
+    tapTimes.current = [...tapTimes.current, now].filter((t) => now - t < 800);
+    if (tapTimes.current.length >= 3) { tapTimes.current = []; onLogoSecretTap(); }
+  };
   return (
     <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-border/60">
       <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <button
-            onClick={onMenu}
-            aria-label="Open campus updates"
-            style={{ position: "relative", width: 40, height: 40, borderRadius: 12, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}
-          >
+          <button onClick={onMenu} aria-label="Open campus updates" style={{ position: "relative", width: 40, height: 40, borderRadius: 12, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{ color: "oklch(0.85 0.02 180)" }}>
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="18" x2="21" y2="18" />
+              <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
             </svg>
-            {updatesCount > 0 && (
-              <span style={{ position: "absolute", top: -4, right: -4, minWidth: 16, height: 16, padding: "0 4px", borderRadius: 999, background: "#10b981", color: "oklch(0.12 0.02 160)", fontSize: "0.6rem", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid oklch(0.14 0.015 250)" }}>{updatesCount}</span>
-            )}
+            {updatesCount > 0 && (<span style={{ position: "absolute", top: -4, right: -4, minWidth: 16, height: 16, padding: "0 4px", borderRadius: 999, background: "#10b981", color: "oklch(0.12 0.02 160)", fontSize: "0.6rem", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid oklch(0.14 0.015 250)" }}>{updatesCount}</span>)}
           </button>
-          <div className="relative h-10 w-10 rounded-xl overflow-hidden border border-white/10 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.8)]">
+          <button id="fudhub-logo" onClick={handleLogoTap} aria-label="FUD Hub" style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }} className="relative h-10 w-10 rounded-xl overflow-hidden border border-white/10 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.8)]">
             <img src="/embiem-logo.png" alt="EMBIEM" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          </div>
+          </button>
           <span className="font-display font-semibold tracking-tight text-lg">FUD Hub</span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
@@ -1187,21 +1211,11 @@ function Nav({ onSOS, onMenu, updatesCount, activeTab, onTab }: { onSOS: () => v
         </div>
       </div>
       <div className="mx-auto max-w-7xl px-6 pb-3">
-        <div
-          className="glass-card"
-          style={{
-            display: "flex",
-            gap: 6,
-            width: "100%",
-            padding: 6,
-            borderRadius: 999,
-          }}
-        >
+        <div className="glass-card" style={{ display: "flex", gap: 6, width: "100%", padding: 6, borderRadius: 999 }}>
           {tabs.map((t) => {
             const isActive = t.id === activeTab;
             return (
-              <button key={t.id} onClick={() => onTab(t.id)}
-                style={{ flex: 1, textAlign: "center", padding: "8px 4px", borderRadius: 999, fontSize: "0.7rem", fontWeight: isActive ? 700 : 500, cursor: "pointer", transition: "all 0.25s ease", border: isActive ? "1px solid transparent" : "1px solid rgba(255,255,255,0.1)", background: isActive ? "oklch(0.72 0.21 152)" : "rgba(255,255,255,0.04)", color: isActive ? "oklch(0.12 0.02 160)" : "oklch(0.65 0.02 250)", boxShadow: isActive ? "0 0 24px -6px oklch(0.72 0.21 152)" : "none", whiteSpace: "nowrap" }}>
+              <button key={t.id} onClick={() => onTab(t.id)} style={{ flex: 1, textAlign: "center", padding: "8px 4px", borderRadius: 999, fontSize: "0.7rem", fontWeight: isActive ? 700 : 500, cursor: "pointer", transition: "all 0.25s ease", border: isActive ? "1px solid transparent" : "1px solid rgba(255,255,255,0.1)", background: isActive ? "oklch(0.72 0.21 152)" : "rgba(255,255,255,0.04)", color: isActive ? "oklch(0.12 0.02 160)" : "oklch(0.65 0.02 250)", boxShadow: isActive ? "0 0 24px -6px oklch(0.72 0.21 152)" : "none", whiteSpace: "nowrap" }}>
                 {t.label}
               </button>
             );
@@ -1397,6 +1411,301 @@ function Card({ business, index, onOpen, onShowTestimonials }: { business: Busin
     </article>
   );
 }
+// ── Off-K Lodges ──────────────────────────────────────────────────────────────
+type LodgeImage = {
+  url: string;
+  label: string;
+};
+ 
+type Lodge = {
+  id: string;
+  name: string;
+  location: string;
+  pricePerYear: number;
+  rooms: string;
+  amenities: string[];
+  images: LodgeImage[];
+  whatsapp: string;
+  available: boolean;
+};
+ 
+const LODGES: Lodge[] = [
+  {
+    id: "lodge-1",
+    name: "Zaranda Lodge",
+    location: "Danbare, behind FUD main gate",
+    pricePerYear: 80000,
+    rooms: "Self-contain",
+    amenities: ["24hr Security", "Borehole Water", "NEPA Light", "Tiled Rooms"],
+    images: [
+      { url: "/lodges/zaranda-room.webp", label: "Room" },
+      { url: "/lodges/zaranda-toilet.webp", label: "Toilet" },
+      { url: "/lodges/zaranda-compound.webp", label: "Compound" },
+      { url: "/lodges/zaranda-gate.webp", label: "Gate" },
+    ],
+    whatsapp: "2347044389234",
+    available: true,
+  },
+  {
+    id: "lodge-2",
+    name: "Kwankwaso Lodge",
+    location: "Danbare, 5 mins walk to FUD gate",
+    pricePerYear: 65000,
+    rooms: "Single Room",
+    amenities: ["Borehole Water", "Solar Light", "Gate Security", "Shared Kitchen"],
+    images: [
+      { url: "/lodges/kwankwaso-room.webp", label: "Room" },
+      { url: "/lodges/kwankwaso-kitchen.webp", label: "Kitchen" },
+      { url: "/lodges/kwankwaso-toilet.webp", label: "Toilet" },
+      { url: "/lodges/kwankwaso-compound.webp", label: "Compound" },
+    ],
+    whatsapp: "2347044389234",
+    available: true,
+  },
+  {
+    id: "lodge-3",
+    name: "Unity Hostel",
+    location: "Magama, FUD road",
+    pricePerYear: 55000,
+    rooms: "Single Room",
+    amenities: ["NEPA Light", "Borehole Water", "Fence & Gate"],
+    images: [
+      { url: "/lodges/unity-room.webp", label: "Room" },
+      { url: "/lodges/unity-toilet.webp", label: "Toilet" },
+      { url: "/lodges/unity-compound.webp", label: "Compound" },
+    ],
+    whatsapp: "2347044389234",
+    available: false,
+  },
+  {
+    id: "lodge-4",
+    name: "Excellence Lodge",
+    location: "Danbare, behind Zenith Bank",
+    pricePerYear: 95000,
+    rooms: "Self-contain",
+    amenities: ["24hr Security", "Constant Water", "NEPA + Solar", "CCTV", "Tiled & POP"],
+    images: [
+      { url: "/lodges/excellence-room.webp", label: "Room" },
+      { url: "/lodges/excellence-toilet.webp", label: "Toilet" },
+      { url: "/lodges/excellence-kitchen.webp", label: "Kitchen" },
+      { url: "/lodges/excellence-compound.webp", label: "Compound" },
+      { url: "/lodges/excellence-gate.webp", label: "Gate" },
+    ],
+    whatsapp: "2347044389234",
+    available: true,
+  },
+  {
+    id: "lodge-5",
+    name: "Al-Amin Lodge",
+    location: "Magama, near FUD junction",
+    pricePerYear: 48000,
+    rooms: "Mini Flat",
+    amenities: ["Borehole Water", "Gate Security", "Prepaid Meter"],
+    images: [
+      { url: "/lodges/alamin-room.webp", label: "Room" },
+      { url: "/lodges/alamin-toilet.webp", label: "Toilet" },
+      { url: "/lodges/alamin-compound.webp", label: "Compound" },
+    ],
+    whatsapp: "2347044389234",
+    available: true,
+  },
+  {
+    id: "lodge-6",
+    name: "Landmark Hostel",
+    location: "Danbare, 2 mins to FUD",
+    pricePerYear: 72000,
+    rooms: "Self-contain",
+    amenities: ["24hr Security", "Borehole Water", "Solar Backup", "Tiled Rooms", "Parking"],
+    images: [
+      { url: "/lodges/landmark-room.webp", label: "Room" },
+      { url: "/lodges/landmark-toilet.webp", label: "Toilet" },
+      { url: "/lodges/landmark-compound.webp", label: "Compound" },
+      { url: "/lodges/landmark-parking.webp", label: "Parking" },
+    ],
+    whatsapp: "2347044389234",
+    available: true,
+  },
+];
+ 
+function LodgeCard({ lodge, index }: { lodge: Lodge; index: number }) {
+  const [activeImg, setActiveImg] = useState(0);
+  const waText = encodeURIComponent(
+    `Hi! I saw ${lodge.name} on FUD Hub. I'd like to request a video tour and get more details about availability and pricing.`
+  );
+  const waHref = `https://wa.me/${lodge.whatsapp}?text=${waText}`;
+ 
+  return (
+    <article
+      className="reveal group relative glass-card rounded-2xl overflow-hidden flex flex-col"
+      style={{ transitionDelay: `${(index % 6) * 50}ms`, transition: "all 0.3s ease" }}
+    >
+      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-amber-400/10 to-emerald-400/10 pointer-events-none" />
+ 
+      {/* ── Main image ─────────────────────────────────── */}
+      <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden", background: "oklch(0.15 0.015 250)", flexShrink: 0 }}>
+        <img
+          key={activeImg}
+          src={lodge.images[activeImg].url}
+          alt={`${lodge.name} — ${lodge.images[activeImg].label}`}
+          loading="lazy"
+          onError={(e) => {
+            const el = e.currentTarget as HTMLImageElement;
+            el.style.display = "none";
+            (el.nextElementSibling as HTMLElement | null)?.style.setProperty("display", "flex");
+          }}
+          style={{ width: "100%", height: "100%", objectFit: "cover", animation: "fadeIn 0.25s ease" }}
+        />
+        {/* Fallback placeholder shown when image fails */}
+        <div style={{ display: "none", position: "absolute", inset: 0, alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 6, color: "oklch(0.45 0.02 250)" }}>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4"><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="9" cy="11" r="2" /><path d="m21 17-5-5-8 8" /></svg>
+          <span style={{ fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.1em" }}>No Photo</span>
+        </div>
+ 
+        {/* Gradient overlay */}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 55%)" }} />
+ 
+        {/* Available badge */}
+        <span style={{ position: "absolute", top: 10, right: 10, fontSize: "0.62rem", fontWeight: 700, padding: "3px 9px", borderRadius: 999, background: lodge.available ? "rgba(16,185,129,0.92)" : "rgba(239,68,68,0.92)", color: "#fff", backdropFilter: "blur(4px)" }}>
+          {lodge.available ? "Available" : "Full"}
+        </span>
+ 
+        {/* Active image label */}
+        <span style={{ position: "absolute", bottom: 8, left: 10, fontSize: "0.65rem", fontWeight: 700, padding: "3px 8px", borderRadius: 6, background: "rgba(0,0,0,0.65)", color: "#fff", backdropFilter: "blur(4px)", letterSpacing: "0.04em" }}>
+          {lodge.images[activeImg].label}
+        </span>
+ 
+        {/* Image count */}
+        {lodge.images.length > 1 && (
+          <span style={{ position: "absolute", bottom: 8, right: 10, fontSize: "0.6rem", color: "rgba(255,255,255,0.75)", fontWeight: 600 }}>
+            {activeImg + 1}/{lodge.images.length}
+          </span>
+        )}
+      </div>
+ 
+      {/* ── Thumbnail strip ────────────────────────────── */}
+      {lodge.images.length > 1 && (
+        <div style={{ display: "flex", gap: 5, padding: "8px 10px", background: "oklch(0.14 0.015 250)", overflowX: "auto", scrollbarWidth: "none", flexShrink: 0 }}>
+          {lodge.images.map((img, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveImg(i)}
+              style={{
+                position: "relative",
+                width: 52,
+                height: 44,
+                borderRadius: 7,
+                overflow: "hidden",
+                flexShrink: 0,
+                border: i === activeImg ? "2px solid oklch(0.72 0.21 152)" : "2px solid transparent",
+                padding: 0,
+                cursor: "pointer",
+                background: "oklch(0.18 0.02 250)",
+                boxShadow: i === activeImg ? "0 0 10px -2px oklch(0.72 0.21 152)" : "none",
+                transition: "border-color 0.15s, box-shadow 0.15s",
+              }}
+              aria-label={`View ${img.label}`}
+            >
+              <img
+                src={img.url}
+                alt={img.label}
+                loading="lazy"
+                onError={(e) => { (e.currentTarget as HTMLImageElement).style.opacity = "0"; }}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+              {/* Label overlay on thumbnail */}
+              <span style={{
+                position: "absolute", bottom: 0, left: 0, right: 0,
+                fontSize: "0.5rem", fontWeight: 700, textAlign: "center",
+                padding: "2px 2px",
+                background: i === activeImg ? "oklch(0.72 0.21 152)" : "rgba(0,0,0,0.65)",
+                color: i === activeImg ? "oklch(0.12 0.02 160)" : "#fff",
+                letterSpacing: "0.03em",
+                lineHeight: 1.3,
+              }}>
+                {img.label}
+              </span>
+            </button>
+          ))}
+          <style>{`div::-webkit-scrollbar{display:none}`}</style>
+        </div>
+      )}
+ 
+      {/* ── Card body ──────────────────────────────────── */}
+      <div style={{ padding: "1rem 1.1rem", display: "flex", flexDirection: "column", flex: 1 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+          <h3 className="font-display font-semibold" style={{ fontSize: "1rem", lineHeight: 1.3, color: "oklch(0.97 0.01 180)" }}>
+            {lodge.name}
+          </h3>
+          <span style={{ fontSize: "0.65rem", fontWeight: 600, padding: "3px 8px", borderRadius: 999, background: "oklch(0.22 0.022 250)", color: "oklch(0.75 0.02 250)", whiteSpace: "nowrap", flexShrink: 0 }}>
+            {lodge.rooms}
+          </span>
+        </div>
+ 
+        <p style={{ fontSize: "0.72rem", color: "oklch(0.6 0.02 250)", marginTop: 4 }}>📍 {lodge.location}</p>
+ 
+        <div style={{ marginTop: 8, marginBottom: 8 }}>
+          <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "1.15rem", color: "var(--emerald-bright)" }}>
+            ₦{lodge.pricePerYear.toLocaleString()}
+          </span>
+          <span style={{ fontSize: "0.72rem", color: "oklch(0.62 0.02 250)", marginLeft: 3 }}>/yr</span>
+        </div>
+ 
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: "0.9rem" }}>
+          {lodge.amenities.map((a) => (
+            <span key={a} style={{ fontSize: "0.65rem", padding: "3px 7px", borderRadius: 999, background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.25)", color: "var(--emerald-bright)" }}>
+              ✓ {a}
+            </span>
+          ))}
+        </div>
+ 
+        <a
+          href={lodge.available ? waHref : undefined}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            marginTop: "auto",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
+            width: "100%", padding: "0.8rem",
+            borderRadius: 12,
+            background: lodge.available ? "oklch(0.72 0.21 152)" : "rgba(255,255,255,0.05)",
+            color: lodge.available ? "oklch(0.12 0.02 160)" : "oklch(0.5 0.02 250)",
+            fontWeight: 700, fontSize: "0.82rem",
+            textDecoration: "none",
+            cursor: lodge.available ? "pointer" : "default",
+            boxShadow: lodge.available ? "0 0 24px -6px oklch(0.72 0.21 152)" : "none",
+            pointerEvents: lodge.available ? "auto" : "none",
+          }}
+        >
+          {lodge.available ? (
+            <>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+              Request Video Tour on WhatsApp
+            </>
+          ) : "Currently Full"}
+        </a>
+      </div>
+    </article>
+  );
+}
+ 
+function LodgeGrid() {
+  return (
+    <section className="mx-auto max-w-7xl px-6 py-12 sm:py-16">
+      <div style={{ marginBottom: "1.5rem" }}>
+        <h2 className="text-2xl font-display font-bold tracking-tight">Off-Campus Lodges</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Verified student housing near FUD — tap thumbnails to preview rooms, then request a WhatsApp video tour.
+        </p>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+        {LODGES.map((lodge, i) => (
+          <LodgeCard key={lodge.id} lodge={lodge} index={i} />
+        ))}
+      </div>
+    </section>
+  );
+}
+ 
 
 // ── Grid ──────────────────────────────────────────────────────────────────────
 function Grid({ items, onOpen, onShowTestimonials }: { items: Business[]; onOpen: (b: Business) => void; onShowTestimonials: (b: Business) => void }) {
@@ -1523,7 +1832,26 @@ function AgriMarket({ products, filter, onFilter }: { products: AgriProduct[]; f
     </>
   );
 }
-
+// ── SUG Welfare Tab ───────────────────────────────────────────────────────────
+function SUGWelfareTab() {
+  return (
+    <section className="mx-auto max-w-2xl px-6" style={{ paddingTop: "3rem", paddingBottom: "4rem" }}>
+      <div className="reveal" style={{ marginBottom: "2rem" }}>
+        <div className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-surface/60 px-3 py-1.5 text-xs text-foreground" style={{ marginBottom: "1.5rem" }}>
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-bright animate-pulse" />
+          Student Union Government · Welfare Desk
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-display font-bold tracking-tight" style={{ lineHeight: 1.25 }}>
+          Report an issue, <span className="text-gradient-emerald">get it resolved.</span>
+        </h1>
+        <p className="mt-4 text-base text-muted-foreground leading-relaxed">
+          Housing, utilities, academics, security, or general welfare — your report goes straight to the SUG Welfare desk.
+        </p>
+      </div>
+      <SUGComplaintForm />
+    </section>
+  );
+}
 const inputStyle: React.CSSProperties = {
   width: "100%", padding: "0.75rem 1rem", borderRadius: 12, background: "oklch(0.2 0.02 250)",
   border: "1px solid rgba(255,255,255,0.1)", color: "oklch(0.95 0.01 180)", fontSize: "0.9rem", outline: "none", marginTop: 6,
@@ -1754,11 +2082,12 @@ function FarmManagerPortal({ setAgriProducts, addToast, onLock, onSendBroadcast 
               {imagePreview && <img src={imagePreview} alt="Preview" style={{ width: 56, height: 56, borderRadius: 10, objectFit: "cover", border: "1px solid rgba(255,255,255,0.1)" }} />}
             </div>
           </div>
-          <button onClick={handlePublish} style={{ marginTop: 8, width: "100%", padding: "0.9rem", borderRadius: 14, border: "none", background: "oklch(0.72 0.21 152)", color: "oklch(0.12 0.02 160)", fontWeight: 700, fontSize: "0.9375rem", cursor: "pointer", boxShadow: "0 0 30px -5px oklch(0.72 0.21 152)" }}>
+            <button onClick={handlePublish} style={{ marginTop: 8, width: "100%", padding: "0.9rem", borderRadius: 14, border: "none", background: "oklch(0.72 0.21 152)", color: "oklch(0.12 0.02 160)", fontWeight: 700, fontSize: "0.9375rem", cursor: "pointer", boxShadow: "0 0 30px -5px oklch(0.72 0.21 152)" }}>
             Publish Live to Agri-Market →
           </button>
         </div>
       </div>
+       <ComplaintsManagementSection />
     </section>
   );
 }
@@ -1852,6 +2181,9 @@ export default function Home() {
   const [showUpdates, setShowUpdates] = useState(false);
   const [agriProducts, setAgriProducts] = useState<AgriProduct[]>([]);
   const [agriFilter, setAgriFilter] = useState<"All" | Department>("All");
+  const [showAdminPin, setShowAdminPin] = useState(false);
+  const [adminUnlocked, setAdminUnlocked] = useState(false);
+  
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -1959,7 +2291,14 @@ export default function Home() {
       `}</style>
 
       {/* 1. Header */}
-      <Nav onSOS={() => setShowEmergency(true)} onMenu={() => setShowUpdates(true)} updatesCount={broadcasts.length} activeTab={activeTab} onTab={setActiveTab} />
+    <Nav
+  onSOS={() => setShowEmergency(true)}
+  onMenu={() => setShowUpdates(true)}
+  updatesCount={broadcasts.length}
+  activeTab={activeTab}
+  onTab={setActiveTab}
+  onLogoSecretTap={() => setShowAdminPin(true)}
+/>
 
       <div style={{ flex: 1 }}>
         {activeTab === "vendors" && (
@@ -1969,10 +2308,14 @@ export default function Home() {
             {/* 3. Broadcast / Subscribe section */}
             <BroadcastSubscribeCard onViewUpdates={() => setShowUpdates(true)} />
             {/* 4. CTA — 20px top / 30px bottom margin */}
+            <ReportIssueCTA />
             <ListYourBusinessCTA />
             {/* 5. Search + vendor grid */}
-            <Controls active={active} onActive={setActive} query={query} onQuery={setQuery} />
-            <Grid items={filtered} onOpen={setSelectedVendor} onShowTestimonials={openTestimonials} />
+              <Controls active={active} onActive={setActive} query={query} onQuery={setQuery} />
+            {active === "Off-K Lodges"
+              ? <LodgeGrid />
+              : <Grid items={filtered} onOpen={setSelectedVendor} onShowTestimonials={openTestimonials} />
+            }
             <Stats />
           </>
         )}
@@ -1980,10 +2323,8 @@ export default function Home() {
         {activeTab === "agri" && (
           <AgriMarket products={filteredAgri} filter={agriFilter} onFilter={setAgriFilter} />
         )}
-
-        {activeTab === "management" && (
-          <ManagementPortal setAgriProducts={setAgriProducts} addToast={addToast} onSendBroadcast={handleSendBroadcast} />
-        )}
+        
+        {activeTab === "welfare" && <SUGWelfareTab />}
       </div>
 
       <Footer />
@@ -2002,6 +2343,26 @@ export default function Home() {
         />
       )}
       {showEmergency && <EmergencyPanel onClose={() => setShowEmergency(false)} />}
+        
+      <AdminPinModal
+        open={showAdminPin}
+        onClose={() => setShowAdminPin(false)}
+        onUnlock={() => { setShowAdminPin(false); setAdminUnlocked(true); }}
+      />
+      {adminUnlocked && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 350, background: "oklch(0.12 0.015 250)", overflowY: "auto" }}>
+          <div style={{ position: "sticky", top: 0, zIndex: 1, display: "flex", justifyContent: "flex-end", padding: "1rem 1.5rem", background: "oklch(0.12 0.015 250 / 0.9)", backdropFilter: "blur(6px)" }}>
+            <button
+              onClick={() => setAdminUnlocked(false)}
+              style={{ padding: "8px 16px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)", color: "oklch(0.65 0.02 250)", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer" }}
+            >
+              ✕ Close Admin
+            </button>
+          </div>
+          <ManagementPortal setAgriProducts={setAgriProducts} addToast={addToast} onSendBroadcast={handleSendBroadcast} />
+        </div>
+      )}
+
       <KekeCallRouter />
       <ToastStack toasts={toasts} />
     </div>
