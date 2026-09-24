@@ -1420,7 +1420,7 @@ type Lodge = {
   location: string;
   landmark: string;
   pricePerYear: number;
-  rooms: string;
+ 
   amenities: string[];
   images: LodgeImage[];
   whatsapp: string;
@@ -1435,7 +1435,7 @@ const LODGES: Lodge[] = [
     location: "Close to second gate",
     landmark: "7 mins walk to Gate 2",
     pricePerYear: 230000,
-    rooms: "Self-contain",
+    
     amenities: ["Solar Powered Water", "NEPA Light", "Shower", "Fan"],
     images: [
       { url: "/lodges/ExclusivegymP.jpeg", label: "Room" },
@@ -1452,7 +1452,7 @@ const LODGES: Lodge[] = [
     location: "Danbare, 5 mins walk to FUD gate",
     landmark: "Behind Access Bank, Danbare",
     pricePerYear: 65000,
-    rooms: "Single Room",
+    
     amenities: ["Borehole Water", "Solar Light", "Gate Security", "Shared Kitchen", "Tiled Floors"],
     images: [
       { url: "/lodges/kwankwaso-room.webp", label: "Room" },
@@ -1470,7 +1470,7 @@ const LODGES: Lodge[] = [
     location: "Magama, FUD road",
     landmark: "Opposite FUD second gate",
     pricePerYear: 55000,
-    rooms: "Single Room",
+   
     amenities: ["NEPA Light", "Borehole Water", "Fence & Gate"],
     images: [
       { url: "/lodges/unity-room.webp", label: "Room" },
@@ -1487,7 +1487,7 @@ const LODGES: Lodge[] = [
     location: "Danbare, behind Zenith Bank",
     landmark: "100m from Zenith Bank, Danbare",
     pricePerYear: 95000,
-    rooms: "Self-contain",
+   
     amenities: ["24hr Security", "Constant Water", "NEPA + Solar Backup", "CCTV", "Tiled & POP", "Parking Space", "Prepaid Meter"],
     images: [
       { url: "/lodges/excellence-room.webp", label: "Room" },
@@ -1506,7 +1506,7 @@ const LODGES: Lodge[] = [
     location: "Magama, near FUD junction",
     landmark: "By FUD junction roundabout",
     pricePerYear: 48000,
-    rooms: "Mini Flat",
+    
     amenities: ["Borehole Water", "Gate Security", "Prepaid Meter"],
     images: [
       { url: "/lodges/alamin-room.webp", label: "Room" },
@@ -1523,7 +1523,7 @@ const LODGES: Lodge[] = [
     location: "Danbare, 2 mins to FUD",
     landmark: "Beside First Bank, Danbare",
     pricePerYear: 72000,
-    rooms: "Self-contain",
+    
     amenities: ["24hr Security", "Borehole Water", "Solar Backup", "Tiled Rooms", "Parking Space"],
     images: [
       { url: "/lodges/landmark-room.webp", label: "Room" },
@@ -1631,10 +1631,7 @@ function LodgeModal({ lodge, onClose }: { lodge: Lodge; onClose: () => void }) {
               )}
             </div>
  
-            {/* Room type */}
-            <span style={{ fontSize: "0.72rem", fontWeight: 600, padding: "3px 10px", borderRadius: 999, background: "oklch(0.22 0.022 250)", color: "oklch(0.75 0.02 250)" }}>
-              {lodge.rooms}
-            </span>
+            
  
             {/* Location */}
             <div style={{ marginTop: "1rem", padding: "0.75rem", borderRadius: 12, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
@@ -1750,9 +1747,7 @@ function LodgeCard({ lodge, index, onOpen }: { lodge: Lodge; index: number; onOp
           <span style={{ fontWeight: 600, fontSize: "0.72rem", color: "oklch(0.97 0.01 180)", lineHeight: 1.3 }}>
             {lodge.name}
           </span>
-          <span style={{ fontSize: "0.5rem", padding: "2px 5px", borderRadius: 999, background: "oklch(0.22 0.022 250)", color: "oklch(0.75 0.02 250)", whiteSpace: "nowrap", flexShrink: 0 }}>
-            {lodge.rooms}
-          </span>
+          
         </div>
  
         <p style={{ fontSize: "0.58rem", color: "oklch(0.6 0.02 250)", margin: "2px 0 5px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -1766,7 +1761,7 @@ function LodgeCard({ lodge, index, onOpen }: { lodge: Lodge; index: number; onOp
             </span>
             <span style={{ fontSize: "0.55rem", color: "oklch(0.62 0.02 250)", marginLeft: 2 }}>/yr</span>
           </div>
-          <span style={{ fontSize: "0.55rem", color: "oklch(0.55 0.02 250)", fontWeight: 500 }}>Tap for details →</span>
+          <span style={{ fontSize: "0.55rem", color: "oklch(0.55 0.02 250)", fontWeight: 500 }}>View details →</span>
         </div>
       </div>
     </article>
