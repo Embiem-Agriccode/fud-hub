@@ -812,7 +812,7 @@ type EmergencyContact = {
 };
 
 const EMERGENCY_CONTACTS: EmergencyContact[] = [
-  { id: "security", icon: "🚨", category: "Security / Safety Emergency", name: "SUG President", role: "Direct radio link to campus security", number: "07061892231", priority: true },
+  { id: "security", icon: "🚨", category: "Security / Safety Emergency", name: "SUG President", role: "Direct radio link to campus security", number: "09163678452", priority: true },
   { id: "medical", icon: "🏥", category: "Medical Emergency", name: "SUG Health Director", role: "Clinic & first response", number: "08156272900" },
   { id: "general", icon: "📢", category: "General Assistance", name: "SUG PRO", role: "Public relations & info", number: "08144291758" },
   { id: "welfare", icon: "🤝", category: "Student Welfare", name: "SUG Welfare Director", role: "Student support & advocacy", number: "08133415133" },
