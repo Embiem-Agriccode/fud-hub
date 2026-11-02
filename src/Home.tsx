@@ -68,7 +68,7 @@ const DEPARTMENTS: Department[] = ["Fisheries", "Animal Science", "Crop Science"
 const DEPARTMENT_WHATSAPP: Record<Department, string> = {
   Fisheries: "2348024511795",
   "Animal Science": "2348035660064",
-  "Crop Science": "2347044389234",
+  "Crop Science": "2349027014135",
 };
 
 // Rotate this PIN whenever farm management staff changes.
@@ -1280,7 +1280,7 @@ function BroadcastSubscribeCard({ onViewUpdates }: { onViewUpdates: () => void }
 }
 // ── List Your Business CTA (ghost button, full width) ─────────────────────────
 function ListYourBusinessCTA() {
-  const href = `https://wa.me/2347044389234?text=${encodeURIComponent("Hi EMBIEM! I'd like to list my business on FUD Hub.")}`;
+  const href = `https://wa.me/2349027014135?text=${encodeURIComponent("Hi EMBIEM! I'd like to list my business on FUD Hub.")}`;
   return (
     <section className="mx-auto max-w-7xl px-6" style={{ marginTop: "20px", marginBottom: "30px" }}>
       <a
@@ -1442,7 +1442,7 @@ const LODGES: Lodge[] = [
       { url: "/lodges/ExclusivegymT.jpeg", label: "WC" },
       { url: "/lodges/Exclusivegym.jpeg", label: "Yard" },
   ],
-    whatsapp: "2347044389234",
+    whatsapp: "2349027014135",
     available: true,
     agentVerified: true,
   },
@@ -1460,7 +1460,7 @@ const LODGES: Lodge[] = [
       { url: "/lodges/kwankwaso-toilet.webp", label: "WC" },
       { url: "/lodges/kwankwaso-compound.webp", label: "Yard" },
     ],
-    whatsapp: "2347044389234",
+    whatsapp: "2349027014135",
     available: true,
     agentVerified: true,
   },
@@ -1477,7 +1477,7 @@ const LODGES: Lodge[] = [
       { url: "/lodges/unity-toilet.webp", label: "WC" },
       { url: "/lodges/unity-compound.webp", label: "Yard" },
     ],
-    whatsapp: "2347044389234",
+    whatsapp: "2349027014135",
     available: false,
     agentVerified: false,
   },
@@ -1496,7 +1496,7 @@ const LODGES: Lodge[] = [
       { url: "/lodges/excellence-compound.webp", label: "Yard" },
       { url: "/lodges/excellence-gate.webp", label: "Gate" },
     ],
-    whatsapp: "2347044389234",
+    whatsapp: "2349027014135",
     available: true,
     agentVerified: true,
   },
@@ -1513,7 +1513,7 @@ const LODGES: Lodge[] = [
       { url: "/lodges/alamin-toilet.webp", label: "WC" },
       { url: "/lodges/alamin-compound.webp", label: "Yard" },
     ],
-    whatsapp: "2347044389234",
+    whatsapp: "2349027014135",
     available: true,
     agentVerified: false,
   },
@@ -1531,7 +1531,7 @@ const LODGES: Lodge[] = [
       { url: "/lodges/landmark-compound.webp", label: "Yard" },
       { url: "/lodges/landmark-parking.webp", label: "Parking" },
     ],
-    whatsapp: "2347044389234",
+    whatsapp: "2349027014135",
     available: true,
     agentVerified: true,
   },
@@ -2219,7 +2219,7 @@ function Footer() {
               </p>
             </div>
           </div>
-          <a href={`https://wa.me/2347044389234?text=${encodeURIComponent("Hi EMBIEM! I'd like to list my business on FUD Hub.")}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }} className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_-5px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)] transition-shadow flex-shrink-0">
+          <a href={`https://wa.me/2349027014135?text=${encodeURIComponent("Hi EMBIEM! I'd like to list my business on FUD Hub.")}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }} className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_-5px_var(--emerald-glow)] hover:shadow-[0_0_50px_-2px_var(--emerald-glow)] transition-shadow flex-shrink-0">
             Add your business →
           </a>
         </div>
